@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="624.0" prefWidth="625.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.ericksocop.controller.MenuPrincipalController">
+   <children>
+      <ImageView fitHeight="641.0" fitWidth="625.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../resource/fondo.png" />
+         </image>
+      </ImageView>
+      <MenuBar id="menubar" layoutX="-4.0" layoutY="-1.0" prefHeight="32.0" prefWidth="289.0" style="-fx-background-color: #F68712; -fx-background-radius: 0 0 8 0; -fx-border-color: white; -fx-border-radius: 0 0 8 0;" stylesheets="@../resource/QuickShopCSS.css">
+        <menus>
+          <Menu mnemonicParsing="false" text="Modulos">
+            <items>
+              <MenuItem fx:id="btnMenuProductos" mnemonicParsing="false" onAction="#handleButtonAction" text="Productos" />
+                  <MenuItem fx:id="btnProveedor" mnemonicParsing="false" onAction="#handleButtonAction" text="Proveedores" />
+                  <MenuItem fx:id="btnMenuClientes" mnemonicParsing="false" onAction="#handleButtonAction" text="Clientes" />
+                  <MenuItem fx:id="btnMenuCargoE" mnemonicParsing="false" onAction="#handleButtonAction" text="Cargo Empleados" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Reporte">
+            <items>
+              <MenuItem fx:id="btnCompra" mnemonicParsing="false" onAction="#handleButtonAction" text="Compra y venta de productos" />
+                  <MenuItem mnemonicParsing="false" text="inventario" />
+                  <MenuItem mnemonicParsing="false" text="Salario" />
+                  <MenuItem fx:id="btnDetalleCompra" mnemonicParsing="false" onAction="#handleButtonAction" text="Detalle Compra" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Acerca de">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Ayuda" />
+                  <MenuItem fx:id="btnProgramador" mnemonicParsing="false" onAction="#handleButtonAction" text="Programador" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <Button layoutX="328.0" layoutY="477.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="120.0" style="-fx-background-radius: 8 8 8 8; -fx-background-color: #F68712;" text="Usuarios en línea" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="11.5" />
+         </font></Button>
+      <Button layoutX="469.0" layoutY="477.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="120.0" style="-fx-background-radius: 8 8 8 8; -fx-background-color: #F68712;" text="Inventario" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font></Button>
+      <Button layoutX="184.0" layoutY="477.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="120.0" style="-fx-background-radius: 8 8 8 8; -fx-background-color: #F68712;" text="Horarios" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font></Button>
+      <Button layoutX="36.0" layoutY="477.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="120.0" style="-fx-background-radius: white; -fx-background-radius: 8 8 8 8; -fx-background-color: #F68712; -fx-border-radius: 8 8 8 8;" text="Ubicaciones" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font></Button>
+      <ImageView fitHeight="192.0" fitWidth="322.0" layoutX="168.0" layoutY="253.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../resource/logo%20sin%20fondo.png" />
+         </image>
+      </ImageView>
+   </children>
+</AnchorPane>

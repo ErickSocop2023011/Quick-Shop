@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="335.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.ericksocop.controller.PrograViewController">
+   <children>
+      <ImageView fitHeight="400.0" fitWidth="600.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../resource/fondoProgramador.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="150.0" fitWidth="138.0" layoutX="14.0" layoutY="94.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../resource/fotoProgramador.jpg" />
+         </image></ImageView>
+      <Label layoutX="173.0" layoutY="91.0" text="Erick Jahir Socop Colindres" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="17.0" />
+         </font>
+      </Label>
+      <Label layoutX="173.0" layoutY="127.0" text="26/09/2006" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="17.0" />
+         </font>
+      </Label>
+      <Label layoutX="173.0" layoutY="169.0" text="2023011" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="17.0" />
+         </font>
+      </Label>
+      <Label alignment="TOP_LEFT" layoutX="173.0" layoutY="208.0" prefHeight="26.0" prefWidth="394.0" text="Yo quería hacer juegos, no romperme la cabeza." textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="17.0" />
+         </font>
+      </Label>
+      <Label alignment="TOP_LEFT" layoutX="173.0" layoutY="234.0" prefHeight="26.0" prefWidth="394.0" text="Aunque la paga no es mala..." textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="17.0" />
+         </font>
+      </Label>
+      <Button fx:id="btnInicio" layoutX="516.0" layoutY="14.0" mnemonicParsing="false" onAction="#handleButtonAction" styleClass="button-regresar" stylesheets="@../resource/QuickShopCSS.css" text="Regresar" />
+   </children>
+</AnchorPane>

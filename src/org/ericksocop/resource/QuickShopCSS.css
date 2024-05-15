@@ -1,0 +1,89 @@
+/* 
+ .menubar{
+    -fx-background-color: transparent;
+    -fx-opacity: 0.5;
+    -fx-border-image-width: 2.0;
+}*/
+
+/* Estilo para la TableView y su contenido 
+.table-view, .table-row-cell {
+    -fx-background-color: rgba(31, 118, 59, 0.5); /* Verde más claro y semitransparente 
+    -fx-text-fill: white; /* Color del texto en blanco 
+} */
+
+/* Estilo para las celdas al pasar el cursor */
+.table-row-cell:hover {
+    -fx-background-color: #F68712; /* Naranja */
+}
+
+/* Estilo para el texto de las celdas al pasar el cursor */
+.table-row-cell:hover .table-cell {
+    -fx-text-fill: white; /* Cambia el color del texto a blanco */
+    -fx-font-weight: bold; /* Hace el texto más grueso */
+}
+
+/* Estilo para las celdas seleccionadas */
+.table-row-cell:selected {
+    -fx-background-color: #5A956B; /* Verde más oscuro */
+}
+
+/* Estilo para el encabezado de la TableView */
+.table-view .column-header-background {
+    -fx-background-color: #FFD699; /* Naranja pálido */
+}
+
+/* Estilo para el texto del encabezado de la TableView */
+.table-view .column-header {
+    -fx-text-fill: white; /* Color del texto en blanco */
+    -fx-font-weight: bold; /* Hace el texto más grueso */
+}
+
+
+
+/* Estilo para el pulgar de la barra de desplazamiento horizontal (thumb) */
+.scroll-bar:horizontal .thumb {
+    -fx-background-color: #FFA500; /* Naranja más claro */
+}
+
+/* Estilo para los botones */
+.button {
+    -fx-background-color: #FFFFFF; /* Color de fondo blanco */
+    -fx-text-fill: #000000; /* Color del texto negro */
+}
+
+/* Estilo para los botones al pasar el cursor */
+.button:hover {
+    -fx-background-color: #CCCCCC; /* Color de fondo ligeramente gris claro */
+    -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.2) , 5,0,0,1 ); /* Efecto de sombra al pasar el cursor */
+}
+
+.button-regresar {
+    -fx-background-color: #FFFFFF; /* Color de fondo blanco */
+    -fx-text-fill: #000000; /* Color del texto negro */
+}
+
+/* Estilo para el botón de regresar al pasar el cursor */
+.button-regresar:hover {
+    -fx-background-color: #C9FFC2; /* Color de fondo verde lima */
+    -fx-effect: dropshadow( gaussian , #8EF68A , 5,0,0,1 ); /* Efecto de sombra verde lima al pasar el cursor */
+}
+
+.menu-bar {
+    -fx-background-color: transparent; /* Hacemos el fondo transparente */
+}
+
+/* Estilo para los elementos del menú al pasar el cursor */
+.menu-item:hover {
+    -fx-background-color: #FFD699; /* Color de fondo naranja claro */
+}
+
+/* Estilo para el texto de los elementos del menú al pasar el cursor */
+.menu-item:hover  {
+    -fx-text-fill: white; /* Color del texto en blanco */
+    -fx-font-weight: bold; /* Hace el texto más grueso */
+}
+
+/* Estilo para el elemento seleccionado del menú al pasar el cursor */
+.menu-item:selected:hover {
+    -fx-background-color: #FFD699; /* Color de fondo naranja claro */
+}
