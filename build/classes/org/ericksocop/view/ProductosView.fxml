@@ -86,5 +86,7 @@
             <ComboBox fx:id="cmbCodigoTipoP" prefWidth="150.0" GridPane.columnIndex="3" GridPane.rowIndex="3" />
          </children>
       </GridPane>
+      <Button fx:id="btnRegresarP" alignment="CENTER" contentDisplay="CENTER" layoutX="1005.0" layoutY="128.0" mnemonicParsing="false" onAction="#handleButtonAction" prefHeight="30.0" prefWidth="135.0" styleClass="button-regresar" stylesheets="@../resource/QuickShopCSS.css" text="Regresar" />
+      <Button fx:id="btnTipoP" alignment="CENTER" contentDisplay="CENTER" layoutX="1005.0" layoutY="86.0" mnemonicParsing="false" onAction="#handleButtonAction" prefHeight="30.0" prefWidth="135.0" styleClass="button-regresar" stylesheets="@../resource/QuickShopCSS.css" text="Tipo Producto" />
    </children>
 </AnchorPane>

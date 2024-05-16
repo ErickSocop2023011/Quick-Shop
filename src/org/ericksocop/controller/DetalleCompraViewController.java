@@ -47,6 +47,8 @@ public class DetalleCompraViewController implements Initializable {
     @FXML
     private TableColumn colNumDoc;
     @FXML
+    private Button btnRegresarDetC;
+    @FXML
     private Button btnAgregarDeC;
     @FXML
     private Button btnEditarDeC;
@@ -102,7 +104,8 @@ public class DetalleCompraViewController implements Initializable {
         txtCodDetC.setText(String.valueOf(((DetalleCompra) tvDetalleC.getSelectionModel().getSelectedItem()).getCodigoDetalleCompra()));
         txtCostoU.setText(String.valueOf(((DetalleCompra) tvDetalleC.getSelectionModel().getSelectedItem()).getCostoUnitario()));
         txtCantidad.setText(String.valueOf(((DetalleCompra) tvDetalleC.getSelectionModel().getSelectedItem()).getCantidad()));
-
+        cmbCodPro.getSelectionModel().select(buscarCodigoProducto((((DetalleCompra) tvDetalleC.getSelectionModel().getSelectedItem()).getCodigoProducto())));
+        cmbNumDoc.getSelectionModel().select((((DetalleCompra) tvDetalleC.getSelectionModel().getSelectedItem()).getNumeroDocumento()));
     }
 
     public ObservableList<DetalleCompra> getDetalleC() {
@@ -122,6 +125,50 @@ public class DetalleCompraViewController implements Initializable {
             e.printStackTrace();
         }
         return listaDetalleC = FXCollections.observableList(listaDeC);
+    }
+
+    public Productos buscarCodigoProducto(String codigoProducto) {
+        Productos resultado = null;
+        try {
+            PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_buscarProducto(?)}");
+            procedimiento.setString(1, codigoProducto);
+            ResultSet registro = procedimiento.executeQuery();
+            while (registro.next()) {
+                resultado = new Productos(registro.getString("codigoProducto"),
+                        registro.getString("descripcionProducto"),
+                        registro.getDouble("precioUnitario"),
+                        registro.getDouble("precioDocena"),
+                        registro.getDouble("precioMayor"),
+                        registro.getString("imagenProducto"),
+                        registro.getInt("existencia"),
+                        registro.getInt("CodigoTipoProducto"),
+                        registro.getInt("codigoProveedor")
+                );
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return resultado;
+
+    }
+
+    public Compras buscarNumDoc(int numDoc) {
+        Compras resultado = null;
+        try {
+            PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_buscarcompra(?)}");
+            procedimiento.setInt(1, numDoc);
+            ResultSet registro = procedimiento.executeQuery();
+            while (registro.next()) {
+                resultado = new Compras(registro.getInt("numeroDocumento"),
+                        registro.getString("fechaDocumento"),
+                        registro.getString("descripcionCompra"),
+                        registro.getDouble("totalDocumento")
+                );
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return resultado;
     }
 
     public ObservableList<Productos> getProducto() {
@@ -338,4 +385,10 @@ public class DetalleCompraViewController implements Initializable {
         tvDetalleC.getSelectionModel().getSelectedItem();
     }
 
+    public void handleButtonAction(ActionEvent event) {
+        if (event.getSource() == btnRegresarDetC) {
+            escenarioPrincipal.CompraView();
+
+        }
+    }
 }

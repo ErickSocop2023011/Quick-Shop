@@ -55,6 +55,8 @@ public class ComprasViewController implements Initializable {
     @FXML
     private TableColumn colTotalDoc;
     @FXML
+    private Button btnDetalleCompra;
+    @FXML
     private Button btnAgregarC;
     @FXML
     private Button btnEditarC;
@@ -274,7 +276,7 @@ public class ComprasViewController implements Initializable {
         try {
             PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_editarcompra(?,?,?,?)}");
             //Compras registro = new Compras();
-            Compras registro = (Compras)tvCompras.getSelectionModel().getSelectedItem();
+            Compras registro = (Compras) tvCompras.getSelectionModel().getSelectedItem();
             if (jfxDatePicker.getValue() != null) {
                 // Convertir LocalDate a Date
                 Date fechaDocumento = Date.valueOf(jfxDatePicker.getValue());
@@ -327,10 +329,12 @@ public class ComprasViewController implements Initializable {
         this.escenarioPrincipal = escenarioPrincipal;
     }
 
-    @FXML
-    private void handleButtonAction(ActionEvent event) {
+    public void handleButtonAction(ActionEvent event) {
         if (event.getSource() == btnRegresarC) {
             escenarioPrincipal.menuPrincipalView();
+        }
+        if (event.getSource() == btnDetalleCompra) {
+            escenarioPrincipal.DetalleCompra();
         }
     }
 

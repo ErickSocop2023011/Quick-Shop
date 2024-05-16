@@ -117,7 +117,7 @@ public class ProveedorViewController implements Initializable {
 
     public void seleccionarElemento() {
         txtCodigoP.setText(String.valueOf(((Proveedores) tvPoveedores.getSelectionModel().getSelectedItem()).getCodigoProveedor()));
-        txtNITP.setText((((Proveedores)tvPoveedores.getSelectionModel().getSelectedItem()).getNITProveedor()));
+        txtNITP.setText((((Proveedores) tvPoveedores.getSelectionModel().getSelectedItem()).getNITProveedor()));
         txtNombresP.setText((((Proveedores) tvPoveedores.getSelectionModel().getSelectedItem()).getNombresProveedor()));
         txtApellidosP.setText((((Proveedores) tvPoveedores.getSelectionModel().getSelectedItem()).getApellidosProveedor()));
         txtDireccionP.setText((((Proveedores) tvPoveedores.getSelectionModel().getSelectedItem()).getDireccionProveedor()));

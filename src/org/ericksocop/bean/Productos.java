@@ -106,4 +106,11 @@ public class Productos {
         this.codigoProveedor = codigoProveedor;
     }
 
+    @Override
+    public String toString() {
+        return getCodigoProducto() + "    |   "  + getDescripcionProducto();
+    }
+    
+    
+
 }

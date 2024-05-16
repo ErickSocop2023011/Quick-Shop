@@ -36,7 +36,7 @@ public class TipoProductoViewController implements Initializable {
     }
     private operador tipoDeOperador = operador.NINGUNO;
     private ObservableList<TipoProducto> listaTipoP;
-    
+
     private Main escenarioPrincipal;
 
     @FXML
@@ -58,7 +58,7 @@ public class TipoProductoViewController implements Initializable {
     @FXML
     private Button btnReportesP;
     @FXML
-    private Button btnRegresarP;
+    private Button btnRegresarTipoP;
 
     /**
      * Initializes the controller class.
@@ -259,13 +259,9 @@ public class TipoProductoViewController implements Initializable {
     }
 
     public void handleButtonAction(ActionEvent event) {
-        if (event.getSource() == btnRegresarP) {
-            escenarioPrincipal.menuPrincipalView();
+        if (event.getSource() == btnRegresarTipoP) {
+            escenarioPrincipal.ProductosView();
         }
     }
 
-
-    
-    
-    
 }

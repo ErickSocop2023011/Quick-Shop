@@ -638,6 +638,29 @@ create procedure sp_mostrarProductos()
 	end$$
 Delimiter ;
 
+
+delimiter $$
+create procedure sp_buscarProducto(in codP varchar(15))
+begin
+	select
+    p.codigoProducto,
+        p.descripcionProducto,
+        p.precioUnitario,
+        p.precioDocena,
+        p.precioMayor,
+        p.imagenProducto,
+        p.existencia,
+        p.codigoTipoProducto,
+        p.codigoProveedor
+        from
+        productos p
+        where 
+        codigoProducto = codP;
+end$$
+delimiter ;
+
+call sp_buscarProducto(1);
+
 call sp_mostrarProductos();
 
 DELIMITER $$
@@ -677,7 +700,7 @@ END$$
 
 DELIMITER ;
 
-call sp_eliminarProducto('P001');
+call sp_eliminarProducto('P002');
 -- CRUD DETALLE COMPRA
 DELIMITER $$
 
@@ -724,8 +747,9 @@ BEGIN
 END$$
 DELIMITER ;
 
-CALL sp_editarDetalleCompra(2, 55.00, 12, 'P002', 3);
+CALL sp_editarDetalleCompra(2, 55.00, 12, 'P001', 2);
 
+call sp_mostrarproductos();
 DELIMITER $$
 CREATE PROCEDURE sp_eliminarDetalleCompra(
     IN p_codigoDetalleCompra INT
@@ -897,7 +921,7 @@ BEGIN
 END$$
 DELIMITER ;
 
-CALL sp_crearDetalleFactura(1, 50.00, 10, 3, 'P002');
+CALL sp_crearDetalleFactura(1, 50.00, 10, 3, 'P001');
 CALL sp_crearDetalleFactura(3, 50.00, 10, 3, 'P003');
 
 DELIMITER $$
@@ -930,7 +954,7 @@ BEGIN
 END$$
 
 DELIMITER ;
-CALL sp_editarDetalleFactura(1, 55.00, 2, 3, 'P002');
+CALL sp_editarDetalleFactura(1, 55.00, 3, 3, 'P001');
 
 DELIMITER $$
 
@@ -946,5 +970,5 @@ DELIMITER ;
 CALL sp_eliminarDetalleFactura(1);
 
 -- -----------------------------------
-call sp_mostrarProductos();
+
 set global time_zone= '-6:00';

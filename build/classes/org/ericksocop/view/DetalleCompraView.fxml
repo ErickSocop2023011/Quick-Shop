@@ -71,5 +71,6 @@
             <ComboBox fx:id="cmbCodPro" prefWidth="150.0" GridPane.columnIndex="3" />
          </children>
       </GridPane>
+      <Button fx:id="btnRegresarDetC" alignment="CENTER" contentDisplay="CENTER" layoutX="1005.0" layoutY="123.0" mnemonicParsing="false" onAction="#handleButtonAction" prefHeight="30.0" prefWidth="135.0" styleClass="button-regresar" stylesheets="@../resource/QuickShopCSS.css" text="Regresar" />
    </children>
 </AnchorPane>

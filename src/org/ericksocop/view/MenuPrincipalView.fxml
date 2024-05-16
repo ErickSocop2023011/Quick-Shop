@@ -31,7 +31,6 @@
               <MenuItem fx:id="btnCompra" mnemonicParsing="false" onAction="#handleButtonAction" text="Compra y venta de productos" />
                   <MenuItem mnemonicParsing="false" text="inventario" />
                   <MenuItem mnemonicParsing="false" text="Salario" />
-                  <MenuItem fx:id="btnDetalleCompra" mnemonicParsing="false" onAction="#handleButtonAction" text="Detalle Compra" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Acerca de">

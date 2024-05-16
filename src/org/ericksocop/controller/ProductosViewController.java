@@ -39,9 +39,13 @@ public class ProductosViewController implements Initializable {
     @FXML
     private TableView tvProductos;
     @FXML
+    private Button btnRegresarP;
+    @FXML
     private Button btnAgregarPro;
     @FXML
     private Button btnEditarPro;
+    @FXML
+    private Button btnTipoP;
     @FXML
     private Button btnEliminarPro;
     @FXML
@@ -359,7 +363,7 @@ public class ProductosViewController implements Initializable {
         }
     }
 
-   /* public void eliminar() {
+    /* public void eliminar() {
         switch (tipoDeOperador) {
             case ACTUALIZAR:
                 desactivarControles();
@@ -401,7 +405,6 @@ public class ProductosViewController implements Initializable {
                 break;
         }
     }*/
-    
     public void eliminar() throws SQLException {
         switch (tipoDeOperador) {
             case ACTUALIZAR:
@@ -435,16 +438,14 @@ public class ProductosViewController implements Initializable {
                 }
         }
     }
-    
-    public void eliminarDetalleCompra () throws SQLException{
+
+    public void eliminarDetalleCompra() throws SQLException {
         PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_eliminarDetalleCompra(?)}");
-       procedimiento.setInt(1, ((DetalleCompra) tvProductos.getSelectionModel().getSelectedItem()).getCodigoDetalleCompra());
-                            procedimiento.execute();
-                            listaProductos.remove(tvProductos.getSelectionModel().getSelectedItem());
-                            limpiarControles();
+        procedimiento.setInt(1, ((DetalleCompra) tvProductos.getSelectionModel().getSelectedItem()).getCodigoDetalleCompra());
+        procedimiento.execute();
+        listaProductos.remove(tvProductos.getSelectionModel().getSelectedItem());
+        limpiarControles();
     }
-    
-    
 
     public void desactivarControles() {
         txtCodigoProd.setEditable(false);
@@ -491,4 +492,15 @@ public class ProductosViewController implements Initializable {
     public void setEscenarioPrincipal(Main escenarioPrincipal) {
         this.escenarioPrincipal = escenarioPrincipal;
     }
+
+    public void handleButtonAction(ActionEvent event) {
+
+        if (event.getSource() == btnRegresarP) {
+            escenarioPrincipal.menuPrincipalView();
+        }
+        if (event.getSource() == btnTipoP) {
+            escenarioPrincipal.tipoProductoView();
+        }
+    }
+
 }

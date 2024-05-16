@@ -32,7 +32,7 @@ public class MenuPrincipalController implements Initializable {
 
     @FXML
     MenuItem btnCompra;
-    
+
     @FXML
     private MenuItem btnDetalleCompra;
 
@@ -126,7 +126,7 @@ public class MenuPrincipalController implements Initializable {
         if (event.getSource() == btnCompra) {
             escenarioPrincipal.CompraView();
         }
-        if(event.getSource() == btnDetalleCompra){
+        if (event.getSource() == btnDetalleCompra) {
             escenarioPrincipal.DetalleCompra();
         }
     }
