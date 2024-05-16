@@ -18,6 +18,7 @@ import org.ericksocop.controller.CargoEmpleadosViewController;
 import org.ericksocop.controller.ClienteVistaController;
 import org.ericksocop.controller.ComprasViewController;
 import org.ericksocop.controller.DetalleCompraViewController;
+import org.ericksocop.controller.EmpleadosViewController;
 import org.ericksocop.controller.MenuPrincipalController;
 import org.ericksocop.controller.ProductosViewController;
 import org.ericksocop.controller.PrograViewController;
@@ -148,6 +149,15 @@ public class Main extends Application {
         try{
             DetalleCompraViewController detalleComView = (DetalleCompraViewController)cambiarEscena("DetalleCompraView.fxml", 1181, 665);
             detalleComView.setEscenarioPrincipal(this);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+    
+    public void EmpleadosView(){
+        try{
+            EmpleadosViewController empleadoView = (EmpleadosViewController)cambiarEscena("EmpleadosView.fxml", 1181, 665);
+            empleadoView.setEscenarioPrincipal(this);
         }catch(Exception e){
             e.printStackTrace();
         }

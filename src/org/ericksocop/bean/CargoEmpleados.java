@@ -45,6 +45,11 @@ public class CargoEmpleados {
     public void setDescripcionCargo(String descripcionCargo) {
         this.descripcionCargo = descripcionCargo;
     }
+
+    @Override
+    public String toString() {
+        return getCodigoCargoEmpleado() + "    |   "  + getNombreCargo();
+    }
     
     
     

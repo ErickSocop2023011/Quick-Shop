@@ -99,7 +99,7 @@ CREATE TABLE Factura(
 numeroDeFactura int,
 estado varchar(50),
 totalFactura decimal(10,2),
-fechaFactura varchar(45),
+fechaFactura date,
 clienteID int,
 codigoEmpleado int,
 PRIMARY KEY PK_numeroDeFactura (numeroDeFactura),
@@ -638,6 +638,7 @@ create procedure sp_mostrarProductos()
 	end$$
 Delimiter ;
 
+call sp_mostrarProductos();
 
 delimiter $$
 create procedure sp_buscarProducto(in codP varchar(15))
@@ -727,6 +728,18 @@ BEGIN
 END$$
 DELIMITER ;
 
+DELIMITER $$
+CREATE PROCEDURE sp_buscarDetalleCompra(
+    IN codDetComp VARCHAR(50)  -- Cambiado a VARCHAR
+)
+BEGIN
+    SELECT * FROM DetalleCompra
+    WHERE codigoProducto = codDetComp;
+END$$
+DELIMITER ;
+
+call sp_buscarDetalleCompra('P001');
+
 CALL sp_mostrarDetallesCompra();
 
 DELIMITER $$
@@ -762,6 +775,17 @@ END$$
 DELIMITER ;
 
 CALL sp_eliminarDetalleCompra(1);
+
+DELIMITER $$
+CREATE PROCEDURE sp_eliminarDetalleCompraPorProducto(
+    IN p_codigoProducto VARCHAR(10)
+)
+BEGIN
+    DELETE FROM DetalleCompra
+    WHERE codigoProducto = p_codigoProducto;
+END$$
+DELIMITER ;
+
 
 
 -- CRUD de Empleados
@@ -933,7 +957,20 @@ BEGIN
 END$$
 DELIMITER ;
 
+
 CALL sp_mostrarDetallesFactura();
+
+
+delimiter $$
+create procedure sp_buscarDetalleFactura(in codDetFac int)
+begin
+	select * from DetalleFactura
+    where 
+		codigoDetalleFactura = codDetFac;
+end $$
+delimiter ;
+
+call sp_buscarDetalleFactura(3);
 
 DELIMITER $$
 

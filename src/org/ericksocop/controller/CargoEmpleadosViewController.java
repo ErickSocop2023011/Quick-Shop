@@ -274,7 +274,7 @@ public class CargoEmpleadosViewController implements Initializable {
     @FXML
     public void handleButtonAction(ActionEvent event) {
         if (event.getSource() == btnRegresarCE) {
-            escenarioPrincipal.menuPrincipalView();
+            escenarioPrincipal.EmpleadosView();
         }
     }
 }

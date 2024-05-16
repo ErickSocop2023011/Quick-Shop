@@ -28,7 +28,7 @@ public class MenuPrincipalController implements Initializable {
     @FXML
     MenuItem btnMenuProductos;
     @FXML
-    MenuItem btnMenuCargoE;
+    MenuItem btnMenuEmp;
 
     @FXML
     MenuItem btnCompra;
@@ -66,13 +66,7 @@ public class MenuPrincipalController implements Initializable {
         this.btnProgramador = btnProgramador;
     }
 
-    public MenuItem getBtnMenuCargoE() {
-        return btnMenuCargoE;
-    }
 
-    public void setBtnMenuCargoE(MenuItem btnMenuCargoE) {
-        this.btnMenuCargoE = btnMenuCargoE;
-    }
 
     public void menuClientesView() {
         escenarioPrincipal.menuClienteView();
@@ -114,8 +108,8 @@ public class MenuPrincipalController implements Initializable {
         if (event.getSource() == btnProgramador) {
             escenarioPrincipal.programadorView();
         }
-        if (event.getSource() == btnMenuCargoE) {
-            escenarioPrincipal.cargoEmpleadosView();
+        if (event.getSource() == btnMenuEmp) {
+            escenarioPrincipal.EmpleadosView();
         }
         if (event.getSource() == btnMenuProductos) {
             escenarioPrincipal.ProductosView();
