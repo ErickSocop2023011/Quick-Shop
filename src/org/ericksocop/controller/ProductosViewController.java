@@ -123,7 +123,6 @@ public class ProductosViewController implements Initializable {
         colCodProv.setCellValueFactory(new PropertyValueFactory<Productos, Integer>("codigoProveedor"));
     }
 
-    @FXML
     public void seleccionarElemento() {
         txtCodigoProd.setText((((Productos) tvProductos.getSelectionModel().getSelectedItem()).getCodigoProducto()));
         txtDescPro.setText((((Productos) tvProductos.getSelectionModel().getSelectedItem()).getDescripcionProducto()));
@@ -245,7 +244,6 @@ public class ProductosViewController implements Initializable {
         return listaTipoP = FXCollections.observableList(lista);
     }
 
-    @FXML
     public void Agregar() {
         switch (tipoDeOperador) {
             case NINGUNO:
@@ -279,7 +277,7 @@ public class ProductosViewController implements Initializable {
         Productos registro = new Productos();
         registro.setCodigoProducto(txtCodigoProd.getText());
         registro.setCodigoProveedor(((Proveedores) cmbCodigoP.getSelectionModel().getSelectedItem()).getCodigoProveedor());
-        registro.setCodigoTipoProducto((((TipoProducto) cmbCodigoTipoP.getSelectionModel().getSelectedItem()).getCodigoTipoProducto()));
+        registro.setCodigoTipoProducto(((TipoProducto) cmbCodigoTipoP.getSelectionModel().getSelectedItem()).getCodigoTipoProducto());
         registro.setDescripcionProducto(txtDescPro.getText());
         registro.setPrecioDocena(Double.parseDouble(txtPrecioD.getText()));
         registro.setPrecioMayor(Double.parseDouble(txtPrecioM.getText()));
@@ -306,7 +304,6 @@ public class ProductosViewController implements Initializable {
         }
     }
 
-    
     public void editar() {
         switch (tipoDeOperador) {
             case NINGUNO:
@@ -367,8 +364,6 @@ public class ProductosViewController implements Initializable {
         }
     }
 
-    
-    
     public void eliminar() throws SQLException {
         switch (tipoDeOperador) {
             case ACTUALIZAR:
@@ -382,41 +377,39 @@ public class ProductosViewController implements Initializable {
                 break;
             default:
                 if (tvProductos.getSelectionModel().getSelectedItem() != null) {
-                    int ans = JOptionPane.showConfirmDialog(null, "Confirma esta Accion", "Verificacion",
+                    int ans = JOptionPane.showConfirmDialog(null, "Confirma esta Acción", "Verificación",
                             JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-                    if (ans == JOptionPane.YES_NO_OPTION) {
+                    if (ans == JOptionPane.YES_OPTION) {
                         try {
-                            PreparedStatement procedimiento = Conexion.getInstance().getConexion()
+                            Productos productoSeleccionado = (Productos) tvProductos.getSelectionModel().getSelectedItem();
+                            String codigoProducto = productoSeleccionado.getCodigoProducto();
+
+                            // Eliminar las referencias en DetalleCompra
+                            PreparedStatement eliminarDetalleCompraStmt = Conexion.getInstance().getConexion()
+                                    .prepareCall("{call sp_eliminarDetalleCompraPorProducto(?)}");
+                            eliminarDetalleCompraStmt.setString(1, codigoProducto);
+                            eliminarDetalleCompraStmt.execute();
+
+                            // Eliminar el producto
+                            PreparedStatement eliminarProductoStmt = Conexion.getInstance().getConexion()
                                     .prepareCall("{call sp_eliminarProducto(?)}");
-                            procedimiento.setInt(1,
-                                    ((Productos) tvProductos.getSelectionModel().getSelectedItem()).getCodigoProveedor());
-                            procedimiento.execute();
-                            listaProductos.remove(tvProductos.getSelectionModel().getSelectedItem());
+                            eliminarProductoStmt.setString(1, codigoProducto);
+                            eliminarProductoStmt.execute();
+
+                            listaProductos.remove(productoSeleccionado);
                             limpiarControles();
-                        } catch (Exception e) {
+                        } catch (SQLException e) {
+                            JOptionPane.showMessageDialog(null, "Error al eliminar el producto: " + e.getMessage());
                             e.printStackTrace();
                         }
                     }
                 } else {
-                    JOptionPane.showMessageDialog(null, "Debe de seleccionar Cliente para eliminar");
+                    JOptionPane.showMessageDialog(null, "Debe de seleccionar un Producto para eliminar");
                 }
+                break;
         }
     }
-    
 
-    public void eliminarDetalleCompra() throws SQLException {
-        PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_eliminarDetalleCompra(?)}");
-        procedimiento.setInt(1, ((DetalleCompra) tvProductos.getSelectionModel().getSelectedItem()).getCodigoDetalleCompra());
-        procedimiento.execute();
-        listaProductos.remove(tvProductos.getSelectionModel().getSelectedItem());
-        limpiarControles();
-    }
-
-    public void eliminarDetalleFactura() throws SQLException{
-        PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{sp_buscarDetalleFactura(?)}");
-        
-    }
-    
     public void desactivarControles() {
         txtCodigoProd.setEditable(false);
         txtDescPro.setEditable(false);
@@ -463,7 +456,6 @@ public class ProductosViewController implements Initializable {
         this.escenarioPrincipal = escenarioPrincipal;
     }
 
-    @FXML
     public void handleButtonAction(ActionEvent event) {
 
         if (event.getSource() == btnRegresarP) {

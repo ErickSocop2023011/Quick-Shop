@@ -348,7 +348,7 @@ public class ClienteVistaController implements Initializable {
         escenarioPrincipal.menuPrincipalView();
     }
 
-    @FXML
+
     public void handleButtonAction(ActionEvent event) {
         if (event.getSource() == btnRegresar) {
             escenarioPrincipal.menuPrincipalView();

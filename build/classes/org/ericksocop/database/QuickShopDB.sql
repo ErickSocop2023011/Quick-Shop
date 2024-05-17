@@ -324,6 +324,8 @@ end $$
 
 delimiter ;
 
+call sp_mostrarCargoEmpleado();
+
 delimiter $$
 
 create procedure sp_buscarCargoEmpleado (in _codigoCargoEmpleado int)
@@ -774,7 +776,7 @@ END$$
 
 DELIMITER ;
 
-CALL sp_eliminarDetalleCompra(1);
+CALL sp_eliminarDetalleCompra(2);
 
 DELIMITER $$
 CREATE PROCEDURE sp_eliminarDetalleCompraPorProducto(
@@ -1006,6 +1008,27 @@ END$$
 DELIMITER ;
 CALL sp_eliminarDetalleFactura(1);
 
+-- Eliminar registros en DetalleFactura relacionados con una Factura específica
+DELIMITER $$
+CREATE PROCEDURE sp_eliminarDetalleFacturaPorFactura(p_numeroDeFactura INT)
+BEGIN
+    DELETE FROM DetalleFactura WHERE numeroDeFactura = p_numeroDeFactura;
+END$$
+DELIMITER ;
+
+-- Eliminar registros en Factura relacionados con un Empleado específico
+DELIMITER $$
+CREATE PROCEDURE sp_eliminarFacturaPorEmpleado(p_codigoEmpleado INT)
+BEGIN
+    DELETE FROM Factura WHERE codigoEmpleado = p_codigoEmpleado;
+END$$
+DELIMITER ;
+
+
+
 -- -----------------------------------
+call sp_mostrarFacturas();
+call sp_mostrarDetallesFactura();
+call sp_mostrarDetallesCompra();
 
 set global time_zone= '-6:00';
