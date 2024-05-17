@@ -821,6 +821,24 @@ DELIMITER ;
 
 CALL sp_mostrarEmpleados();
 
+delimiter $$
+create procedure sp_buscarEmpleado(in idEmpleado int)
+begin
+	select 
+    e.codigoEmpleado,
+    e.nombresEmpleado,
+    e.apellidosEmpleado,
+    e.sueldo,
+    e.direccion,
+    e.turno,
+    e.codigoCargoEmpleado
+    from empleados e
+    where codigoEmpleado = idEmpleado;
+end $$
+delimiter ;
+
+call sp_buscarEmpleado(2);
+
 DELIMITER $$
 
 CREATE PROCEDURE sp_editarEmpleado(
@@ -1030,5 +1048,7 @@ DELIMITER ;
 call sp_mostrarFacturas();
 call sp_mostrarDetallesFactura();
 call sp_mostrarDetallesCompra();
+call sp_mostrarEmpleados();
+call sp_mostrarProductos();
 
 set global time_zone= '-6:00';

@@ -29,7 +29,7 @@
           <Menu mnemonicParsing="false" text="Reporte">
             <items>
               <MenuItem fx:id="btnCompra" mnemonicParsing="false" onAction="#handleButtonAction" text="Compra y venta de productos" />
-                  <MenuItem mnemonicParsing="false" text="inventario" />
+                  <MenuItem fx:id="btnFacturas" mnemonicParsing="false" onAction="#handleButtonAction" text="Facturas" />
                   <MenuItem mnemonicParsing="false" text="Salario" />
             </items>
           </Menu>
