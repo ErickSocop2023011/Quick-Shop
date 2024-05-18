@@ -6,9 +6,11 @@ package org.ericksocop.controller;
 
 import com.jfoenix.controls.JFXDatePicker;
 import java.net.URL;
+import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -356,21 +358,73 @@ public class FacturasViewController implements Initializable {
     }
 
     public void eliminar() {
+    if (tvFacturas.getSelectionModel().getSelectedItem() != null) {
+        int respuesta = JOptionPane.showConfirmDialog(null, "¿Está seguro de eliminar el registro?", "Eliminar Factura", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        if (respuesta == JOptionPane.YES_OPTION) {
+            try {
+                Facturas facturaSeleccionada = (Facturas) tvFacturas.getSelectionModel().getSelectedItem();
+                int numeroDeFactura = facturaSeleccionada.getNumeroDeFactura();
+
+                // Primero, eliminar los detalles de la factura
+                PreparedStatement eliminarDetalleFactura = Conexion.getInstance().getConexion().prepareCall("{call sp_eliminarDetalleFacturaPorFactura(?)}");
+                eliminarDetalleFactura.setInt(1, numeroDeFactura);
+                eliminarDetalleFactura.execute();
+
+                // Luego, eliminar la factura
+                PreparedStatement eliminarFactura = Conexion.getInstance().getConexion().prepareCall("{call sp_eliminarFactura(?)}");
+                eliminarFactura.setInt(1, numeroDeFactura);
+                eliminarFactura.execute();
+
+                listaFacturas.remove(facturaSeleccionada);
+                limpiarControles();
+                cargarDatos();
+                JOptionPane.showMessageDialog(null, "Factura eliminada correctamente");
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(null, "Error al intentar eliminar la factura: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
+    } else {
+        JOptionPane.showMessageDialog(null, "Debe seleccionar una factura para eliminar");
+    }
+}
+
+    public void reportes(){
+        switch (tipoDeOperador) {
+            case ACTUALIZAR:
+                desactivarControles();
+                limpiarControles();
+                btnEditarF.setText("Editar");
+                btnReportesF.setText("Reportes");
+                btnAgregarF.setDisable(false);
+                btnEliminarF.setDisable(false);
+                tipoDeOperador = operador.NINGUNO;
+         }
     }
 
-    public void reportes() {
-    }
 
     public void limpiarControles() {
-
+        txtEstadoF.clear();
+        txtNumF.clear();
+        txtTotalF.clear();
+        cmbClienteID.getSelectionModel().clearSelection();
+        cmbCodEmp.getSelectionModel().clearSelection();
     }
 
     public void activarControles() {
-
+        txtEstadoF.setEditable(true);
+        txtNumF.setEditable(true);
+        txtTotalF.setEditable(true);
+        cmbClienteID.setDisable(false);
+        cmbCodEmp.setDisable(false);
     }
 
     public void desactivarControles() {
-
+        txtEstadoF.setEditable(false);
+        txtNumF.setEditable(false);
+        txtTotalF.setEditable(false);
+        cmbClienteID.setDisable(true);
+        cmbCodEmp.setDisable(true);
     }
 
     public void handleButtonAction(ActionEvent event) {

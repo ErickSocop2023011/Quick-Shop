@@ -381,7 +381,7 @@ public class EmpleadosViewController implements Initializable {
         txtSueldo.clear();
         txtDireccionEmp.clear();
         txtTurno.clear();
-        cmbCargoEmp.getSelectionModel().getSelectedItem();
+        cmbCargoEmp.getSelectionModel().clearSelection();
     }
 
     public Main getEscenarioPrincipal() {

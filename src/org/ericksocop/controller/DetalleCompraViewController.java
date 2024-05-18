@@ -289,8 +289,9 @@ public class DetalleCompraViewController implements Initializable {
             btnReportesDeC.setText("Reportes");
             btnAgregarDeC.setDisable(false);
             btnEliminarDeC.setDisable(false);
-            desactivarControles();
             limpiarControles();
+            desactivarControles();
+            
             tipoDeOperador = operador.NINGUNO;
             cargarDatos();
             break;
@@ -351,6 +352,19 @@ public class DetalleCompraViewController implements Initializable {
                 break;
         }
     }
+    
+    public void reportes() {
+        switch (tipoDeOperador) {
+            case ACTUALIZAR:
+                desactivarControles();
+                limpiarControles();
+                btnEditarDeC.setText("Editar");
+                btnReportesDeC.setText("Reportes");
+                btnAgregarDeC.setDisable(false);
+                btnEliminarDeC.setDisable(false);
+                tipoDeOperador = operador.NINGUNO;
+        }
+    }
 
     public Main getEscenarioPrincipal() {
         return escenarioPrincipal;
@@ -380,11 +394,11 @@ public class DetalleCompraViewController implements Initializable {
         txtCodDetC.clear();
         txtCostoU.clear();
         txtCantidad.clear();
-        cmbCodPro.getSelectionModel().getSelectedItem();
-        cmbNumDoc.getSelectionModel().getSelectedItem();
-        tvDetalleC.getSelectionModel().getSelectedItem();
+        cmbCodPro.getSelectionModel().clearSelection();
+        cmbNumDoc.getSelectionModel().clearSelection();
     }
 
+    
     public void handleButtonAction(ActionEvent event) {
         if (event.getSource() == btnRegresarDetC) {
             escenarioPrincipal.CompraView();

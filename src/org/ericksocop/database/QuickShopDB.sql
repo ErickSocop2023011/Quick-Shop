@@ -965,7 +965,7 @@ BEGIN
 END$$
 DELIMITER ;
 
-CALL sp_crearDetalleFactura(1, 50.00, 10, 3, 'P001');
+CALL sp_crearDetalleFactura(1, 50.00, 10, 2, 'P001');
 CALL sp_crearDetalleFactura(3, 50.00, 10, 3, 'P003');
 
 DELIMITER $$
@@ -1042,9 +1042,7 @@ BEGIN
 END$$
 DELIMITER ;
 
-
-
--- -----------------------------------
+-- -----------------------
 call sp_mostrarFacturas();
 call sp_mostrarDetallesFactura();
 call sp_mostrarDetallesCompra();

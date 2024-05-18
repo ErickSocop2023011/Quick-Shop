@@ -1042,9 +1042,7 @@ BEGIN
 END$$
 DELIMITER ;
 
-
-
--- -----------------------------------
+-- -----------------------
 call sp_mostrarFacturas();
 call sp_mostrarDetallesFactura();
 call sp_mostrarDetallesCompra();

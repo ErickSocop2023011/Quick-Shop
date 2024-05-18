@@ -409,6 +409,19 @@ public class ProductosViewController implements Initializable {
                 break;
         }
     }
+    
+    public void reportes(){
+        switch (tipoDeOperador) {
+            case ACTUALIZAR:
+                desactivarControles();
+                limpiarControles();
+                btnEditarPro.setText("Editar");
+                btnReportesPro.setText("Reportes");
+                btnAgregarPro.setDisable(false);
+                btnEliminarPro.setDisable(false);
+                tipoDeOperador = operador.NINGUNO;
+         }
+    }
 
     public void desactivarControles() {
         txtCodigoProd.setEditable(false);
@@ -443,8 +456,8 @@ public class ProductosViewController implements Initializable {
         txtPrecioM.clear();
         txtPrecioU.clear();
         tvProductos.getSelectionModel().getSelectedItem();
-        cmbCodigoTipoP.getSelectionModel().getSelectedItem();
-        cmbCodigoP.getSelectionModel().getSelectedItem();
+        cmbCodigoTipoP.getSelectionModel().clearSelection();
+        cmbCodigoP.getSelectionModel().clearSelection();
 
     }
 

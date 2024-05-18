@@ -47,7 +47,7 @@
             <Button fx:id="btnAgregarPro" alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#Agregar" prefHeight="50.0" prefWidth="80.0" stylesheets="@../resource/QuickShopCSS.css" text="Agregar" />
             <Button fx:id="btnEditarPro" alignment="CENTER" mnemonicParsing="false" onAction="#editar" prefHeight="50.0" prefWidth="80.0" stylesheets="@../resource/QuickShopCSS.css" text="Editar" GridPane.rowIndex="1" />
             <Button fx:id="btnEliminarPro" alignment="CENTER" mnemonicParsing="false" onAction="#eliminar" prefHeight="50.0" prefWidth="80.0" stylesheets="@../resource/QuickShopCSS.css" text="Eliminar" GridPane.rowIndex="2" />
-            <Button fx:id="btnReportesPro" alignment="CENTER" mnemonicParsing="false" prefHeight="50.0" prefWidth="80.0" stylesheets="@../resource/QuickShopCSS.css" text="Reportes" GridPane.rowIndex="3" />
+            <Button fx:id="btnReportesPro" alignment="CENTER" mnemonicParsing="false" onAction="#reportes" prefHeight="50.0" prefWidth="80.0" stylesheets="@../resource/QuickShopCSS.css" text="Reportes" GridPane.rowIndex="3" />
          </children>
       </GridPane>
       <GridPane layoutX="135.0" layoutY="460.0">
