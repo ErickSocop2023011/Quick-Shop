@@ -318,6 +318,7 @@ public class DetalleFacturaViewController implements Initializable {
             procedimiento.setInt(3, registro.getCantidad());
             procedimiento.setInt(4, registro.getNumeroDeFactura());
             procedimiento.setString(5, registro.getCodigoProducto());
+            procedimiento.execute();
         } catch (Exception e) {
             e.printStackTrace();
         }

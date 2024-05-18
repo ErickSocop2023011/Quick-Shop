@@ -108,7 +108,7 @@ public class Productos {
 
     @Override
     public String toString() {
-        return getCodigoProducto() + "    |   "  + getDescripcionProducto();
+        return getCodigoProducto() + "    |   "  + getDescripcionProducto() + "    |   "  + getPrecioUnitario();
     }
     
     

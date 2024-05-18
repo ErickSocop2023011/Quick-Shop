@@ -245,7 +245,7 @@ public class TipoProductoViewController implements Initializable {
         txtCodigoP.setEditable(true);
         txtDescripcionP.setEditable(true);
     }
-
+ 
     public void limpiarControles() {
         txtCodigoP.clear();
         txtDescripcionP.clear();

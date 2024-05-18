@@ -896,8 +896,8 @@ BEGIN
 END$$
 DELIMITER ;
 
-CALL sp_crearFactura(2, 'Pagada', 500.00, '2024-05-12', 2, 2);
-CALL sp_crearFactura(3, 'Pendiente', 800.00, '2024-05-12', 3, 3);
+CALL sp_crearFactura(2, 'Pagada', 0.00, '2024-05-12', 2, 2);
+CALL sp_crearFactura(3, 'Pendiente', 0.00, '2024-05-12', 3, 3);
 
 
 DELIMITER $$
@@ -943,7 +943,7 @@ DELIMITER ;
 
 
 
-CALL sp_editarFactura(2, 'Pendiente', 550.00, '2024-05-13', 2, 2);
+CALL sp_editarFactura(2, 'Pendiente', 0.00, '2024-05-13', 2, 2);
 
 
 DELIMITER $$
@@ -957,7 +957,7 @@ BEGIN
 END$$
 
 DELIMITER ;
-CALL sp_eliminarFactura(2);
+CALL sp_eliminarFactura(1);
 
 -- CRUD de DetalleFactura 
 DELIMITER $$
@@ -1058,5 +1058,88 @@ call sp_mostrarDetallesFactura();
 call sp_mostrarDetallesCompra();
 call sp_mostrarEmpleados();
 call sp_mostrarProductos();
+
+-- Trigger para actualización del total en la tabla Facturas al insertar un DetalleFactura
+DELIMITER //
+CREATE TRIGGER ActualizarTotalFacturaInsert AFTER INSERT ON DetalleFactura
+FOR EACH ROW
+BEGIN
+    UPDATE Factura
+    SET totalFactura = totalFactura + NEW.precioUnitario * NEW.cantidad
+    WHERE numeroDeFactura = NEW.numeroDeFactura;
+END;
+//
+DELIMITER ;
+
+-- Trigger para actualización del total en la tabla Facturas al actualizar un DetalleFactura
+DELIMITER //
+CREATE TRIGGER ActualizarTotalFacturaUpdate AFTER UPDATE ON DetalleFactura
+FOR EACH ROW
+BEGIN
+    UPDATE Factura
+    SET totalFactura = totalFactura + (NEW.precioUnitario * NEW.cantidad) - (OLD.precioUnitario * OLD.cantidad)
+    WHERE numeroDeFactura = NEW.numeroDeFactura;
+END;
+//
+DELIMITER ;
+
+-- Trigger para actualización del total en la tabla Facturas al eliminar un DetalleFactura
+DELIMITER //
+CREATE TRIGGER ActualizarTotalFacturaDelete AFTER DELETE ON DetalleFactura
+FOR EACH ROW
+BEGIN
+    UPDATE Factura
+    SET totalFactura = totalFactura - OLD.precioUnitario * OLD.cantidad
+    WHERE numeroDeFactura = OLD.numeroDeFactura;
+END;
+//
+DELIMITER ;
+
+-- Procedimiento para actualizar el stock de un producto al insertar un DetalleFactura
+DELIMITER //
+CREATE PROCEDURE ActualizarStockInsertarDetalle(
+    IN p_codigoProducto varchar(15),
+    IN p_cantidad INT
+)
+BEGIN
+    UPDATE Productos
+    SET existencia = existencia - p_cantidad
+    WHERE codigoProducto = p_codigoProducto;
+END;
+//
+DELIMITER ;
+
+-- Procedimiento para actualizar el stock de un producto al eliminar un DetalleFactura
+DELIMITER //
+CREATE PROCEDURE ActualizarStockEliminarDetalle(
+    IN p_productoID varchar(15),
+    IN p_cantidad INT
+)
+BEGIN
+    UPDATE Productos
+    SET existencia = existencia + p_cantidad
+    WHERE codigoProducto = p_productoID;
+END;
+//
+DELIMITER ;
+
+DELIMITER //
+CREATE TRIGGER ActualizarStockInsert AFTER INSERT ON DetalleFactura
+FOR EACH ROW
+BEGIN
+    CALL ActualizarStockInsertarDetalle(NEW.codigoProducto, NEW.cantidad);
+END;
+//
+DELIMITER ;
+
+-- Trigger para actualizar el stock al eliminar un DetalleFactura
+DELIMITER //
+CREATE TRIGGER ActualizarStockDelete AFTER DELETE ON DetalleFactura
+FOR EACH ROW
+BEGIN
+    CALL ActualizarStockEliminarDetalle(OLD.codigoProducto, OLD.cantidad);
+END;
+//
+DELIMITER ;
 
 set global time_zone= '-6:00';
