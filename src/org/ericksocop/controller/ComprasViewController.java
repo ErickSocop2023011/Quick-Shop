@@ -95,6 +95,7 @@ public class ComprasViewController implements Initializable {
     }
 
     public void seleccionarElemento() {
+        try{
         txtNumDoc.setText(String.valueOf(((Compras) tvCompras.getSelectionModel().getSelectedItem()).getNumeroDocumento()));
         Compras compraSeleccionada = (Compras) tvCompras.getSelectionModel().getSelectedItem();
 
@@ -112,7 +113,10 @@ public class ComprasViewController implements Initializable {
 
         txtDescDoc.setText((((Compras) tvCompras.getSelectionModel().getSelectedItem()).getDescripcionCompra()));
         txtTotalDoc.setText(String.valueOf((((Compras) tvCompras.getSelectionModel().getSelectedItem()).getTotalDocumento())));
-
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null, "Por favor selecciona una fila válida", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        
     }
 
     public ObservableList<Compras> getCompra() {
@@ -217,12 +221,14 @@ public class ComprasViewController implements Initializable {
                             procedimiento.execute();
                             listaCompras.remove(tvCompras.getSelectionModel().getSelectedItem());
                             limpiarControles();
+                            cargarDatos();
+                            JOptionPane.showMessageDialog(null, "Compra eliminada correctamente");
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
                 } else {
-                    JOptionPane.showMessageDialog(null, "Debe de seleccionar un cliente para eliminar");
+                    JOptionPane.showMessageDialog(null, "Debe de seleccionar una fila para eliminar");
                 }
 
                 break;
@@ -241,7 +247,7 @@ public class ComprasViewController implements Initializable {
                     txtNumDoc.setEditable(false);
                     tipoDeOperador = operador.ACTUALIZAR;
                 } else {
-                    JOptionPane.showMessageDialog(null, "Debe de seleccionar un cliente para editar");
+                    JOptionPane.showMessageDialog(null, "Debe de seleccionar una fila para editar");
                 }
                 break;
             case ACTUALIZAR:
@@ -305,6 +311,7 @@ public class ComprasViewController implements Initializable {
         jfxDatePicker.setEditable(false);
         txtDescDoc.setEditable(false);
         txtTotalDoc.setEditable(false);
+        jfxDatePicker.setDisable(true);
     }
 
     public void activarControles() {
@@ -312,6 +319,7 @@ public class ComprasViewController implements Initializable {
         jfxDatePicker.setEditable(true);
         txtDescDoc.setEditable(true);
         txtTotalDoc.setEditable(true);
+        jfxDatePicker.setDisable(false);
     }
 
     public void limpiarControles() {
@@ -319,6 +327,7 @@ public class ComprasViewController implements Initializable {
         jfxDatePicker.setValue(null);
         txtDescDoc.clear();
         txtTotalDoc.clear();
+        jfxDatePicker.setValue(null);
     }
 
     public Main getEscenarioPrincipal() {

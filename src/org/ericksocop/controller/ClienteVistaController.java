@@ -121,13 +121,17 @@ public class ClienteVistaController implements Initializable {
     }
 
     public void seleccionarElemento() {
-        txtClienteID.setText(String.valueOf(((Clientes) tvCliente.getSelectionModel().getSelectedItem()).getClienteID()));
-        txtNombreCliente.setText((((Clientes) tvCliente.getSelectionModel().getSelectedItem()).getNombreClientes()));
-        txtApellidoCliente.setText((((Clientes) tvCliente.getSelectionModel().getSelectedItem()).getApellidoClientes()));
-        txtDireccionCliente.setText((((Clientes) tvCliente.getSelectionModel().getSelectedItem()).getDireccionClientes()));
-        txtNIT.setText((((Clientes) tvCliente.getSelectionModel().getSelectedItem()).getNITClientes()));
-        txtTelefonoCli.setText((((Clientes) tvCliente.getSelectionModel().getSelectedItem()).getTelefonoClientes()));
-        txtCorreoCliente.setText((((Clientes) tvCliente.getSelectionModel().getSelectedItem()).getCorreoClientes()));
+        try {
+            txtClienteID.setText(String.valueOf(((Clientes) tvCliente.getSelectionModel().getSelectedItem()).getClienteID()));
+            txtNombreCliente.setText((((Clientes) tvCliente.getSelectionModel().getSelectedItem()).getNombreClientes()));
+            txtApellidoCliente.setText((((Clientes) tvCliente.getSelectionModel().getSelectedItem()).getApellidoClientes()));
+            txtDireccionCliente.setText((((Clientes) tvCliente.getSelectionModel().getSelectedItem()).getDireccionClientes()));
+            txtNIT.setText((((Clientes) tvCliente.getSelectionModel().getSelectedItem()).getNITClientes()));
+            txtTelefonoCli.setText((((Clientes) tvCliente.getSelectionModel().getSelectedItem()).getTelefonoClientes()));
+            txtCorreoCliente.setText((((Clientes) tvCliente.getSelectionModel().getSelectedItem()).getCorreoClientes()));
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Por favor selecciona una fila válida", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     public ObservableList<Clientes> getClientes() {
@@ -235,12 +239,14 @@ public class ClienteVistaController implements Initializable {
                             procedimiento.execute();
                             listaClientes.remove(tvCliente.getSelectionModel().getSelectedItem());
                             limpiarControles();
+                            cargarDatos();
+                            JOptionPane.showMessageDialog(null, "Cliente eliminada correctamente");
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
                 } else {
-                    JOptionPane.showMessageDialog(null, "Debe de seleccionar un cliente para eliminar");
+                    JOptionPane.showMessageDialog(null, "Debe de seleccionar una fila para eliminar");
                 }
 
                 break;
@@ -260,7 +266,7 @@ public class ClienteVistaController implements Initializable {
                     txtClienteID.setEditable(false);
                     tipoDeOperador = operador.ACTUALIZAR;
                 } else {
-                    JOptionPane.showMessageDialog(null, "Debe de seleccionar un cliente para editar");
+                    JOptionPane.showMessageDialog(null, "Debe de seleccionar una fila para editar");
                 }
                 break;
             case ACTUALIZAR:
@@ -347,7 +353,6 @@ public class ClienteVistaController implements Initializable {
     public void MenuPrincipalView() {
         escenarioPrincipal.menuPrincipalView();
     }
-
 
     public void handleButtonAction(ActionEvent event) {
         if (event.getSource() == btnRegresar) {

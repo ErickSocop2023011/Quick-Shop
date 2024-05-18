@@ -77,8 +77,12 @@ public class TipoProductoViewController implements Initializable {
     }
 
     public void seleccionarElemento() {
-        txtCodigoP.setText(String.valueOf(((TipoProducto) tvDescripcionP.getSelectionModel().getSelectedItem()).getCodigoTipoProducto()));
-        txtDescripcionP.setText((((TipoProducto) tvDescripcionP.getSelectionModel().getSelectedItem()).getDescripcionProducto()));
+        try {
+            txtCodigoP.setText(String.valueOf(((TipoProducto) tvDescripcionP.getSelectionModel().getSelectedItem()).getCodigoTipoProducto()));
+            txtDescripcionP.setText((((TipoProducto) tvDescripcionP.getSelectionModel().getSelectedItem()).getDescripcionProducto()));
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Por favor selecciona una fila válida", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     public ObservableList<TipoProducto> getTipoP() {
@@ -167,12 +171,14 @@ public class TipoProductoViewController implements Initializable {
                             procedimiento.execute();
                             listaTipoP.remove(tvDescripcionP.getSelectionModel().getSelectedItem());
                             limpiarControles();
+                            cargarDatos();
+                            JOptionPane.showMessageDialog(null, "Tipo Producto eliminada correctamente");
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
                 } else {
-                    JOptionPane.showMessageDialog(null, "Debe de seleccionar un cliente para eliminar");
+                    JOptionPane.showMessageDialog(null, "Debe de seleccionar una fila para eliminar");
                 }
 
                 break;
@@ -191,7 +197,7 @@ public class TipoProductoViewController implements Initializable {
                     txtCodigoP.setEditable(false);
                     tipoDeOperador = operador.ACTUALIZAR;
                 } else {
-                    JOptionPane.showMessageDialog(null, "Debe de seleccionar un cliente para editar");
+                    JOptionPane.showMessageDialog(null, "Debe de seleccionar una fila para editar");
                 }
                 break;
             case ACTUALIZAR:

@@ -110,13 +110,17 @@ public class EmpleadosViewController implements Initializable {
     }
 
     public void seleccionarElemento() {
-        txtCodigoEmp.setText(String.valueOf(((Empleados) tvEmpleados.getSelectionModel().getSelectedItem()).getCodigoEmpleado()));
-        txtnomEmp.setText((((Empleados) tvEmpleados.getSelectionModel().getSelectedItem()).getNombresEmpleado()));
-        txtApellidosEmp.setText((((Empleados) tvEmpleados.getSelectionModel().getSelectedItem()).getApellidosEmpleado()));
-        txtSueldo.setText(String.valueOf(((Empleados) tvEmpleados.getSelectionModel().getSelectedItem()).getSueldo()));
-        txtDireccionEmp.setText((((Empleados) tvEmpleados.getSelectionModel().getSelectedItem()).getDireccion()));
-        txtTurno.setText((((Empleados) tvEmpleados.getSelectionModel().getSelectedItem()).getTurno()));
-        cmbCargoEmp.getSelectionModel().select(buscarCodigoEmp(((Empleados) tvEmpleados.getSelectionModel().getSelectedItem()).getCodigoCargoEmpleado()));
+        try {
+            txtCodigoEmp.setText(String.valueOf(((Empleados) tvEmpleados.getSelectionModel().getSelectedItem()).getCodigoEmpleado()));
+            txtnomEmp.setText((((Empleados) tvEmpleados.getSelectionModel().getSelectedItem()).getNombresEmpleado()));
+            txtApellidosEmp.setText((((Empleados) tvEmpleados.getSelectionModel().getSelectedItem()).getApellidosEmpleado()));
+            txtSueldo.setText(String.valueOf(((Empleados) tvEmpleados.getSelectionModel().getSelectedItem()).getSueldo()));
+            txtDireccionEmp.setText((((Empleados) tvEmpleados.getSelectionModel().getSelectedItem()).getDireccion()));
+            txtTurno.setText((((Empleados) tvEmpleados.getSelectionModel().getSelectedItem()).getTurno()));
+            cmbCargoEmp.getSelectionModel().select(buscarCodigoEmp(((Empleados) tvEmpleados.getSelectionModel().getSelectedItem()).getCodigoCargoEmpleado()));
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Por favor selecciona una fila válida", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     public CargoEmpleados buscarCodigoEmp(int codigoEmpleado) {
@@ -244,7 +248,7 @@ public class EmpleadosViewController implements Initializable {
                     txtCodigoEmp.setEditable(false);
                     tipoDeOperador = operador.ACTUALIZAR;
                 } else {
-                    JOptionPane.showMessageDialog(null, "Debe de seleccionar un Detalle Compra para editar");
+                    JOptionPane.showMessageDialog(null, "Debe de seleccionar una fila para editar");
                 }
                 break;
             case ACTUALIZAR:
@@ -329,13 +333,15 @@ public class EmpleadosViewController implements Initializable {
 
                             listaEmpleados.remove(empleadoSeleccionado);
                             limpiarControles();
+                            cargarDatos();
+                            JOptionPane.showMessageDialog(null, "Empleado eliminada correctamente");
                         } catch (SQLException e) {
                             JOptionPane.showMessageDialog(null, "Error al eliminar el empleado: " + e.getMessage());
                             e.printStackTrace();
                         }
                     }
                 } else {
-                    JOptionPane.showMessageDialog(null, "Debe de seleccionar un empleado para eliminar");
+                    JOptionPane.showMessageDialog(null, "Debe de seleccionar una fila para eliminar");
                 }
                 break;
         }

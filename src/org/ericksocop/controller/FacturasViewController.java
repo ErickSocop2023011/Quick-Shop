@@ -113,6 +113,7 @@ public class FacturasViewController implements Initializable {
     }
 
     public void seleccionarElemento() {
+        try{
         txtNumF.setText(String.valueOf(((Facturas) tvFacturas.getSelectionModel().getSelectedItem()).getNumeroDeFactura()));
         txtEstadoF.setText(((Facturas) tvFacturas.getSelectionModel().getSelectedItem()).getEstado());
         txtTotalF.setText(String.valueOf(((Facturas) tvFacturas.getSelectionModel().getSelectedItem()).getTotalFactura()));
@@ -126,6 +127,9 @@ public class FacturasViewController implements Initializable {
 
         cmbClienteID.getSelectionModel().select(buscarCliente((((Facturas) tvFacturas.getSelectionModel().getSelectedItem()).getClienteID())));
         cmbCodEmp.getSelectionModel().select(buscarEmpleado((((Facturas) tvFacturas.getSelectionModel().getSelectedItem()).getCodigoEmpleado())));
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null, "Por favor selecciona una fila válida", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     public Clientes buscarCliente(int ClienteID) {
@@ -306,7 +310,7 @@ public class FacturasViewController implements Initializable {
                     txtNumF.setEditable(false);
                     tipoDeOperador = operador.ACTUALIZAR;
                 } else {
-                    JOptionPane.showMessageDialog(null, "Debe de seleccionar un Detalle Compra para editar");
+                    JOptionPane.showMessageDialog(null, "Debe de seleccionar una fila para editar");
                 }
                 break;
             case ACTUALIZAR:
@@ -409,6 +413,7 @@ public class FacturasViewController implements Initializable {
         txtTotalF.clear();
         cmbClienteID.getSelectionModel().clearSelection();
         cmbCodEmp.getSelectionModel().clearSelection();
+        jfxDatePicker.setValue(null);
     }
 
     public void activarControles() {
@@ -417,6 +422,7 @@ public class FacturasViewController implements Initializable {
         txtTotalF.setEditable(true);
         cmbClienteID.setDisable(false);
         cmbCodEmp.setDisable(false);
+        jfxDatePicker.setDisable(false);
     }
 
     public void desactivarControles() {
@@ -425,6 +431,7 @@ public class FacturasViewController implements Initializable {
         txtTotalF.setEditable(false);
         cmbClienteID.setDisable(true);
         cmbCodEmp.setDisable(true);
+        jfxDatePicker.setDisable(true);
     }
 
     public void handleButtonAction(ActionEvent event) {
@@ -432,7 +439,7 @@ public class FacturasViewController implements Initializable {
             escenarioPrincipal.menuPrincipalView();
         }
         if (event.getSource() == btnDetalleFact) {
-
+            escenarioPrincipal.DetalleFacturaView();
         }
     }
 

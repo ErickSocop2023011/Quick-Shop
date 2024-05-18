@@ -116,16 +116,20 @@ public class ProveedorViewController implements Initializable {
     }
 
     public void seleccionarElemento() {
-        txtCodigoP.setText(String.valueOf(((Proveedores) tvPoveedores.getSelectionModel().getSelectedItem()).getCodigoProveedor()));
-        txtNITP.setText((((Proveedores) tvPoveedores.getSelectionModel().getSelectedItem()).getNITProveedor()));
-        txtNombresP.setText((((Proveedores) tvPoveedores.getSelectionModel().getSelectedItem()).getNombresProveedor()));
-        txtApellidosP.setText((((Proveedores) tvPoveedores.getSelectionModel().getSelectedItem()).getApellidosProveedor()));
-        txtDireccionP.setText((((Proveedores) tvPoveedores.getSelectionModel().getSelectedItem()).getDireccionProveedor()));
-        txtRazonSocial.setText((((Proveedores) tvPoveedores.getSelectionModel().getSelectedItem()).getRazonSocial()));
-        txtContactoP.setText((((Proveedores) tvPoveedores.getSelectionModel().getSelectedItem()).getContactoPrincipal()));
-        txtSitioWeb.setText((((Proveedores) tvPoveedores.getSelectionModel().getSelectedItem()).getPaginaWeb()));
-        txtTelefono.setText((((Proveedores) tvPoveedores.getSelectionModel().getSelectedItem()).getTelefonoProveedor()));
-        txtEmailP.setText((((Proveedores) tvPoveedores.getSelectionModel().getSelectedItem()).getEmailProveedor()));
+        try {
+            txtCodigoP.setText(String.valueOf(((Proveedores) tvPoveedores.getSelectionModel().getSelectedItem()).getCodigoProveedor()));
+            txtNITP.setText((((Proveedores) tvPoveedores.getSelectionModel().getSelectedItem()).getNITProveedor()));
+            txtNombresP.setText((((Proveedores) tvPoveedores.getSelectionModel().getSelectedItem()).getNombresProveedor()));
+            txtApellidosP.setText((((Proveedores) tvPoveedores.getSelectionModel().getSelectedItem()).getApellidosProveedor()));
+            txtDireccionP.setText((((Proveedores) tvPoveedores.getSelectionModel().getSelectedItem()).getDireccionProveedor()));
+            txtRazonSocial.setText((((Proveedores) tvPoveedores.getSelectionModel().getSelectedItem()).getRazonSocial()));
+            txtContactoP.setText((((Proveedores) tvPoveedores.getSelectionModel().getSelectedItem()).getContactoPrincipal()));
+            txtSitioWeb.setText((((Proveedores) tvPoveedores.getSelectionModel().getSelectedItem()).getPaginaWeb()));
+            txtTelefono.setText((((Proveedores) tvPoveedores.getSelectionModel().getSelectedItem()).getTelefonoProveedor()));
+            txtEmailP.setText((((Proveedores) tvPoveedores.getSelectionModel().getSelectedItem()).getEmailProveedor()));
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Por favor selecciona una fila válida", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     public ObservableList<Proveedores> getProveedores() {
@@ -236,12 +240,14 @@ public class ProveedorViewController implements Initializable {
                             procedimiento.execute();
                             listaProveedores.remove(tvPoveedores.getSelectionModel().getSelectedItem());
                             limpiarControles();
+                            cargarDatos();
+                            JOptionPane.showMessageDialog(null, "Proveedor eliminado correctamente");
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
                 } else {
-                    JOptionPane.showMessageDialog(null, "Debe de seleccionar un cliente para eliminar");
+                    JOptionPane.showMessageDialog(null, "Debe de seleccionar una fila para eliminar");
                 }
 
                 break;
@@ -260,7 +266,7 @@ public class ProveedorViewController implements Initializable {
                     txtCodigoP.setEditable(false);
                     tipoDeOperador = operador.ACTUALIZAR;
                 } else {
-                    JOptionPane.showMessageDialog(null, "Debe de seleccionar un cliente para editar");
+                    JOptionPane.showMessageDialog(null, "Debe de seleccionar una fila para editar");
                 }
                 break;
             case ACTUALIZAR:
@@ -362,8 +368,7 @@ public class ProveedorViewController implements Initializable {
         escenarioPrincipal.menuPrincipalView();
     }
 
-    @FXML
-    private void handleButtonAction(ActionEvent event) {
+    public void handleButtonAction(ActionEvent event) {
         if (event.getSource() == btnRegresarP) {
             escenarioPrincipal.menuPrincipalView();
         }

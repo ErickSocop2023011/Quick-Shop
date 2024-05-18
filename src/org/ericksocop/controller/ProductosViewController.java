@@ -124,6 +124,7 @@ public class ProductosViewController implements Initializable {
     }
 
     public void seleccionarElemento() {
+        try{
         txtCodigoProd.setText((((Productos) tvProductos.getSelectionModel().getSelectedItem()).getCodigoProducto()));
         txtDescPro.setText((((Productos) tvProductos.getSelectionModel().getSelectedItem()).getDescripcionProducto()));
         txtPrecioU.setText(String.valueOf(((Productos) tvProductos.getSelectionModel().getSelectedItem()).getPrecioUnitario()));
@@ -133,6 +134,9 @@ public class ProductosViewController implements Initializable {
         txtExistencia.setText(String.valueOf(((Productos) tvProductos.getSelectionModel().getSelectedItem()).getExistencia()));
         cmbCodigoTipoP.getSelectionModel().select(buscarTipoProducto(((Productos) tvProductos.getSelectionModel().getSelectedItem()).getCodigoTipoProducto()));
         cmbCodigoP.getSelectionModel().select(buscarProveedor(((Productos) tvProductos.getSelectionModel().getSelectedItem()).getCodigoProveedor()));
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null, "Por favor selecciona una fila válida", "Error", JOptionPane.ERROR_MESSAGE);
+        }
         //cmbCodgioTipoP.set(String.valueOf(((Productos)tvProductos.getSelectionModel().getSelectedItem()).getCodigoTipoProducto()));
         //  cmbCodigoP.setText(String.valueOf(((Productos)tvProductos.getSelectionModel().getSelectedItem()).getCodigoProveedor()));
     }
@@ -316,7 +320,7 @@ public class ProductosViewController implements Initializable {
                     txtCodigoProd.setEditable(false);
                     tipoDeOperador = operador.ACTUALIZAR;
                 } else {
-                    JOptionPane.showMessageDialog(null, "Debe de seleccionar un Detalle Compra para editar");
+                    JOptionPane.showMessageDialog(null, "Debe de seleccionar una fila para editar");
                 }
                 break;
             case ACTUALIZAR:
@@ -398,13 +402,15 @@ public class ProductosViewController implements Initializable {
 
                             listaProductos.remove(productoSeleccionado);
                             limpiarControles();
+                            cargarDatos();
+                            JOptionPane.showMessageDialog(null, "Producto eliminado correctamente");
                         } catch (SQLException e) {
                             JOptionPane.showMessageDialog(null, "Error al eliminar el producto: " + e.getMessage());
                             e.printStackTrace();
                         }
                     }
                 } else {
-                    JOptionPane.showMessageDialog(null, "Debe de seleccionar un Producto para eliminar");
+                    JOptionPane.showMessageDialog(null, "Debe de seleccionar una fila para eliminar");
                 }
                 break;
         }

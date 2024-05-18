@@ -910,6 +910,16 @@ DELIMITER ;
 
 CALL sp_mostrarFacturas();
 
+delimiter $$
+create procedure sp_buscarFactura(in facturaID int)
+begin
+	select * from factura
+    where numeroDeFactura = facturaID;
+end$$
+delimiter ;
+
+call sp_buscarFactura(2);
+
 DELIMITER $$
 
 CREATE PROCEDURE sp_editarFactura(

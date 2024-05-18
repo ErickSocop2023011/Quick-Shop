@@ -31,8 +31,7 @@ public class PrograViewController implements Initializable {
         // TODO
     }
 
-    @FXML
-    void handleButtonAction(ActionEvent event) throws Exception {
+   public void handleButtonAction(ActionEvent event) throws Exception {
         if (event.getSource() == btnInicio) {
             escenarioPrincipal.menuPrincipalView();
         }

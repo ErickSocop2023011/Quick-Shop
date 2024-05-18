@@ -81,10 +81,13 @@ public class CargoEmpleadosViewController implements Initializable {
     }
 
     public void seleccionarElemento() {
-
-        txtCodigoCargoE.setText(String.valueOf(((CargoEmpleados) tvCargoE.getSelectionModel().getSelectedItem()).getCodigoCargoEmpleado()));
-        txtNombreCargo.setText((((CargoEmpleados) tvCargoE.getSelectionModel().getSelectedItem()).getNombreCargo()));
-        txtDescripcionC.setText((((CargoEmpleados) tvCargoE.getSelectionModel().getSelectedItem()).getDescripcionCargo()));
+        try {
+            txtCodigoCargoE.setText(String.valueOf(((CargoEmpleados) tvCargoE.getSelectionModel().getSelectedItem()).getCodigoCargoEmpleado()));
+            txtNombreCargo.setText((((CargoEmpleados) tvCargoE.getSelectionModel().getSelectedItem()).getNombreCargo()));
+            txtDescripcionC.setText((((CargoEmpleados) tvCargoE.getSelectionModel().getSelectedItem()).getDescripcionCargo()));
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Por favor selecciona una fila válida", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     public ObservableList<CargoEmpleados> getCargoE() {
@@ -175,12 +178,14 @@ public class CargoEmpleadosViewController implements Initializable {
                             procedimiento.execute();
                             listaCargo.remove(tvCargoE.getSelectionModel().getSelectedItem());
                             limpiarControles();
+                            cargarDatos();
+                            JOptionPane.showMessageDialog(null, "Cargo eliminada correctamente");
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
                 } else {
-                    JOptionPane.showMessageDialog(null, "Debe de seleccionar un cliente para eliminar");
+                    JOptionPane.showMessageDialog(null, "Debe de seleccionar una fila para eliminar");
                 }
 
                 break;
@@ -199,7 +204,7 @@ public class CargoEmpleadosViewController implements Initializable {
                     txtCodigoCargoE.setEditable(false);
                     tipoDeOperador = operador.ACTUALIZAR;
                 } else {
-                    JOptionPane.showMessageDialog(null, "Debe de seleccionar un cliente para editar");
+                    JOptionPane.showMessageDialog(null, "Debe de seleccionar una fila para editar");
                 }
                 break;
             case ACTUALIZAR:

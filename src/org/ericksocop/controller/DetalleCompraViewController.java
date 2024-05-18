@@ -101,11 +101,15 @@ public class DetalleCompraViewController implements Initializable {
     }
 
     public void seleccionarElemento() {
-        txtCodDetC.setText(String.valueOf(((DetalleCompra) tvDetalleC.getSelectionModel().getSelectedItem()).getCodigoDetalleCompra()));
-        txtCostoU.setText(String.valueOf(((DetalleCompra) tvDetalleC.getSelectionModel().getSelectedItem()).getCostoUnitario()));
-        txtCantidad.setText(String.valueOf(((DetalleCompra) tvDetalleC.getSelectionModel().getSelectedItem()).getCantidad()));
-        cmbCodPro.getSelectionModel().select(buscarCodigoProducto((((DetalleCompra) tvDetalleC.getSelectionModel().getSelectedItem()).getCodigoProducto())));
-        cmbNumDoc.getSelectionModel().select((((DetalleCompra) tvDetalleC.getSelectionModel().getSelectedItem()).getNumeroDocumento()));
+        try {
+            txtCodDetC.setText(String.valueOf(((DetalleCompra) tvDetalleC.getSelectionModel().getSelectedItem()).getCodigoDetalleCompra()));
+            txtCostoU.setText(String.valueOf(((DetalleCompra) tvDetalleC.getSelectionModel().getSelectedItem()).getCostoUnitario()));
+            txtCantidad.setText(String.valueOf(((DetalleCompra) tvDetalleC.getSelectionModel().getSelectedItem()).getCantidad()));
+            cmbCodPro.getSelectionModel().select(buscarCodigoProducto((((DetalleCompra) tvDetalleC.getSelectionModel().getSelectedItem()).getCodigoProducto())));
+            cmbNumDoc.getSelectionModel().select((((DetalleCompra) tvDetalleC.getSelectionModel().getSelectedItem()).getNumeroDocumento()));
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Por favor selecciona una fila válida", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     public ObservableList<DetalleCompra> getDetalleC() {
@@ -276,7 +280,7 @@ public class DetalleCompraViewController implements Initializable {
                     txtCodDetC.setEditable(false);
                     tipoDeOperador = operador.ACTUALIZAR;
                 } else {
-                    JOptionPane.showMessageDialog(null, "Debe de seleccionar un Detalle Compra para editar");
+                    JOptionPane.showMessageDialog(null, "Debe de seleccionar una fila para editar");
                 }
                 break;
             case ACTUALIZAR:
@@ -291,7 +295,7 @@ public class DetalleCompraViewController implements Initializable {
             btnEliminarDeC.setDisable(false);
             limpiarControles();
             desactivarControles();
-            
+
             tipoDeOperador = operador.NINGUNO;
             cargarDatos();
             break;
@@ -341,18 +345,20 @@ public class DetalleCompraViewController implements Initializable {
                             procedimiento.execute();
                             listaDetalleC.remove(tvDetalleC.getSelectionModel().getSelectedItem());
                             limpiarControles();
+                            cargarDatos();
+                            JOptionPane.showMessageDialog(null, "Detalle Compra eliminado correctamente");
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
                 } else {
-                    JOptionPane.showMessageDialog(null, "Debe de seleccionar un detalle Compra para eliminar");
+                    JOptionPane.showMessageDialog(null, "Debe de seleccionar una fila Compra para eliminar");
                 }
 
                 break;
         }
     }
-    
+
     public void reportes() {
         switch (tipoDeOperador) {
             case ACTUALIZAR:
@@ -398,7 +404,6 @@ public class DetalleCompraViewController implements Initializable {
         cmbNumDoc.getSelectionModel().clearSelection();
     }
 
-    
     public void handleButtonAction(ActionEvent event) {
         if (event.getSource() == btnRegresarDetC) {
             escenarioPrincipal.CompraView();
