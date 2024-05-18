@@ -246,30 +246,6 @@ public class DetalleCompraViewController implements Initializable {
                 break;
         }
     }
-
-    /*public void guardar() {
-        DetalleCompra registro = new DetalleCompra();
-        
-        registro.setCodigoDetalleCompra(Integer.parseInt(txtCodDetC.getText()));
-        registro.setCantidad(Integer.parseInt(txtCantidad.getText()));
-        registro.setCostoUnitario(Double.parseDouble(txtCostoU.getText()));
-        registro.setCodigoProducto((((Productos) cmbCodPro.getSelectionModel().getSelectedItem()).getCodigoProducto()));
-        registro.setNumeroDocumento((((Compras) cmbNumDoc.getSelectionModel().getSelectedItem()).getNumeroDocumento()));
-
-        try {
-            PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_crearDetalleCompra(?,?,?, ?,?)}");
-            procedimiento.setInt(1, registro.getCodigoDetalleCompra());
-            procedimiento.setDouble(2, registro.getCostoUnitario());
-            procedimiento.setInt(3, registro.getCantidad());
-            procedimiento.setString(4, registro.getCodigoProducto());
-            procedimiento.setInt(5, registro.getNumeroDocumento());
-            procedimiento.execute();
-            actualizarStockInsertarDetalle(DetalleFactura.getCodigoProducto(), DetalleFactura.getCantidad());
-            listaDetalleC.add(registro);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }*/
     
     public void guardar() {
     DetalleCompra registro = new DetalleCompra();
@@ -295,9 +271,9 @@ public class DetalleCompraViewController implements Initializable {
 }
     
     public void actualizarStockInsertarDetalle(String codigoProducto, int cantidad) {
-        DetalleFactura detalleFactura = new DetalleFactura(); // Instancia de DetalleFactura
-    detalleFactura.setCodigoProducto(codigoProducto); // Establecer el código del producto
-    detalleFactura.setCantidad(cantidad); // Establecer la cantidad
+        DetalleFactura detalleFactura = new DetalleFactura(); 
+    detalleFactura.setCodigoProducto(codigoProducto); 
+    detalleFactura.setCantidad(cantidad); 
     try {
         PreparedStatement procedimiento = Conexion.getInstance().getConexion()
             .prepareCall("{call ActualizarStockInsertarDetalle(?, ?)}");
@@ -306,7 +282,7 @@ public class DetalleCompraViewController implements Initializable {
         procedimiento.executeUpdate();
     } catch (SQLException e) {
         e.printStackTrace();
-        // Manejar cualquier excepción
+
     }
 }
 
@@ -362,45 +338,6 @@ public class DetalleCompraViewController implements Initializable {
             e.printStackTrace();
         }
     }
-
-    /*public void eliminar() {
-        switch (tipoDeOperador) {
-            case ACTUALIZAR:
-                desactivarControles();
-                limpiarControles();
-                btnAgregarDeC.setText("Agregar");
-                btnEliminarDeC.setText("Eliminar");
-                btnEditarDeC.setDisable(false);
-                btnReportesDeC.setDisable(false);
-                /*regresar de nuevo a sus imagenes originales
-                imgAgregar.setImage(new Image("URL"));
-                tipoDeOperador = operador.NINGUNO;
-                break;
-            default:
-                if (tvDetalleC.getSelectionModel().getSelectedItem() != null) {
-                    int respuesta = JOptionPane.showConfirmDialog(null, "Confirmas la eliminacion del registro?", "Eliminar Detalle Compra", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-
-                    if (respuesta == JOptionPane.YES_NO_OPTION) {
-                        try {
-                            PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_eliminarDetalleCompra(?)}");
-                            procedimiento.setInt(1, ((DetalleCompra) tvDetalleC.getSelectionModel().getSelectedItem()).getCodigoDetalleCompra());
-                            procedimiento.execute();
-                            listaDetalleC.remove(tvDetalleC.getSelectionModel().getSelectedItem());
-                            limpiarControles();
-                            cargarDatos();
-                            JOptionPane.showMessageDialog(null, "Detalle Compra eliminado correctamente");
-                            
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                } else {
-                    JOptionPane.showMessageDialog(null, "Debe de seleccionar una fila Compra para eliminar");
-                }
-
-                break;
-        }
-    }*/
     
     public void eliminar() {
     switch (tipoDeOperador) {
