@@ -124,17 +124,17 @@ public class ProductosViewController implements Initializable {
     }
 
     public void seleccionarElemento() {
-        try{
-        txtCodigoProd.setText(String.valueOf(((Productos) tvProductos.getSelectionModel().getSelectedItem()).getCodigoProducto()));
-        txtDescPro.setText((((Productos) tvProductos.getSelectionModel().getSelectedItem()).getDescripcionProducto()));
-        txtPrecioU.setText(String.valueOf(((Productos) tvProductos.getSelectionModel().getSelectedItem()).getPrecioUnitario()));
-        txtPrecioD.setText(String.valueOf(((Productos) tvProductos.getSelectionModel().getSelectedItem()).getPrecioDocena()));
-        txtPrecioM.setText(String.valueOf(((Productos) tvProductos.getSelectionModel().getSelectedItem()).getPrecioMayor()));
-        txtImagenPro.setText((((Productos) tvProductos.getSelectionModel().getSelectedItem()).getImagenProducto()));
-        txtExistencia.setText(String.valueOf(((Productos) tvProductos.getSelectionModel().getSelectedItem()).getExistencia()));
-        cmbCodigoTipoP.getSelectionModel().select(buscarTipoProducto(((Productos) tvProductos.getSelectionModel().getSelectedItem()).getCodigoTipoProducto()));
-        cmbCodigoP.getSelectionModel().select(buscarProveedor(((Productos) tvProductos.getSelectionModel().getSelectedItem()).getCodigoProveedor()));
-        }catch(Exception e){
+        try {
+            txtCodigoProd.setText(String.valueOf(((Productos) tvProductos.getSelectionModel().getSelectedItem()).getCodigoProducto()));
+            txtDescPro.setText((((Productos) tvProductos.getSelectionModel().getSelectedItem()).getDescripcionProducto()));
+            txtPrecioU.setText(String.valueOf(((Productos) tvProductos.getSelectionModel().getSelectedItem()).getPrecioUnitario()));
+            txtPrecioD.setText(String.valueOf(((Productos) tvProductos.getSelectionModel().getSelectedItem()).getPrecioDocena()));
+            txtPrecioM.setText(String.valueOf(((Productos) tvProductos.getSelectionModel().getSelectedItem()).getPrecioMayor()));
+            txtImagenPro.setText((((Productos) tvProductos.getSelectionModel().getSelectedItem()).getImagenProducto()));
+            txtExistencia.setText(String.valueOf(((Productos) tvProductos.getSelectionModel().getSelectedItem()).getExistencia()));
+            cmbCodigoTipoP.getSelectionModel().select(buscarTipoProducto(((Productos) tvProductos.getSelectionModel().getSelectedItem()).getCodigoTipoProducto()));
+            cmbCodigoP.getSelectionModel().select(buscarProveedor(((Productos) tvProductos.getSelectionModel().getSelectedItem()).getCodigoProveedor()));
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Por favor selecciona una fila válida", "Error", JOptionPane.ERROR_MESSAGE);
         }
         //cmbCodgioTipoP.set(String.valueOf(((Productos)tvProductos.getSelectionModel().getSelectedItem()).getCodigoTipoProducto()));
@@ -253,6 +253,9 @@ public class ProductosViewController implements Initializable {
             case NINGUNO:
                 limpiarControles();
                 activarControles();
+                txtPrecioD.setDisable(true);
+                txtPrecioM.setDisable(true);
+                txtPrecioU.setDisable(true);
                 btnAgregarPro.setText("Guardar");
                 btnEliminarPro.setText("Cancelar");
                 btnEditarPro.setDisable(true);
@@ -283,11 +286,11 @@ public class ProductosViewController implements Initializable {
         registro.setCodigoProveedor(((Proveedores) cmbCodigoP.getSelectionModel().getSelectedItem()).getCodigoProveedor());
         registro.setCodigoTipoProducto(((TipoProducto) cmbCodigoTipoP.getSelectionModel().getSelectedItem()).getCodigoTipoProducto());
         registro.setDescripcionProducto(txtDescPro.getText());
-        registro.setPrecioDocena(Double.parseDouble(txtPrecioD.getText()));
-        registro.setPrecioMayor(Double.parseDouble(txtPrecioM.getText()));
+        registro.setPrecioDocena(Double.parseDouble("0.00"));
+        registro.setPrecioMayor(Double.parseDouble("0.00"));
         registro.setExistencia(Integer.parseInt(txtExistencia.getText()));
         registro.setImagenProducto(txtImagenPro.getText());
-        registro.setPrecioUnitario(Double.parseDouble(txtPrecioU.getText()));
+        registro.setPrecioUnitario(Double.parseDouble("0.00"));
 
         try {
             PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{Call sp_agregarProducto(?,?,?,?,?,?,?,?,?)}");
@@ -316,6 +319,9 @@ public class ProductosViewController implements Initializable {
                     btnReportesPro.setText("Cancelar");
                     btnEliminarPro.setDisable(true);
                     btnAgregarPro.setDisable(true);
+                    txtPrecioD.setDisable(true);
+                    txtPrecioM.setDisable(true);
+                    txtPrecioU.setDisable(true);
                     activarControles();
                     txtCodigoProd.setEditable(false);
                     tipoDeOperador = operador.ACTUALIZAR;
@@ -415,8 +421,8 @@ public class ProductosViewController implements Initializable {
                 break;
         }
     }
-    
-    public void reportes(){
+
+    public void reportes() {
         switch (tipoDeOperador) {
             case ACTUALIZAR:
                 desactivarControles();
@@ -426,7 +432,7 @@ public class ProductosViewController implements Initializable {
                 btnAgregarPro.setDisable(false);
                 btnEliminarPro.setDisable(false);
                 tipoDeOperador = operador.NINGUNO;
-         }
+        }
     }
 
     public void desactivarControles() {
