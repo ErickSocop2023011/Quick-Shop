@@ -124,7 +124,7 @@ public class DetalleFacturaViewController implements Initializable {
                         resultado.getDouble("precioUnitario"),
                         resultado.getInt("cantidad"),
                         resultado.getInt("numeroDeFactura"),
-                        resultado.getString("codigoProducto")
+                        resultado.getInt("codigoProducto")
                 ));
             }
 
@@ -140,7 +140,7 @@ public class DetalleFacturaViewController implements Initializable {
             PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_mostrarProductos()}");
             ResultSet resultado = procedimiento.executeQuery();
             while (resultado.next()) {
-                listaP.add(new Productos(resultado.getString("codigoProducto"),
+                listaP.add(new Productos(resultado.getInt("codigoProducto"),
                         resultado.getString("descripcionProducto"),
                         resultado.getDouble("precioUnitario"),
                         resultado.getDouble("precioDocena"),
@@ -177,15 +177,15 @@ public class DetalleFacturaViewController implements Initializable {
         return listaFacturas = FXCollections.observableList(listaF);
     }
 
-    public Productos buscarProducto(String productoID) {
+    public Productos buscarProducto(int productoID) {
         Productos resultado = null;
         try {
             PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_buscarProducto(?)}");
-            procedimiento.setString(1, productoID);
+            procedimiento.setInt(1, productoID);
             ResultSet registro = procedimiento.executeQuery();
             while (registro.next()) {
                 resultado = new Productos(
-                        registro.getString("codigoProducto"),
+                        registro.getInt("codigoProducto"),
                         registro.getString("descripcionProducto"),
                         registro.getDouble("precioUnitario"),
                         registro.getDouble("precioDocena"),
@@ -266,7 +266,7 @@ public class DetalleFacturaViewController implements Initializable {
             procedimiento.setDouble(2, registro.getPrecioUnitario());
             procedimiento.setInt(3, registro.getCantidad());
             procedimiento.setInt(4, registro.getNumeroDeFactura());
-            procedimiento.setString(5, registro.getCodigoProducto());
+            procedimiento.setInt(5, registro.getCodigoProducto());
             procedimiento.execute();
 
             listaDetalleFactura.add(registro);
@@ -317,7 +317,7 @@ public class DetalleFacturaViewController implements Initializable {
             procedimiento.setDouble(2, registro.getPrecioUnitario());
             procedimiento.setInt(3, registro.getCantidad());
             procedimiento.setInt(4, registro.getNumeroDeFactura());
-            procedimiento.setString(5, registro.getCodigoProducto());
+            procedimiento.setInt(5, registro.getCodigoProducto());
             procedimiento.execute();
         } catch (Exception e) {
             e.printStackTrace();

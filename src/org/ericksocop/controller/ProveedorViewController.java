@@ -20,6 +20,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javax.swing.JOptionPane;
+import org.ericksocop.bean.Productos;
 import org.ericksocop.bean.Proveedores;
 import org.ericksocop.dao.Conexion;
 import org.ericksocop.system.Main;
@@ -135,7 +136,7 @@ public class ProveedorViewController implements Initializable {
     public ObservableList<Proveedores> getProveedores() {
         ArrayList<Proveedores> listaPro = new ArrayList<>();
         try {
-            PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_mostrarproveedor()}");
+            PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_mostrarproveedores()}");
             ResultSet resultado = procedimiento.executeQuery();
             while (resultado.next()) {
                 listaPro.add(new Proveedores(resultado.getInt("codigoProveedor"),
@@ -171,7 +172,6 @@ public class ProveedorViewController implements Initializable {
             case ACTUALIZAR:
                 guardar();
                 limpiarControles();
-
                 desactivarControles();
                 btnAgregarP.setText("Agregar");
                 btnEliminarP.setText("Eliminar");
@@ -180,7 +180,7 @@ public class ProveedorViewController implements Initializable {
                 /*regresar de nuevo a sus imagenes originales
                 imgAgregar.setImage(new Image("URL"));*/
                 tipoDeOperador = operador.NINGUNO;
-                // cargarDatos();
+                cargarDatos();
                 break;
         }
     }
@@ -210,6 +210,7 @@ public class ProveedorViewController implements Initializable {
             procedimiento.setString(8, registro.getPaginaWeb());
             procedimiento.setString(9, registro.getTelefonoProveedor());
             procedimiento.setString(10, registro.getEmailProveedor());
+            procedimiento.execute();
             listaProveedores.add(registro);
         } catch (Exception e) {
             e.printStackTrace();
@@ -235,10 +236,27 @@ public class ProveedorViewController implements Initializable {
 
                     if (respuesta == JOptionPane.YES_NO_OPTION) {
                         try {
+                            Proveedores productoSeleccionado = (Proveedores) tvPoveedores.getSelectionModel().getSelectedItem();
+                            int codigoProducto = productoSeleccionado.getCodigoProveedor();
+
+                            PreparedStatement eliminarDetalleCompraStmt = Conexion.getInstance().getConexion()
+                                    .prepareCall("{call sp_eliminarDetalleCompraPorProducto(?)}");
+                            eliminarDetalleCompraStmt.setInt(1, codigoProducto);
+                            eliminarDetalleCompraStmt.execute();
+
+                            PreparedStatement eliminarDetalleFacturaStmt = Conexion.getInstance().getConexion()
+                                    .prepareCall("{call sp_eliminarDetalleFacturaPorProducto(?)}");
+                            eliminarDetalleFacturaStmt.setInt(1, codigoProducto);
+                            eliminarDetalleFacturaStmt.execute();
+
+                            PreparedStatement eliminarProductoPorProveedorStmt = Conexion.getInstance().getConexion()
+                                    .prepareCall("{call sp_eliminarProductoPorProveedor(?)}");
+                            eliminarProductoPorProveedorStmt.setInt(1, codigoProducto);
+                            eliminarProductoPorProveedorStmt.execute();
+
                             PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_eliminarproveedor(?)}");
-                            procedimiento.setInt(1, ((Proveedores) tvPoveedores.getSelectionModel().getSelectedItem()).getCodigoProveedor());
+                            procedimiento.setInt(1, codigoProducto);
                             procedimiento.execute();
-                            listaProveedores.remove(tvPoveedores.getSelectionModel().getSelectedItem());
                             limpiarControles();
                             cargarDatos();
                             JOptionPane.showMessageDialog(null, "Proveedor eliminado correctamente");
@@ -301,7 +319,6 @@ public class ProveedorViewController implements Initializable {
         try {
             PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_editarproveedor(?,?,?,?,?,?,?,?,?,?)}");
             Proveedores registro = (Proveedores) tvPoveedores.getSelectionModel().getSelectedItem();
-            registro.setNITProveedor(txtNITP.getText());
             registro.setNombresProveedor(txtNombresP.getText());
             registro.setApellidosProveedor(txtApellidosP.getText());
             registro.setDireccionProveedor(txtDireccionP.getText());
@@ -320,6 +337,7 @@ public class ProveedorViewController implements Initializable {
             procedimiento.setString(8, registro.getPaginaWeb());
             procedimiento.setString(9, registro.getTelefonoProveedor());
             procedimiento.setString(10, registro.getEmailProveedor());
+            procedimiento.execute();
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -13,13 +13,13 @@ public class DetalleCompra {
     private int codigoDetalleCompra;
     private double costoUnitario;
     private int cantidad;
-    private String codigoProducto;
+    private int codigoProducto;
     private int numeroDocumento;
 
     public DetalleCompra() {
     }
 
-    public DetalleCompra(int codigoDetalleCompra, double costoUnitario, int cantidad, String codigoProducto, int numeroDocumento) {
+    public DetalleCompra(int codigoDetalleCompra, double costoUnitario, int cantidad, int codigoProducto, int numeroDocumento) {
         this.codigoDetalleCompra = codigoDetalleCompra;
         this.costoUnitario = costoUnitario;
         this.cantidad = cantidad;
@@ -51,11 +51,11 @@ public class DetalleCompra {
         this.cantidad = cantidad;
     }
 
-    public String getCodigoProducto() {
+    public int getCodigoProducto() {
         return codigoProducto;
     }
 
-    public void setCodigoProducto(String codigoProducto) {
+    public void setCodigoProducto(int codigoProducto) {
         this.codigoProducto = codigoProducto;
     }
 

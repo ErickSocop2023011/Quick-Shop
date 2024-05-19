@@ -78,7 +78,7 @@ public class Facturas {
 
     @Override
     public String toString() {
-        return getNumeroDeFactura()+ "    |   " + getEstado();
+        return getNumeroDeFactura()+ "    |   " + getEstado() + "    |   " + getTotalFactura();
     }
     
     

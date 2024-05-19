@@ -125,7 +125,7 @@ public class ProductosViewController implements Initializable {
 
     public void seleccionarElemento() {
         try{
-        txtCodigoProd.setText((((Productos) tvProductos.getSelectionModel().getSelectedItem()).getCodigoProducto()));
+        txtCodigoProd.setText(String.valueOf(((Productos) tvProductos.getSelectionModel().getSelectedItem()).getCodigoProducto()));
         txtDescPro.setText((((Productos) tvProductos.getSelectionModel().getSelectedItem()).getDescripcionProducto()));
         txtPrecioU.setText(String.valueOf(((Productos) tvProductos.getSelectionModel().getSelectedItem()).getPrecioUnitario()));
         txtPrecioD.setText(String.valueOf(((Productos) tvProductos.getSelectionModel().getSelectedItem()).getPrecioDocena()));
@@ -190,7 +190,7 @@ public class ProductosViewController implements Initializable {
             PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_mostrarProductos()}");
             ResultSet resultado = procedimiento.executeQuery();
             while (resultado.next()) {
-                listaP.add(new Productos(resultado.getString("codigoProducto"),
+                listaP.add(new Productos(resultado.getInt("codigoProducto"),
                         resultado.getString("descripcionProducto"),
                         resultado.getDouble("precioUnitario"),
                         resultado.getDouble("precioDocena"),
@@ -210,7 +210,7 @@ public class ProductosViewController implements Initializable {
     public ObservableList<Proveedores> getProveedores() {
         ArrayList<Proveedores> listaPro = new ArrayList<>();
         try {
-            PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_mostrarproveedor()}");
+            PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_mostrarproveedores()}");
             ResultSet resultado = procedimiento.executeQuery();
             while (resultado.next()) {
                 listaPro.add(new Proveedores(resultado.getInt("codigoProveedor"),
@@ -279,7 +279,7 @@ public class ProductosViewController implements Initializable {
 
     public void guardar() {
         Productos registro = new Productos();
-        registro.setCodigoProducto(txtCodigoProd.getText());
+        registro.setCodigoProducto(Integer.parseInt(txtCodigoProd.getText()));
         registro.setCodigoProveedor(((Proveedores) cmbCodigoP.getSelectionModel().getSelectedItem()).getCodigoProveedor());
         registro.setCodigoTipoProducto(((TipoProducto) cmbCodigoTipoP.getSelectionModel().getSelectedItem()).getCodigoTipoProducto());
         registro.setDescripcionProducto(txtDescPro.getText());
@@ -291,7 +291,7 @@ public class ProductosViewController implements Initializable {
 
         try {
             PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{Call sp_agregarProducto(?,?,?,?,?,?,?,?,?)}");
-            procedimiento.setString(1, registro.getCodigoProducto());
+            procedimiento.setInt(1, registro.getCodigoProducto());
             procedimiento.setString(2, registro.getDescripcionProducto());
             procedimiento.setDouble(3, registro.getPrecioUnitario());
             procedimiento.setDouble(4, registro.getPrecioDocena());
@@ -353,7 +353,7 @@ public class ProductosViewController implements Initializable {
             registro.setExistencia(Integer.parseInt(txtExistencia.getText()));
             registro.setImagenProducto(txtImagenPro.getText());
             registro.setPrecioUnitario(Double.parseDouble(txtPrecioU.getText()));
-            procedimiento.setString(1, registro.getCodigoProducto());
+            procedimiento.setInt(1, registro.getCodigoProducto());
             procedimiento.setString(2, registro.getDescripcionProducto());
             procedimiento.setDouble(3, registro.getPrecioUnitario());
             procedimiento.setDouble(4, registro.getPrecioDocena());
@@ -381,23 +381,23 @@ public class ProductosViewController implements Initializable {
                 break;
             default:
                 if (tvProductos.getSelectionModel().getSelectedItem() != null) {
-                    int ans = JOptionPane.showConfirmDialog(null, "Confirma esta Acción", "Verificación",
+                    int respuesta = JOptionPane.showConfirmDialog(null, "Confirma esta Acción", "Verificación",
                             JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-                    if (ans == JOptionPane.YES_OPTION) {
+                    if (respuesta == JOptionPane.YES_OPTION) {
                         try {
                             Productos productoSeleccionado = (Productos) tvProductos.getSelectionModel().getSelectedItem();
-                            String codigoProducto = productoSeleccionado.getCodigoProducto();
+                            int codigoProducto = productoSeleccionado.getCodigoProducto();
 
                             // Eliminar las referencias en DetalleCompra
                             PreparedStatement eliminarDetalleCompraStmt = Conexion.getInstance().getConexion()
                                     .prepareCall("{call sp_eliminarDetalleCompraPorProducto(?)}");
-                            eliminarDetalleCompraStmt.setString(1, codigoProducto);
+                            eliminarDetalleCompraStmt.setInt(1, codigoProducto);
                             eliminarDetalleCompraStmt.execute();
 
                             // Eliminar el producto
                             PreparedStatement eliminarProductoStmt = Conexion.getInstance().getConexion()
                                     .prepareCall("{call sp_eliminarProducto(?)}");
-                            eliminarProductoStmt.setString(1, codigoProducto);
+                            eliminarProductoStmt.setInt(1, codigoProducto);
                             eliminarProductoStmt.execute();
 
                             listaProductos.remove(productoSeleccionado);

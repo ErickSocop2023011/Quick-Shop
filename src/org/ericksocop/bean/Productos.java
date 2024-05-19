@@ -9,7 +9,7 @@ package org.ericksocop.bean;
  * @author mauco
  */
 public class Productos {
-    private String codigoProducto;
+    private int codigoProducto;
     private String descripcionProducto;
     private double precioUnitario;
     private double precioDocena;
@@ -22,7 +22,7 @@ public class Productos {
     public Productos() {
     }
 
-    public Productos(String codigoProducto, String descripcionProducto, double precioUnitario, double precioDocena, double precioMayor, String imagenProducto, int existencia, int codigoTipoProducto, int codigoProveedor) {
+    public Productos(int codigoProducto, String descripcionProducto, double precioUnitario, double precioDocena, double precioMayor, String imagenProducto, int existencia, int codigoTipoProducto, int codigoProveedor) {
         this.codigoProducto = codigoProducto;
         this.descripcionProducto = descripcionProducto;
         this.precioUnitario = precioUnitario;
@@ -34,11 +34,11 @@ public class Productos {
         this.codigoProveedor = codigoProveedor;
     }
 
-    public String getCodigoProducto() {
+    public int getCodigoProducto() {
         return codigoProducto;
     }
 
-    public void setCodigoProducto(String codigoProducto) {
+    public void setCodigoProducto(int codigoProducto) {
         this.codigoProducto = codigoProducto;
     }
 
@@ -108,7 +108,7 @@ public class Productos {
 
     @Override
     public String toString() {
-        return getCodigoProducto() + "    |   "  + getDescripcionProducto() + "    |   "  + getPrecioUnitario();
+        return getCodigoProducto() + "    |   "  + getDescripcionProducto() + "    |   "  + getPrecioUnitario()+ "    |   "  + getExistencia();
     }
     
     

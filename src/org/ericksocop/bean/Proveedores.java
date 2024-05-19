@@ -118,7 +118,7 @@ public class Proveedores {
 
     @Override
     public String toString() {
-        return getNITProveedor() + "    |   "  + getNombresProveedor();
+        return getNITProveedor() + "    |   "  + getNombresProveedor()+ "    |   " + getRazonSocial();
     }
     
     

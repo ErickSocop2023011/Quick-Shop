@@ -123,7 +123,7 @@ public class DetalleCompraViewController implements Initializable {
                 listaDeC.add(new DetalleCompra(resultado.getInt("codigoDetalleCompra"),
                         resultado.getDouble("costoUnitario"),
                         resultado.getInt("cantidad"),
-                        resultado.getString("codigoProducto"),
+                        resultado.getInt("codigoProducto"),
                         resultado.getInt("numeroDocumento")
                 ));
             }
@@ -133,14 +133,14 @@ public class DetalleCompraViewController implements Initializable {
         return listaDetalleC = FXCollections.observableList(listaDeC);
     }
 
-    public Productos buscarCodigoProducto(String codigoProducto) {
+    public Productos buscarCodigoProducto(int codigoProducto) {
         Productos resultado = null;
         try {
             PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_buscarProducto(?)}");
-            procedimiento.setString(1, codigoProducto);
+            procedimiento.setInt(1, codigoProducto);
             ResultSet registro = procedimiento.executeQuery();
             while (registro.next()) {
-                resultado = new Productos(registro.getString("codigoProducto"),
+                resultado = new Productos(registro.getInt("codigoProducto"),
                         registro.getString("descripcionProducto"),
                         registro.getDouble("precioUnitario"),
                         registro.getDouble("precioDocena"),
@@ -183,7 +183,7 @@ public class DetalleCompraViewController implements Initializable {
             PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_mostrarProductos()}");
             ResultSet resultado = procedimiento.executeQuery();
             while (resultado.next()) {
-                listaP.add(new Productos(resultado.getString("codigoProducto"),
+                listaP.add(new Productos(resultado.getInt("codigoProducto"),
                         resultado.getString("descripcionProducto"),
                         resultado.getDouble("precioUnitario"),
                         resultado.getDouble("precioDocena"),
@@ -260,7 +260,7 @@ public class DetalleCompraViewController implements Initializable {
         procedimiento.setInt(1, registro.getCodigoDetalleCompra());
         procedimiento.setDouble(2, registro.getCostoUnitario());
         procedimiento.setInt(3, registro.getCantidad());
-        procedimiento.setString(4, registro.getCodigoProducto());
+        procedimiento.setInt(4, registro.getCodigoProducto());
         procedimiento.setInt(5, registro.getNumeroDocumento());
         procedimiento.execute();
         actualizarStockInsertarDetalle(registro.getCodigoProducto(), registro.getCantidad());
@@ -270,14 +270,14 @@ public class DetalleCompraViewController implements Initializable {
     }
 }
     
-    public void actualizarStockInsertarDetalle(String codigoProducto, int cantidad) {
+    public void actualizarStockInsertarDetalle(int codigoProducto, int cantidad) {
         DetalleFactura detalleFactura = new DetalleFactura(); 
     detalleFactura.setCodigoProducto(codigoProducto); 
     detalleFactura.setCantidad(cantidad); 
     try {
         PreparedStatement procedimiento = Conexion.getInstance().getConexion()
             .prepareCall("{call ActualizarStockInsertarDetalle(?, ?)}");
-        procedimiento.setString(1, codigoProducto);
+        procedimiento.setInt(1, codigoProducto);
         procedimiento.setInt(2, cantidad);
         procedimiento.executeUpdate();
     } catch (SQLException e) {
@@ -331,7 +331,7 @@ public class DetalleCompraViewController implements Initializable {
             procedimiento.setInt(1, registro.getCodigoDetalleCompra());
             procedimiento.setDouble(2, registro.getCostoUnitario());
             procedimiento.setInt(3, registro.getCantidad());
-            procedimiento.setString(4, registro.getCodigoProducto());
+            procedimiento.setInt(4, registro.getCodigoProducto());
             procedimiento.setInt(5, registro.getNumeroDocumento());
             procedimiento.execute();
         } catch (Exception e) {
@@ -379,14 +379,14 @@ public class DetalleCompraViewController implements Initializable {
     }
 }
     
-    public void actualizarStockEliminarDetalle(String codigoProducto, int cantidad) {
+    public void actualizarStockEliminarDetalle(int codigoProducto, int cantidad) {
         DetalleFactura detalleFactura = new DetalleFactura(); // Instancia de DetalleFactura
 detalleFactura.setCodigoProducto(codigoProducto); // Establecer el código del producto
 detalleFactura.setCantidad(cantidad); // Establecer la cantidad
     try {
         PreparedStatement procedimiento = Conexion.getInstance().getConexion()
             .prepareCall("{call ActualizarStockEliminarDetalle(?, ?)}");
-        procedimiento.setString(1, codigoProducto);
+        procedimiento.setInt(1, codigoProducto);
         procedimiento.setInt(2, cantidad);
         procedimiento.executeUpdate();
     } catch (SQLException e) {

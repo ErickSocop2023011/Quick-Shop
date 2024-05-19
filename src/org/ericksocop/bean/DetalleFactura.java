@@ -13,12 +13,12 @@ public class DetalleFactura {
     private double precioUnitario;
     private int cantidad;
     private int numeroDeFactura;
-    private String codigoProducto;
+    private int codigoProducto;
 
     public DetalleFactura() {
     }
 
-    public DetalleFactura(int codigoDetalleFactura, double precioUnitario, int cantidad, int numeroDeFactura, String codigoProducto) {
+    public DetalleFactura(int codigoDetalleFactura, double precioUnitario, int cantidad, int numeroDeFactura, int codigoProducto) {
         this.codigoDetalleFactura = codigoDetalleFactura;
         this.precioUnitario = precioUnitario;
         this.cantidad = cantidad;
@@ -58,11 +58,11 @@ public class DetalleFactura {
         this.numeroDeFactura = numeroDeFactura;
     }
 
-    public String getCodigoProducto() {
+    public int getCodigoProducto() {
         return codigoProducto;
     }
 
-    public void setCodigoProducto(String codigoProducto) {
+    public void setCodigoProducto(int codigoProducto) {
         this.codigoProducto = codigoProducto;
     }
  

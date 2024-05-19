@@ -1052,6 +1052,8 @@ BEGIN
 END$$
 DELIMITER ;
 
+
+
 -- -----------------------
 call sp_mostrarFacturas();
 call sp_mostrarDetallesFactura();
@@ -1163,4 +1165,7 @@ END $$
 
 DELIMITER ;
 
+
+
 set global time_zone= '-6:00';
+
