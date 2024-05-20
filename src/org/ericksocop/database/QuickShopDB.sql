@@ -1,507 +1,485 @@
-drop database if exists DB_QuickShop;
+DROP DATABASE IF EXISTS DB_QuickShop;
 
+CREATE DATABASE DB_QuickShop;
 
-create database DB_QuickShop;
+USE DB_QuickShop;
 
-use DB_QuickShop;
-
-create table Clientes(
-	clienteID int,
-    nombreClientes varchar (45),
-    apellidosClientes varchar (45),
-    direccionClientes varchar (128),
-    NIT varchar (13),
-    telefonoClientes varchar (13),
-    correoClientes varchar (128),
-    primary key PK_ClienteID(clienteID)
+CREATE TABLE Clientes(
+    clienteID INT,
+    nombreClientes VARCHAR(45),
+    apellidosClientes VARCHAR(45),
+    direccionClientes VARCHAR(128),
+    NIT VARCHAR(13),
+    telefonoClientes VARCHAR(13),
+    correoClientes VARCHAR(128),
+    PRIMARY KEY PK_ClienteID(clienteID)
 );
 
-create table TipoProducto(
-	codigoTipoProducto int ,
-    descripcionProducto varchar (45),
-    primary key PK_TipoProducto(codigoTipoProducto)
+CREATE TABLE TipoProducto(
+    codigoTipoProducto INT,
+    descripcionProducto VARCHAR(45),
+    PRIMARY KEY PK_TipoProducto(codigoTipoProducto)
 );
 
-create table Compras(
-	numeroDocumento int,
-    fechaDocumento date,
-    descripcionCompra varchar(60),
-    totalDocumento decimal(20,2),
-    primary key PK_NumeroDocumento(numeroDocumento)
+CREATE TABLE Compras(
+    numeroDocumento INT,
+    fechaDocumento DATE,
+    descripcionCompra VARCHAR(60),
+    totalDocumento DECIMAL(20,2),
+    PRIMARY KEY PK_NumeroDocumento(numeroDocumento)
 );
 
-create table proveedores(
-	codigoProveedor int,
-    NITProveedor varchar(13),
-    nombresProveedor varchar(60),
-    apellidosProveedor varchar (60),
-    direccionProveedor varchar (150),
-    razonSocial varchar (60),
-    contactoPrincipal varchar (100),
-    paginaWeb varchar(50),
-    telefonoProveedor varchar (13),
-    emailProveedor varchar(50),
-    primary key PK_codigoProveedor(codigoProveedor)
+CREATE TABLE Proveedores(
+    codigoProveedor INT,
+    NITProveedor VARCHAR(13),
+    nombresProveedor VARCHAR(60),
+    apellidosProveedor VARCHAR(60),
+    direccionProveedor VARCHAR(150),
+    razonSocial VARCHAR(60),
+    contactoPrincipal VARCHAR(100),
+    paginaWeb VARCHAR(50),
+    telefonoProveedor VARCHAR(13),
+    emailProveedor VARCHAR(50),
+    PRIMARY KEY PK_codigoProveedor(codigoProveedor)
 );
 
-create table CargoEmpleado (
-	codigoCargoEmpleado int,
-    nombreCargo varchar (45),
-    descripcionCargo varchar (82),
-    primary key PK_codigoCargoEmpleado (codigoCargoEmpleado)
+CREATE TABLE CargoEmpleado (
+    codigoCargoEmpleado INT,
+    nombreCargo VARCHAR(45),
+    descripcionCargo VARCHAR(82),
+    PRIMARY KEY PK_codigoCargoEmpleado (codigoCargoEmpleado)
 );
 
-create table Productos(
-	codigoProducto varchar(15),
-	descripcionProducto varchar(15),
-	precioUnitario decimal(10,2),
-	precioDocena decimal(10,2),
-	precioMayor decimal(10,2),
-	imagenProducto varchar(45),
-	existencia int,
-	codigoTipoProducto int,
-	codigoProveedor int,
-	primary key  PK_codigoProducto (codigoProducto),
-	foreign key (codigoTipoProducto) references TipoProducto(codigoTipoProducto),
-	foreign key (codigoProveedor) references Proveedores(codigoProveedor)
+CREATE TABLE Productos(
+    codigoProducto INT,
+    descripcionProducto VARCHAR(15),
+    precioUnitario DECIMAL(10,2),
+    precioDocena DECIMAL(10,2),
+    precioMayor DECIMAL(10,2),
+    imagenProducto VARCHAR(45),
+    existencia INT,
+    codigoTipoProducto INT,
+    codigoProveedor INT,
+    PRIMARY KEY PK_codigoProducto (codigoProducto),
+    FOREIGN KEY (codigoTipoProducto) REFERENCES TipoProducto(codigoTipoProducto) on delete cascade,
+    FOREIGN KEY (codigoProveedor) REFERENCES Proveedores(codigoProveedor)on delete cascade
+
 );
 
 CREATE TABLE DetalleCompra(
+    codigoDetalleCompra INT,
+    costoUnitario DECIMAL(10,2),
+    cantidad INT,
+    codigoProducto INT,
+    numeroDocumento INT,
+    PRIMARY KEY PK_codigoDetalleCompra (codigoDetalleCompra),
+    FOREIGN KEY (codigoProducto) REFERENCES Productos(codigoProducto)on delete cascade,
+    FOREIGN KEY (numeroDocumento) REFERENCES Compras(numeroDocumento) on delete cascade
 
-codigoDetalleCompra int,
-costoUnitario decimal(10,2),
-cantidad int,
-codigoProducto varchar(15),
-numeroDocumento int,
-PRIMARY KEY PK_codigoDetalleCompra (codigoDetalleCompra),
-FOREIGN KEY (codigoProducto) REFERENCES Productos(codigoProducto),
-FOREIGN KEY (numeroDocumento) REFERENCES Compras(numeroDocumento)
-    
 );
 
 CREATE TABLE Empleados(
-
-codigoEmpleado int,
-nombresEmpleado varchar(50),
-apellidosEmpleado varchar(50),
-sueldo decimal(10,2),
-direccion varchar(150),
-turno varchar(15),
-codigoCargoEmpleado int,
-PRIMARY KEY PK_codigoEmpleado (codigoEmpleado),
-FOREIGN KEY (codigoCargoEmpleado) REFERENCES CargoEmpleado(codigoCargoEmpleado)
-
+    codigoEmpleado INT,
+    nombresEmpleado VARCHAR(50),
+    apellidosEmpleado VARCHAR(50),
+    sueldo DECIMAL(10,2),
+    direccion VARCHAR(150),
+    turno VARCHAR(15),
+    codigoCargoEmpleado INT,
+    PRIMARY KEY PK_codigoEmpleado (codigoEmpleado),
+    FOREIGN KEY (codigoCargoEmpleado) REFERENCES CargoEmpleado(codigoCargoEmpleado) on delete cascade
 );
-
 
 CREATE TABLE Factura(
-
-numeroDeFactura int,
-estado varchar(50),
-totalFactura decimal(10,2),
-fechaFactura date,
-clienteID int,
-codigoEmpleado int,
-PRIMARY KEY PK_numeroDeFactura (numeroDeFactura),
-FOREIGN KEY (clienteID) REFERENCES Clientes(clienteID),
-FOREIGN KEY (codigoEmpleado) REFERENCES Empleados(codigoEmpleado)
-
+    numeroDeFactura INT,
+    estado VARCHAR(50),
+    totalFactura DECIMAL(10,2),
+    fechaFactura DATE,
+    clienteID INT,
+    codigoEmpleado INT,
+    PRIMARY KEY PK_numeroDeFactura (numeroDeFactura),
+    FOREIGN KEY (clienteID) REFERENCES Clientes(clienteID) on delete cascade,
+    FOREIGN KEY (codigoEmpleado) REFERENCES Empleados(codigoEmpleado) on delete cascade
 );
-
 
 CREATE TABLE DetalleFactura(
-
-codigoDetalleFactura int,
-precioUnitario decimal(10,2),
-cantidad int,
-numeroDeFactura int,
-codigoProducto varchar(15),
-PRIMARY KEY PK_codigoDetalleFactura (codigoDetalleFactura),
-FOREIGN KEY (numeroDeFactura) REFERENCES Factura(numeroDeFactura),
-FOREIGN KEY (codigoProducto) REFERENCES Productos(codigoProducto)
-
+    codigoDetalleFactura INT,
+    precioUnitario DECIMAL(10,2),
+    cantidad INT,
+    numeroDeFactura INT,
+    codigoProducto INT,
+    PRIMARY KEY PK_codigoDetalleFactura (codigoDetalleFactura),
+    FOREIGN KEY (numeroDeFactura) REFERENCES Factura(numeroDeFactura) on delete cascade,
+    FOREIGN KEY (codigoProducto) REFERENCES Productos(codigoProducto) on delete cascade
 );
 
+-- PROCEDIMIENTOS ALMACENADOS
+USE DB_QuickShop;
 
--- PROCEDIMIENTOS ALMACENADOS 
-use DB_QuickShop;
+DELIMITER $$
+CREATE PROCEDURE sp_AgregarCliente (IN _idCliente INT, IN _nombre VARCHAR(45), IN _apellidos VARCHAR(45), IN _direccionClientes VARCHAR(128), IN _nit VARCHAR(13), IN _telefono VARCHAR(13), IN _correo VARCHAR(128))
+BEGIN 
+    INSERT INTO Clientes (Clientes.ClienteID, Clientes.nombreClientes, Clientes.apellidosClientes, Clientes.direccionClientes, Clientes.NIT, Clientes.telefonoClientes, Clientes.correoClientes)
+        VALUES (_idCliente, _nombre, _apellidos, _direccionClientes, _nit, _telefono, _correo);
+END $$        
+DELIMITER ;
 
-delimiter $$
-create procedure sp_AgregarCliente (in _idCliente int,in _nombre varchar (45), in _apellidos varchar(45), in _direccionClientes varchar(128), in _nit varchar(13), in _telefono varchar (13), in _correo varchar(128))
-begin 
-	insert into Clientes (Clientes.ClienteID, Clientes.nombreClientes, Clientes.apellidosClientes, Clientes.direccionClientes, Clientes.NIT, Clientes.telefonoClientes, Clientes.correoClientes)
-		values (_idCliente,_nombre, _apellidos, _direccionClientes, _nit, _telefono,_correo);
-end $$        
-delimiter ;
+CALL sp_AgregarCliente(1, 'Luis Rafa', 'Cordova', 'zona 21', '1234567890123', '12345678', 'luis@gmail.com');
+CALL sp_AgregarCliente(2, 'Luis Rafa', 'Cordova', 'zona 21', '1234567890123', '12345678', 'luis@gmail.com');
+CALL sp_AgregarCliente(3, 'Ramiro', 'Morales', 'zona 15', '5869324785123', '36578924', 'ramiro@gmail.com');
 
-call sp_AgregarCliente('1','Luis Rafa','Cordova','zona 21','1234567890123','12345678','luis@gmail.com');
-call sp_AgregarCliente('2','Luis Rafa','Cordova','zona 21','1234567890123','12345678','luis@gmail.com');
-call sp_AgregarCliente('3','Ramiro','Morales','zona 15','5869324785123','36578924','ramiro@gmail.com');
+DELIMITER $$
+CREATE PROCEDURE sp_MostrarClientes ()
+BEGIN 
+    SELECT
+        c.clienteID,
+        c.nombreClientes,
+        c.apellidosClientes,
+        c.direccionClientes,
+        c.NIT,
+        c.telefonoClientes,
+        c.correoClientes
+    FROM Clientes c;
+END $$        
+DELIMITER ;
 
+CALL sp_MostrarClientes;
 
+DELIMITER $$
+CREATE PROCEDURE sp_buscarClientes (IN _clienteID INT)
+BEGIN 
+    SELECT
+        c.clienteID,
+        c.nombreClientes,
+        c.apellidosClientes,
+        c.direccionClientes,
+        c.NIT,
+        c.telefonoClientes,
+        c.correoClientes
+    FROM Clientes c
+    WHERE clienteID = _clienteID;
+END $$        
+DELIMITER ;
 
-delimiter $$
-create procedure sp_MostrarClientes ()
-begin 
-	select
-    c.clienteID,
-    c.nombreClientes,
-    c.apellidosClientes,
-    c.direccionClientes,
-    c.NIT,
-    c.telefonoClientes,
-    c.correoClientes
-    from clientes c;
-end $$        
-delimiter ;
+CALL sp_buscarClientes(1);
 
-call sp_MostrarClientes;
+DELIMITER $$
+CREATE PROCEDURE sp_eliminarClientes (IN _clienteID INT)
+BEGIN 
+    DELETE FROM Clientes 
+    WHERE clienteID = _clienteID;
+END $$        
+DELIMITER ;
 
-delimiter $$
-create procedure sp_buscarClientes (in _clienteID int)
-begin 
-	select
-    c.clienteID,
-    c.nombreClientes,
-    c.apellidosClientes,
-    c.direccionClientes,
-    c.NIT,
-    c.telefonoClientes,
-    c.correoClientes
-    from clientes c
-    where clienteID = _clienteID;
-end $$        
-delimiter ;
+CALL sp_eliminarClientes(1);
 
-call sp_buscarClientes(1);
+CALL sp_MostrarClientes;
 
-delimiter $$
-create procedure sp_eliminarClientes (in _clienteID int)
-begin 
-	delete from clientes 
-    where clienteID = _clienteID;
-end $$        
-delimiter ;
+DELIMITER $$
+CREATE PROCEDURE sp_editarClientes (IN _ID INT(11), IN _nom VARCHAR(45), IN _ape VARCHAR(45), IN _dire VARCHAR(128), IN _nit VARCHAR(13), IN _num VARCHAR(13), IN _mail VARCHAR(128))
+BEGIN 
+    UPDATE Clientes
+    SET
+        Clientes.clienteID = _ID,
+        Clientes.nombreClientes = _nom,
+        Clientes.apellidosClientes = _ape,
+        Clientes.direccionClientes = _dire,
+        Clientes.NIT = _nit,
+        Clientes.telefonoClientes = _num,
+        Clientes.correoClientes = _mail
+    WHERE
+        Clientes.clienteID = _ID;
+END $$        
+DELIMITER ;
 
-call sp_eliminarClientes(1);
-
-call sp_MostrarClientes;
-
-delimiter $$
-create procedure sp_editarClientes (in _ID int(11), in _nom varchar (45), 
-	in _ape varchar (45), in _dire varchar(128), in _nit varchar(13), in _num varchar(13), in _mail varchar (128))
-begin 
-	update Clientes
-    set
-    Clientes.clienteID = _ID,
-    Clientes.nombreClientes = _nom,
-    Clientes.apellidosClientes = _ape,
-    Clientes.direccionClientes = _dire,
-    Clientes.NIT = _nit,
-    Clientes.telefonoClientes = _num,
-    Clientes.correoClientes = _mail
-    where
-    Clientes.clienteID = _ID;
-end $$        
-delimiter ;
-
-call sp_editarClientes('2','Jose','Figueroa','Amatitlan','1265289635741','98562471','jose@outlook.com');
-call sp_MostrarClientes;
+CALL sp_editarClientes(2, 'Jose', 'Figueroa', 'Amatitlan', '1265289635741', '98562471', 'jose@outlook.com');
+CALL sp_MostrarClientes;
 
 -- CRUD TIPO PRODUCTO
-delimiter $$
+DELIMITER $$
 
-create procedure sp_agregarTipoProducto (
-    in _codigoTipoProducto int,
-    in _descripcionProducto varchar(45)
+CREATE PROCEDURE sp_agregarTipoProducto (
+    IN _codigoTipoProducto INT,
+    IN _descripcionProducto VARCHAR(45)
 )
-begin
-    insert into TipoProducto (codigoTipoProducto, descripcionProducto)
-    values (_codigoTipoProducto, _descripcionProducto);
-end $$
+BEGIN
+    INSERT INTO TipoProducto (codigoTipoProducto, descripcionProducto)
+    VALUES (_codigoTipoProducto, _descripcionProducto);
+END $$
 
-delimiter ;
+DELIMITER ;
 
-call sp_agregarTipoProducto(1, 'Combustibles');
-call sp_agregarTipoProducto(2, 'Alimentos');
-call sp_agregarTipoProducto(3, 'Bebidas');
-call sp_agregarTipoProducto(4, 'Snacks');
-call sp_agregarTipoProducto(5, 'Cuidado Personal');
+CALL sp_agregarTipoProducto(1, 'Combustibles');
+CALL sp_agregarTipoProducto(2, 'Alimentos');
+CALL sp_agregarTipoProducto(3, 'Bebidas');
+CALL sp_agregarTipoProducto(4, 'Snacks');
+CALL sp_agregarTipoProducto(5, 'Cuidado Personal');
 
-delimiter $$
+DELIMITER $$
 
-create procedure sp_mostrarTipoProducto ()
-begin
-    select
+CREATE PROCEDURE sp_mostrarTipoProducto ()
+BEGIN
+    SELECT
         codigoTipoProducto,
         descripcionProducto
-    from
+    FROM
         TipoProducto;
-end $$
+END $$
 
-delimiter ;
+DELIMITER ;
 
-call sp_mostrarTipoProducto;
+CALL sp_mostrarTipoProducto;
 
-delimiter $$
+DELIMITER $$
 
-create procedure sp_buscarTipoProducto (in _codigoTipoProducto int)
-begin
-    select
+CREATE PROCEDURE sp_buscarTipoProducto (IN _codigoTipoProducto INT)
+BEGIN
+    SELECT
         codigoTipoProducto,
         descripcionProducto
-    from
+    FROM
         TipoProducto
-    where
+    WHERE
         codigoTipoProducto = _codigoTipoProducto;
-end $$
+END $$
 
-delimiter ;
+DELIMITER ;
 
-call sp_buscarTipoProducto(1);
+CALL sp_buscarTipoProducto(1);
 
-delimiter $$
+DELIMITER $$
 
-create procedure sp_eliminarTipoProducto (in _codigoTipoProducto int)
-begin
-    delete from TipoProducto
-    where codigoTipoProducto = _codigoTipoProducto;
-end $$
+CREATE PROCEDURE sp_eliminarTipoProducto (IN _codigoTipoProducto INT)
+BEGIN
+    DELETE FROM TipoProducto
+    WHERE codigoTipoProducto = _codigoTipoProducto;
+END $$
 
-delimiter ;
+DELIMITER ;
 
-call sp_eliminarTipoProducto(1);
+CALL sp_eliminarTipoProducto(1);
 
-delimiter $$
+DELIMITER $$
 
-create procedure sp_editarTipoProducto (
-    in _codigoTipoProducto int,
-    in _descripcionProducto varchar(45)
+CREATE PROCEDURE sp_editarTipoProducto (
+    IN _codigoTipoProducto INT,
+    IN _descripcionProducto VARCHAR(45)
 )
-begin
-    update TipoProducto
-    set descripcionProducto = _descripcionProducto
-    where codigoTipoProducto = _codigoTipoProducto;
-end $$
+BEGIN
+    UPDATE TipoProducto
+    SET descripcionProducto = _descripcionProducto
+    WHERE codigoTipoProducto = _codigoTipoProducto;
+END $$
 
-delimiter ;
+DELIMITER ;
 
- call sp_editarTipoProducto(1, 'Combustibles Premium');
+CALL sp_editarTipoProducto(1, 'Combustibles Premium');
 
 -- CRUD CARGO EMPLEADO
 
-delimiter $$
+DELIMITER $$
 
-create procedure sp_agregarCargoEmpleado (
-    in _codigoCargoEmpleado int,
-    in _nombreCargo varchar(45),
-    in _descripcionCargo varchar(82)
+CREATE PROCEDURE sp_agregarCargoEmpleado (
+    IN _codigoCargoEmpleado INT,
+    IN _nombreCargo VARCHAR(45),
+    IN _descripcionCargo VARCHAR(82)
 )
-begin
-    insert into cargoEmpleado (codigoCargoEmpleado, nombreCargo, descripcionCargo)
-    values (_codigoCargoEmpleado, _nombreCargo, _descripcionCargo);
-end $$
+BEGIN
+    INSERT INTO CargoEmpleado (codigoCargoEmpleado, nombreCargo, descripcionCargo)
+    VALUES (_codigoCargoEmpleado, _nombreCargo, _descripcionCargo);
+END $$
 
-delimiter ;
+DELIMITER ;
 
-call sp_agregarCargoEmpleado('1', 'Gerente', 'Responsable de la dirección y gestión del personal');
-call sp_agregarCargoEmpleado('2', 'Asistente Administrativo', 'Apoyo en labores administrativas y de oficina');
-call sp_agregarCargoEmpleado('3', 'Técnico de Soporte', 'Brinda asistencia técnica y soluciona problemas de hardware y software');
-call sp_agregarCargoEmpleado('4', 'Analista de Marketing', 'Encargado de analizar datos y desarrollar estrategias de marketing');
-call sp_agregarCargoEmpleado('5', 'Contador', 'Realiza tareas contables y financieras');
+CALL sp_agregarCargoEmpleado(1, 'Gerente', 'Responsable de la dirección y gestión del personal');
+CALL sp_agregarCargoEmpleado(2, 'Asistente Administrativo', 'Apoyo en labores administrativas y de oficina');
+CALL sp_agregarCargoEmpleado(3, 'Técnico de Soporte', 'Brinda asistencia técnica y soluciona problemas de hardware y software');
+CALL sp_agregarCargoEmpleado(4, 'Analista de Marketing', 'Encargado de analizar datos y desarrollar estrategias de marketing');
+CALL sp_agregarCargoEmpleado(5, 'Contador', 'Realiza tareas contables y financieras');
 
-delimiter $$
+DELIMITER $$
 
-create procedure sp_mostrarCargoEmpleado()
-begin
-    select
-        ce.codigoCargoEmpleado,
-        ce.nombreCargo,
-        ce.descripcionCargo
-    from
-        cargoEmpleado ce;
-end $$
+CREATE PROCEDURE sp_mostrarCargoEmpleado ()
+BEGIN
+    SELECT
+        codigoCargoEmpleado,
+        nombreCargo,
+        descripcionCargo
+    FROM
+        CargoEmpleado;
+END $$
 
-delimiter ;
+DELIMITER ;
 
-call sp_mostrarCargoEmpleado();
+CALL sp_mostrarCargoEmpleado;
 
-delimiter $$
+DELIMITER $$
 
-create procedure sp_buscarCargoEmpleado (in _codigoCargoEmpleado int)
-begin
-    select
-        ce.codigoCargoEmpleado,
-        ce.nombreCargo,
-        ce.descripcionCargo
-    from
-        cargoEmpleado ce
-    where
-        ce.codigoCargoEmpleado = _codigoCargoEmpleado;
-end $$
+CREATE PROCEDURE sp_buscarCargoEmpleado (IN _codigoCargoEmpleado INT)
+BEGIN
+    SELECT
+        codigoCargoEmpleado,
+        nombreCargo,
+        descripcionCargo
+    FROM
+        CargoEmpleado
+    WHERE
+        codigoCargoEmpleado = _codigoCargoEmpleado;
+END $$
 
-delimiter ;
+DELIMITER ;
 
-call sp_buscarCargoEmpleado(1);
+CALL sp_buscarCargoEmpleado(1);
 
-delimiter $$
+DELIMITER $$
 
-create procedure sp_eliminarCargoEmpleado (in _codigoCargoEmpleado int)
-begin
-    delete from cargoEmpleado
-    where codigoCargoEmpleado = _codigoCargoEmpleado;
-end $$
+CREATE PROCEDURE sp_eliminarCargoEmpleado (IN _codigoCargoEmpleado INT)
+BEGIN
+    DELETE FROM CargoEmpleado
+    WHERE codigoCargoEmpleado = _codigoCargoEmpleado;
+END $$
 
-delimiter ;
+DELIMITER ;
 
-call sp_eliminarCargoEmpleado(1);
+CALL sp_eliminarCargoEmpleado(1);
 
-delimiter $$
+DELIMITER $$
 
-create procedure sp_editarCargoEmpleado (
-    in _codigoCargoEmpleado int,
-    in _nombreCargo varchar(45),
-    in _descripcionCargo varchar(82)
+CREATE PROCEDURE sp_editarCargoEmpleado (
+    IN _codigoCargoEmpleado INT,
+    IN _nombreCargo VARCHAR(45),
+    IN _descripcionCargo VARCHAR(82)
 )
-begin
-    update cargoEmpleado ce
-    set
-        ce.nombreCargo = _nombreCargo,
-        ce.descripcionCargo = _descripcionCargo
-    where
-        ce.codigoCargoEmpleado = _codigoCargoEmpleado;
-end $$
+BEGIN
+    UPDATE CargoEmpleado
+    SET nombreCargo = _nombreCargo,
+        descripcionCargo = _descripcionCargo
+    WHERE codigoCargoEmpleado = _codigoCargoEmpleado;
+END $$
 
-delimiter ;
+DELIMITER ;
 
-call sp_editarCargoEmpleado('3','Limpieza y Mantenimiento','Encargado de mantener en orden su área específicada');
+CALL sp_editarCargoEmpleado(1, 'Gerente General', 'Responsable de la dirección y gestión general del personal');
 
-call sp_mostrarCargoEmpleado();
+-- CRUD PROVEEDOR
 
--- CRUD PROVEEDORES
-delimiter $$
+DELIMITER $$
 
-create procedure sp_agregarproveedor (
-    in _codigoproveedor int,
-    in _nitproveedor varchar(13),
-    in _nombresproveedor varchar(60),
-    in _apellidosproveedor varchar(60),
-    in _direccionproveedor varchar(150),
-    in _razonsocial varchar(60),
-    in _contactoprincipal varchar(100),
-    in _paginaweb varchar(50),
-    in _telefonoproveedor varchar(13),
-    in _emailproveedor varchar(50)
+CREATE PROCEDURE sp_agregarProveedor (
+    IN _codigoProveedor INT,
+    IN _NITProveedor VARCHAR(13),
+    IN _nombresProveedor VARCHAR(60),
+    IN _apellidosProveedor VARCHAR(60),
+    IN _direccionProveedor VARCHAR(150),
+    IN _razonSocial VARCHAR(60),
+    IN _contactoPrincipal VARCHAR(100),
+    IN _paginaWeb VARCHAR(50),
+    IN _telefonoProveedor VARCHAR(13),
+    IN _emailProveedor VARCHAR(50)
 )
-begin
-    insert into Proveedores (codigoProveedor, NITProveedor, nombresProveedor, apellidosProveedor, direccionProveedor, razonSocial, contactoPrincipal, paginaWeb, telefonoProveedor, emailProveedor)
-    values (_codigoproveedor, _nitproveedor, _nombresproveedor, _apellidosproveedor, _direccionproveedor, _razonsocial, _contactoprincipal, _paginaweb, _telefonoproveedor, _emailproveedor);
-end $$
+BEGIN
+    INSERT INTO Proveedores (codigoProveedor, NITProveedor, nombresProveedor, apellidosProveedor, direccionProveedor, razonSocial, contactoPrincipal, paginaWeb, telefonoProveedor, emailProveedor)
+    VALUES (_codigoProveedor, _NITProveedor, _nombresProveedor, _apellidosProveedor, _direccionProveedor, _razonSocial, _contactoPrincipal, _paginaWeb, _telefonoProveedor, _emailProveedor);
+END $$
 
-delimiter ;
+DELIMITER ;
 
-call sp_agregarproveedor(1, '0614000000011', 'Gasolinera Express', 'S.A.', 'Av. Principal 123, Zona 1', 'Gasolinera Express S.A.', 'Juan Pérez', 'www.gasolineraexpress.com', '1234567890', 'info@gasolineraexpress.com');
-call sp_agregarproveedor(2, '0614000000024', 'Distribuidora de Alimentos', 'Dialiment S.A.', 'Av. Comercial 456, Zona 2', 'Dialiment S.A.', 'María Gómez', 'www.dialiment.com', '2345678901', 'info@dialiment.com');
-call sp_agregarproveedor(3, '0614000000037', 'Bebidas Refrescantes', 'Refrescos del Sur S.A.', 'Calle Refrescante 789, Zona 3', 'Refrescos del Sur S.A.', 'Pedro Martínez', 'www.refrescosdelsur.com', '3456789012', 'info@refrescosdelsur.com');
-call sp_agregarproveedor(4, '0614000000040', 'Lubricantes y Aceites', 'Lubriaceites Ltda.', 'Carrera Lubricante 101, Zona 4', 'Lubriaceites Ltda.', 'Luis Rodríguez', 'www.lubriaceites.com', '4567890123', 'info@lubriaceites.com');
-call sp_agregarproveedor(5, '0614000000053', 'Productos de Limpieza', 'Limpiafacil S.A.', 'Pasaje Limpio 202, Zona 5', 'Limpiafacil S.A.', 'Ana López', 'www.limpiafacil.com', '5678901234', 'info@limpiafacil.com');
+CALL sp_agregarProveedor(1, '1234567890123', 'Carlos', 'Martinez', 'Calle 123', 'Razon Social 1', 'Contacto Principal 1', 'www.proveedor1.com', '12345678', 'proveedor1@gmail.com');
+CALL sp_agregarProveedor(2, '9876543210987', 'Ana', 'Lopez', 'Avenida 456', 'Razon Social 2', 'Contacto Principal 2', 'www.proveedor2.com', '87654321', 'proveedor2@hotmail.com');
 
-delimiter $$
+DELIMITER $$
 
-create procedure sp_mostrarproveedor ()
-begin
-    select
-        codigoproveedor,
-        nitproveedor,
-        nombresproveedor,
-        apellidosproveedor,
-        direccionproveedor,
-        razonsocial,
-        contactoprincipal,
-        paginaweb,
-        telefonoproveedor,
-        emailproveedor
-    from
+CREATE PROCEDURE sp_mostrarProveedores ()
+BEGIN
+    SELECT
+        codigoProveedor,
+        NITProveedor,
+        nombresProveedor,
+        apellidosProveedor,
+        direccionProveedor,
+        razonSocial,
+        contactoPrincipal,
+        paginaWeb,
+        telefonoProveedor,
+        emailProveedor
+    FROM
         Proveedores;
-end $$
+END $$
 
-delimiter ;
+DELIMITER ;
 
-call sp_mostrarproveedor;
+CALL sp_mostrarProveedores;
 
+DELIMITER $$
 
-delimiter $$
-
-create procedure sp_buscarproveedor (in _codigoproveedor int)
-begin
-    select
-        codigoproveedor,
-        nitproveedor,
-        nombresproveedor,
-        apellidosproveedor,
-        direccionproveedor,
-        razonsocial,
-        contactoprincipal,
-        paginaweb,
-        telefonoproveedor,
-        emailproveedor
-    from
+CREATE PROCEDURE sp_buscarProveedor (IN _codigoProveedor INT)
+BEGIN
+    SELECT
+        codigoProveedor,
+        NITProveedor,
+        nombresProveedor,
+        apellidosProveedor,
+        direccionProveedor,
+        razonSocial,
+        contactoPrincipal,
+        paginaWeb,
+        telefonoProveedor,
+        emailProveedor
+    FROM
         Proveedores
-    where
-        codigoproveedor = _codigoproveedor;
-end $$
+    WHERE
+        codigoProveedor = _codigoProveedor;
+END $$
 
-delimiter ;
+DELIMITER ;
 
-call sp_buscarproveedor(2);
+CALL sp_buscarProveedor(1);
 
-delimiter $$
+DELIMITER $$
 
-create procedure sp_eliminarproveedor (in _codigoproveedor int)
-begin
-    delete from Proveedores
-    where codigoproveedor = _codigoproveedor;
-end $$
+CREATE PROCEDURE sp_eliminarProveedor (IN _codigoProveedor INT)
+BEGIN
+    DELETE FROM Proveedores
+    WHERE codigoProveedor = _codigoProveedor;
+END $$
 
-delimiter ;
+DELIMITER ;
 
-call sp_eliminarproveedor(1);
+CALL sp_eliminarProveedor(1);
 
-delimiter $$
+DELIMITER $$
 
-create procedure sp_editarproveedor (
-    in _codigoproveedor int,
-    in _nitproveedor varchar(13),
-    in _nombresproveedor varchar(60),
-    in _apellidosproveedor varchar(60),
-    in _direccionproveedor varchar(150),
-    in _razonsocial varchar(60),
-    in _contactoprincipal varchar(100),
-    in _paginaweb varchar(50),
-    in _telefonoproveedor varchar(13),
-    in _emailproveedor varchar(50)
+CREATE PROCEDURE sp_editarProveedor (
+    IN _codigoProveedor INT,
+    IN _NITProveedor VARCHAR(13),
+    IN _nombresProveedor VARCHAR(60),
+    IN _apellidosProveedor VARCHAR(60),
+    IN _direccionProveedor VARCHAR(150),
+    IN _razonSocial VARCHAR(60),
+    IN _contactoPrincipal VARCHAR(100),
+    IN _paginaWeb VARCHAR(50),
+    IN _telefonoProveedor VARCHAR(13),
+    IN _emailProveedor VARCHAR(50)
 )
-begin
-    update Proveedores
-    set
-        NITProveedor = _nitproveedor,
-        nombresProveedor = _nombresproveedor,
-        apellidosProveedor = _apellidosproveedor,
-        direccionProveedor = _direccionproveedor,
-        razonSocial = _razonsocial,
-        contactoPrincipal = _contactoprincipal,
-        paginaWeb = _paginaweb,
-        telefonoProveedor = _telefonoproveedor,
-        emailProveedor = _emailproveedor
-    where
-        codigoProveedor = _codigoproveedor;
-end $$
+BEGIN
+    UPDATE Proveedores
+    SET
+        NITProveedor = _NITProveedor,
+        nombresProveedor = _nombresProveedor,
+        apellidosProveedor = _apellidosProveedor,
+        direccionProveedor = _direccionProveedor,
+        razonSocial = _razonSocial,
+        contactoPrincipal = _contactoPrincipal,
+        paginaWeb = _paginaWeb,
+        telefonoProveedor = _telefonoProveedor,
+        emailProveedor = _emailProveedor
+    WHERE
+        codigoProveedor = _codigoProveedor;
+END $$
 
-delimiter ;
+DELIMITER ;
 
- call sp_editarproveedor(1, '1234567890123', 'Juan', 'Perez', 'Calle 123', 'Razón Social', 'Contacto', 'www.proveedor.com', '1234567890', 'proveedor@correo.com');
-
-
+CALL sp_editarProveedor(2, '1234567890123', 'Carlos', 'Gomez', 'Calle 789', 'Razon Social Editada', 'Contacto Principal Editado', 'www.proveedor-editado.com', '12345678', 'proveedor-editado@gmail.com');
 -- CRUD COMPRA
 delimiter $$
 
@@ -600,7 +578,7 @@ call sp_editarcompra(1, '2024-05-01', 'Producto modificado', 150.00);
 DELIMITER $$
 
 CREATE PROCEDURE sp_agregarProducto(
-    IN p_codigoProducto VARCHAR(15),
+    IN p_codigoProducto int,
     IN p_descripcionProducto VARCHAR(15),
     IN p_precioUnitario DECIMAL(10,2),
     IN p_precioDocena DECIMAL(10,2),
@@ -616,11 +594,11 @@ BEGIN
 END$$
 DELIMITER ;
 
-CALL sp_agregarProducto('P001', 'Arroz', 5.99, 68.99, 129.99, 'arroz.jpg', 100, 2, 2);
-CALL sp_agregarProducto('P002', 'Frijoles', 3.49, 39.99, 74.99, 'frijoles.jpg', 150, 2, 2);
-CALL sp_agregarProducto('P003', 'Aceite', 8.99, 102.99, 194.99, 'aceite.jpg', 80, 3, 2);
-CALL sp_agregarProducto('P004', 'Leche Entera', 2.99, 32.99, 62.99, 'leche.jpg', 120, 3, 4);
-CALL sp_agregarProducto('P005', 'Azúcar', 4.49, 51.99, 98.99, 'azucar.jpg', 90, 4, 5);
+CALL sp_agregarProducto(1, 'Arroz', 0.00, 0.00, 0.00, 'arroz.jpg', 100, 2, 2);
+CALL sp_agregarProducto(2, 'Frijoles', 0.00, 0.00, 0.00, 'frijoles.jpg', 150, 2, 2);
+CALL sp_agregarProducto(3, 'Aceite', 0.00, 0.00, 0.00, 'aceite.jpg', 80, 3, 2);
+CALL sp_agregarProducto(4, 'Leche Entera', 0.00, 0.00, 0.00, 'leche.jpg', 120, 3, 2);
+CALL sp_agregarProducto(5, 'Azúcar', 0.00, 0.00, 0.00, 'azucar.jpg', 90, 4, 2);
 
 Delimiter $$
 create procedure sp_mostrarProductos()
@@ -692,7 +670,7 @@ BEGIN
 END$$
 DELIMITER ;
 
-call sp_editarProducto('P001', 'Pollo', 8.99, 69.99, 130.99, 'pollo.jpg', 100, 2, 2);
+call sp_editarProducto(1, 'Pollo', 0.00, 0.00, 0.00, 'pollo.jpg', 100, 2, 2);
 
 Delimiter $$
 CREATE PROCEDURE sp_eliminarProducto(IN _codigoProducto VARCHAR(15))
@@ -720,8 +698,8 @@ BEGIN
 END$$
 DELIMITER ;
 
-CALL sp_crearDetalleCompra(2, 50.00, 10, 'P005', 2);
-CALL sp_crearDetalleCompra(3, 50.00, 10, 'P005', 3);
+CALL sp_crearDetalleCompra(2, 50.00, 10, 5, 2);
+CALL sp_crearDetalleCompra(3, 50.00, 10, 5, 3);
 
 DELIMITER $$
 CREATE PROCEDURE sp_mostrarDetallesCompra()
@@ -732,7 +710,7 @@ DELIMITER ;
 
 DELIMITER $$
 CREATE PROCEDURE sp_buscarDetalleCompra(
-    IN codDetComp VARCHAR(50)  -- Cambiado a VARCHAR
+    IN codDetComp int  -- Cambiado a VARCHAR
 )
 BEGIN
     SELECT * FROM DetalleCompra
@@ -740,7 +718,7 @@ BEGIN
 END$$
 DELIMITER ;
 
-call sp_buscarDetalleCompra('P001');
+call sp_buscarDetalleCompra(1);
 
 CALL sp_mostrarDetallesCompra();
 
@@ -762,7 +740,7 @@ BEGIN
 END$$
 DELIMITER ;
 
-CALL sp_editarDetalleCompra(2, 55.00, 12, 'P001', 2);
+CALL sp_editarDetalleCompra(2, 55.00, 12, 1, 2);
 
 call sp_mostrarproductos();
 DELIMITER $$
@@ -780,7 +758,7 @@ CALL sp_eliminarDetalleCompra(2);
 
 DELIMITER $$
 CREATE PROCEDURE sp_eliminarDetalleCompraPorProducto(
-    IN p_codigoProducto VARCHAR(10)
+    IN p_codigoProducto int
 )
 BEGIN
     DELETE FROM DetalleCompra
@@ -967,7 +945,7 @@ CREATE PROCEDURE sp_crearDetalleFactura(
     IN p_precioUnitario DECIMAL(10,2),
     IN p_cantidad INT,
     IN p_numeroDeFactura INT,
-    IN p_codigoProducto VARCHAR(15)
+    IN p_codigoProducto int
 )
 BEGIN
     INSERT INTO DetalleFactura(codigoDetalleFactura, precioUnitario, cantidad, numeroDeFactura, codigoProducto)
@@ -975,8 +953,8 @@ BEGIN
 END$$
 DELIMITER ;
 
-CALL sp_crearDetalleFactura(1, 50.00, 10, 2, 'P001');
-CALL sp_crearDetalleFactura(3, 50.00, 10, 3, 'P003');
+CALL sp_crearDetalleFactura(1, 50.00, 10, 2, 1);
+CALL sp_crearDetalleFactura(3, 50.00, 10, 3, 3);
 
 DELIMITER $$
 
@@ -1009,7 +987,7 @@ CREATE PROCEDURE sp_editarDetalleFactura(
     IN p_nuevoPrecioUnitario DECIMAL(10,2),
     IN p_nuevaCantidad INT,
     IN p_nuevoNumeroDeFactura INT,
-    IN p_nuevoCodigoProducto VARCHAR(15)
+    IN p_nuevoCodigoProducto int
 )
 BEGIN
     UPDATE DetalleFactura
@@ -1021,7 +999,7 @@ BEGIN
 END$$
 
 DELIMITER ;
-CALL sp_editarDetalleFactura(1, 55.00, 3, 3, 'P001');
+CALL sp_editarDetalleFactura(1, 55.00, 3, 3, 1);
 
 DELIMITER $$
 
@@ -1051,8 +1029,6 @@ BEGIN
     DELETE FROM Factura WHERE codigoEmpleado = p_codigoEmpleado;
 END$$
 DELIMITER ;
-
-
 
 -- -----------------------
 call sp_mostrarFacturas();
@@ -1098,7 +1074,7 @@ DELIMITER ;
 -- Procedimiento para actualizar el stock de un producto al insertar un DetalleFactura
 DELIMITER $$
 CREATE PROCEDURE ActualizarStockInsertarDetalle(
-    IN p_codigoProducto varchar(15),
+    IN p_codigoProducto int,
     IN p_cantidad INT
 )
 BEGIN
@@ -1157,15 +1133,65 @@ BEGIN
 
     -- Actualizar productos con los precios calculados
     UPDATE Productos
-    SET precioUnitario = precioProveedor,
+    SET precioUnitario = NEW.costoUnitario,
         precioDocena = precioDocena,
         precioMayor = precioMayor
     WHERE codigoProducto = NEW.codigoProducto;
+    
 END $$
 
 DELIMITER ;
 
+-- Trigger para actualización del total en la tabla Facturas al insertar un DetalleCompra
+DELIMITER $$
+CREATE TRIGGER ActualizarTotalCompraInsert AFTER INSERT ON DetalleCompra
+FOR EACH ROW
+BEGIN
+    UPDATE Compras
+    SET totalDocumento = totalDocumento + NEW.costoUnitario * NEW.cantidad
+    WHERE numeroDocumento = NEW.numeroDocumento;
+END
+$$
+DELIMITER ;
+
+-- Trigger para actualización del total en la tabla Compras al actualizar un DetalleCompra
+DELIMITER $$
+CREATE TRIGGER ActualizarTotalCompraUpdate AFTER UPDATE ON DetalleCompra
+FOR EACH ROW
+BEGIN
+    UPDATE Compras
+    SET totalDocumento = totalDocumento + (NEW.costoUnitario * NEW.cantidad) - (OLD.costoUnitario * OLD.cantidad)
+    WHERE numeroDocumento = NEW.numeroDocumento;
+END $$
+DELIMITER ;
+
+-- Trigger para actualización del total en la tabla Facturas al eliminar un DetalleFactura
+DELIMITER $$
+CREATE TRIGGER ActualizarTotalCompraDelete AFTER DELETE ON DetalleCompra
+FOR EACH ROW
+BEGIN
+    UPDATE Compras
+    SET totalDocumento = totalDocumento - OLD.costoUnitario * OLD.cantidad
+    WHERE numeroDocumento = OLD.numeroDocumento;
+END $$
+DELIMITER ;
+
+delimiter $$
+create procedure sp_eliminarProductoPorProveedor(in codProveedor int)
+begin
+	delete from productos 
+    where codigoProveedor = codProveedor;
+end$$
+delimiter ;
+
+delimiter $$
+create procedure sp_eliminarDetalleFacturaPorProducto(in codProducto int)
+begin
+	delete from detalleFactura 
+    where codigoProducto = codProducto;
+end$$
+delimiter ;
+
 
 
 set global time_zone= '-6:00';
-
