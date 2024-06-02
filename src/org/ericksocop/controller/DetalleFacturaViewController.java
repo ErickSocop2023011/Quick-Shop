@@ -89,6 +89,7 @@ public class DetalleFacturaViewController implements Initializable {
         cargarDatos();
         cmbCodP.setItems(getProducto());
         cmbNumF.setItems(getFacturas());
+        txtPrecioU.setDisable(true);
         desactivarControles();
 
     }
@@ -238,7 +239,6 @@ public class DetalleFacturaViewController implements Initializable {
             case ACTUALIZAR:
                 guardar();
                 limpiarControles();
-                cargarDatos();
                 desactivarControles();
                 btnAgregarDeF.setText("Agregar");
                 btnEliminarDeF.setText("Eliminar");
@@ -255,7 +255,8 @@ public class DetalleFacturaViewController implements Initializable {
     public void guardar() {
         DetalleFactura registro = new DetalleFactura();
         registro.setCodigoDetalleFactura(Integer.parseInt(txtCodDetF.getText()));
-        registro.setPrecioUnitario(Double.parseDouble(txtPrecioU.getText()));
+        registro.setPrecioUnitario(Double.parseDouble("0.00"));
+        //registro.setPrecioUnitario(Double.parseDouble(txtPrecioU.getText()));
         registro.setCantidad(Integer.parseInt(txtCantidad.getText()));
         registro.setNumeroDeFactura(((Facturas) cmbNumF.getSelectionModel().getSelectedItem()).getNumeroDeFactura());
         registro.setCodigoProducto(((Productos) cmbCodP.getSelectionModel().getSelectedItem()).getCodigoProducto());
@@ -325,7 +326,21 @@ public class DetalleFacturaViewController implements Initializable {
     }
 
     public void eliminar() {
-    // Verificar si se ha seleccionado un detalle de factura
+        
+   switch(tipoDeOperador){
+       case ACTUALIZAR:
+           desactivarControles();
+                limpiarControles();
+                btnAgregarDeF.setText("Agregar");
+                btnEliminarDeF.setText("Eliminar");
+                btnEditarDeF.setDisable(false);
+                btnReportesDeF.setDisable(false);
+                /*regresar de nuevo a sus imagenes originales
+                imgAgregar.setImage(new Image("URL"));*/
+                tipoDeOperador = operador.NINGUNO;
+           break;
+       default:
+            // Verificar si se ha seleccionado un detalle de factura
     if (tvDetalleF.getSelectionModel().getSelectedItem() != null) {
         // Obtener el detalle de factura seleccionado
         DetalleFactura detalleSeleccionado = (DetalleFactura) tvDetalleF.getSelectionModel().getSelectedItem();
@@ -359,6 +374,8 @@ public class DetalleFacturaViewController implements Initializable {
         JOptionPane.showMessageDialog(null, "Debe seleccionar un detalle de factura para eliminarlo", "Advertencia",
                 JOptionPane.WARNING_MESSAGE);
     }
+    break;
+   }
 }
 
     public void reportes() {

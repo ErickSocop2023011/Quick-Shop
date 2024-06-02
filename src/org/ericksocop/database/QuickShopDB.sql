@@ -124,9 +124,7 @@ BEGIN
 END $$        
 DELIMITER ;
 
-CALL sp_AgregarCliente(1, 'Luis Rafa', 'Cordova', 'zona 21', '1234567890123', '12345678', 'luis@gmail.com');
-CALL sp_AgregarCliente(2, 'Luis Rafa', 'Cordova', 'zona 21', '1234567890123', '12345678', 'luis@gmail.com');
-CALL sp_AgregarCliente(3, 'Ramiro', 'Morales', 'zona 15', '5869324785123', '36578924', 'ramiro@gmail.com');
+
 
 DELIMITER $$
 CREATE PROCEDURE sp_MostrarClientes ()
@@ -209,11 +207,7 @@ END $$
 
 DELIMITER ;
 
-CALL sp_agregarTipoProducto(1, 'Combustibles');
-CALL sp_agregarTipoProducto(2, 'Alimentos');
-CALL sp_agregarTipoProducto(3, 'Bebidas');
-CALL sp_agregarTipoProducto(4, 'Snacks');
-CALL sp_agregarTipoProducto(5, 'Cuidado Personal');
+
 
 DELIMITER $$
 
@@ -291,11 +285,7 @@ END $$
 
 DELIMITER ;
 
-CALL sp_agregarCargoEmpleado(1, 'Gerente', 'Responsable de la dirección y gestión del personal');
-CALL sp_agregarCargoEmpleado(2, 'Asistente Administrativo', 'Apoyo en labores administrativas y de oficina');
-CALL sp_agregarCargoEmpleado(3, 'Técnico de Soporte', 'Brinda asistencia técnica y soluciona problemas de hardware y software');
-CALL sp_agregarCargoEmpleado(4, 'Analista de Marketing', 'Encargado de analizar datos y desarrollar estrategias de marketing');
-CALL sp_agregarCargoEmpleado(5, 'Contador', 'Realiza tareas contables y financieras');
+
 
 DELIMITER $$
 
@@ -384,8 +374,7 @@ END $$
 
 DELIMITER ;
 
-CALL sp_agregarProveedor(1, '1234567890123', 'Carlos', 'Martinez', 'Calle 123', 'Razon Social 1', 'Contacto Principal 1', 'www.proveedor1.com', '12345678', 'proveedor1@gmail.com');
-CALL sp_agregarProveedor(2, '9876543210987', 'Ana', 'Lopez', 'Avenida 456', 'Razon Social 2', 'Contacto Principal 2', 'www.proveedor2.com', '87654321', 'proveedor2@hotmail.com');
+
 
 DELIMITER $$
 
@@ -445,7 +434,7 @@ END $$
 
 DELIMITER ;
 
-CALL sp_eliminarProveedor(1);
+-- CALL sp_eliminarProveedor(1);
 
 DELIMITER $$
 
@@ -496,11 +485,7 @@ end $$
 
 delimiter ;
 
-call sp_agregarcompra(1, '2024-05-01', 'Producto 1', 100.00);
-call sp_agregarcompra(2, '2024-05-02', 'Producto 2', 150.00);
-call sp_agregarcompra(3, '2024-05-03', 'Producto 3', 200.00);
-call sp_agregarcompra(4, '2024-05-04', 'Producto 4', 250.00);
-call sp_agregarcompra(5, '2024-05-05', 'Producto 5', 300.00);
+
 
 delimiter $$
 
@@ -594,11 +579,7 @@ BEGIN
 END$$
 DELIMITER ;
 
-CALL sp_agregarProducto(1, 'Arroz', 0.00, 0.00, 0.00, 'arroz.jpg', 100, 2, 2);
-CALL sp_agregarProducto(2, 'Frijoles', 0.00, 0.00, 0.00, 'frijoles.jpg', 150, 2, 2);
-CALL sp_agregarProducto(3, 'Aceite', 0.00, 0.00, 0.00, 'aceite.jpg', 80, 3, 2);
-CALL sp_agregarProducto(4, 'Leche Entera', 0.00, 0.00, 0.00, 'leche.jpg', 120, 3, 2);
-CALL sp_agregarProducto(5, 'Azúcar', 0.00, 0.00, 0.00, 'azucar.jpg', 90, 4, 2);
+
 
 Delimiter $$
 create procedure sp_mostrarProductos()
@@ -621,7 +602,7 @@ Delimiter ;
 call sp_mostrarProductos();
 
 delimiter $$
-create procedure sp_buscarProducto(in codP varchar(15))
+create procedure sp_buscarProducto(in codP int)
 begin
 	select
     p.codigoProducto,
@@ -698,8 +679,6 @@ BEGIN
 END$$
 DELIMITER ;
 
-CALL sp_crearDetalleCompra(2, 50.00, 10, 5, 2);
-CALL sp_crearDetalleCompra(3, 50.00, 10, 5, 3);
 
 DELIMITER $$
 CREATE PROCEDURE sp_mostrarDetallesCompra()
@@ -786,8 +765,7 @@ BEGIN
     VALUES(p_codigoEmpleado, p_nombresEmpleado, p_apellidosEmpleado, p_sueldo, p_direccion, p_turno, p_codigoCargoEmpleado);
 END$$
 DELIMITER ;
-CALL sp_crearEmpleado(2, 'Juan', 'Perez', 1500.00, 'Calle Falsa 123', 'Diurno', 2);
-CALL sp_crearEmpleado(3, 'Kevin', 'Mendez', 1500.00, 'Calle Real 321', 'Nocturno', 3);
+
 
 DELIMITER $$
 
@@ -874,8 +852,7 @@ BEGIN
 END$$
 DELIMITER ;
 
-CALL sp_crearFactura(2, 'Pagada', 0.00, '2024-05-12', 2, 2);
-CALL sp_crearFactura(3, 'Pendiente', 0.00, '2024-05-12', 3, 3);
+
 
 
 DELIMITER $$
@@ -953,8 +930,7 @@ BEGIN
 END$$
 DELIMITER ;
 
-CALL sp_crearDetalleFactura(1, 50.00, 10, 2, 1);
-CALL sp_crearDetalleFactura(3, 50.00, 10, 3, 3);
+
 
 DELIMITER $$
 
@@ -1060,6 +1036,8 @@ BEGIN
 END $$
 DELIMITER ;
 
+
+
 -- Trigger para actualización del total en la tabla Facturas al eliminar un DetalleFactura
 DELIMITER $$
 CREATE TRIGGER ActualizarTotalFacturaDelete AFTER DELETE ON DetalleFactura
@@ -1122,22 +1100,106 @@ CREATE TRIGGER AfterInsertDetalleCompra
 AFTER INSERT ON DetalleCompra
 FOR EACH ROW
 BEGIN
-    DECLARE precioProveedor DECIMAL(10,2);
+    DECLARE precioUnidad DECIMAL(10,2);
     DECLARE precioDocena DECIMAL(10,2);
     DECLARE precioMayor DECIMAL(10,2);
 
     -- Calcular precios
-    SET precioProveedor = NEW.costoUnitario * 1.40;
-    SET precioDocena = precioProveedor * 1.35;
-    SET precioMayor = precioProveedor * 1.25;
+    SET precioUnidad = NEW.costoUnitario * 1.40;
+    SET precioDocena = NEW.costoUnitario * 1.35;
+    SET precioMayor = NEW.costoUnitario * 1.25;
 
     -- Actualizar productos con los precios calculados
     UPDATE Productos
-    SET precioUnitario = NEW.costoUnitario,
+    SET precioUnitario = precioUnidad,
         precioDocena = precioDocena,
         precioMayor = precioMayor
     WHERE codigoProducto = NEW.codigoProducto;
     
+END $$
+
+
+CREATE TRIGGER AfterUpdateDetalleCompra
+AFTER UPDATE ON DetalleCompra
+FOR EACH ROW
+BEGIN
+    DECLARE nuevoPrecioUnidad DECIMAL(10,2);
+    DECLARE nuevoPrecioDocena DECIMAL(10,2);
+    DECLARE nuevoPrecioMayor DECIMAL(10,2);
+
+    SET nuevoPrecioUnidad = NEW.costoUnitario * 1.40;
+    SET nuevoPrecioDocena = NEW.costoUnitario * 1.35;
+    SET nuevoPrecioMayor = NEW.costoUnitario * 1.25;
+
+    UPDATE Productos
+    SET precioUnitario = nuevoPrecioProveedor,
+        precioDocena = nuevoPrecioDocena,
+        precioMayor = nuevoPrecioMayor
+    WHERE codigoProducto = NEW.codigoProducto;
+    
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE TRIGGER AfterDeleteDetalleCompra
+AFTER DELETE ON DetalleCompra
+FOR EACH ROW
+BEGIN
+    UPDATE Productos
+    SET precioUnitario = 0,
+        precioDocena = 0,
+        precioMayor = 0
+    WHERE codigoProducto = OLD.codigoProducto;
+END $$
+
+DELIMITER ;
+
+-- Trigger para la actualización del precioUnitario en la entidad detalleFactura
+DELIMITER $$
+
+CREATE TRIGGER BeforeInsertDetalleFactura
+BEFORE INSERT ON DetalleFactura
+FOR EACH ROW
+BEGIN
+    DECLARE precioDetalleF DECIMAL(10,2);
+
+    SELECT precioUnitario INTO precioDetalleF
+    FROM Productos
+    WHERE codigoProducto = NEW.codigoProducto;
+
+    SET NEW.precioUnitario = precioDetalleF;
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE TRIGGER AfterUpdateDetalleCompraEnProductos
+AFTER UPDATE ON DetalleCompra
+FOR EACH ROW
+BEGIN
+    UPDATE Productos
+    SET precioUnitario = NEW.costoUnitario
+    WHERE codigoProducto = NEW.codigoProducto;
+
+    UPDATE detalleFactura
+    SET precioUnitario = NEW.costoUnitario
+    WHERE codigoProducto = NEW.codigoProducto;
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE TRIGGER AfterDeleteDetalleCompraEnProductos
+AFTER DELETE ON DetalleCompra
+FOR EACH ROW
+BEGIN
+    UPDATE detalleFactura
+    SET precioUnitario = 0
+    WHERE codigoProducto = OLD.codigoProducto;
 END $$
 
 DELIMITER ;
@@ -1191,6 +1253,50 @@ begin
     where codigoProducto = codProducto;
 end$$
 delimiter ;
+
+CALL sp_AgregarCliente(1, 'Luis Rafa', 'Cordova', 'zona 21', '1234567890123', '12345678', 'luis@gmail.com');
+CALL sp_AgregarCliente(2, 'Luis Rafa', 'Cordova', 'zona 21', '1234567890123', '12345678', 'luis@gmail.com');
+CALL sp_AgregarCliente(3, 'Ramiro', 'Morales', 'zona 15', '5869324785123', '36578924', 'ramiro@gmail.com');
+
+CALL sp_agregarTipoProducto(1, 'Combustibles');
+CALL sp_agregarTipoProducto(2, 'Alimentos');
+CALL sp_agregarTipoProducto(3, 'Bebidas');
+CALL sp_agregarTipoProducto(4, 'Snacks');
+CALL sp_agregarTipoProducto(5, 'Cuidado Personal');
+
+CALL sp_agregarCargoEmpleado(1, 'Gerente', 'Responsable de la dirección y gestión del personal');
+CALL sp_agregarCargoEmpleado(2, 'Asistente Administrativo', 'Apoyo en labores administrativas y de oficina');
+CALL sp_agregarCargoEmpleado(3, 'Técnico de Soporte', 'Brinda asistencia técnica y soluciona problemas de hardware y software');
+CALL sp_agregarCargoEmpleado(4, 'Analista de Marketing', 'Encargado de analizar datos y desarrollar estrategias de marketing');
+CALL sp_agregarCargoEmpleado(5, 'Contador', 'Realiza tareas contables y financieras');
+
+CALL sp_agregarProveedor(1, '1234567890123', 'Carlos', 'Martinez', 'Calle 123', 'Razon Social 1', 'Contacto Principal 1', 'www.proveedor1.com', '12345678', 'proveedor1@gmail.com');
+CALL sp_agregarProveedor(2, '9876543210987', 'Ana', 'Lopez', 'Avenida 456', 'Razon Social 2', 'Contacto Principal 2', 'www.proveedor2.com', '87654321', 'proveedor2@hotmail.com');
+
+CALL sp_agregarProducto(1, 'Arroz', 0.00, 0.00, 0.00, 'arroz.jpg', 100, 2, 2);
+CALL sp_agregarProducto(2, 'Frijoles', 0.00, 0.00, 0.00, 'frijoles.jpg', 150, 2, 2);
+CALL sp_agregarProducto(3, 'Aceite', 0.00, 0.00, 0.00, 'aceite.jpg', 80, 3, 2);
+CALL sp_agregarProducto(4, 'Leche Entera', 0.00, 0.00, 0.00, 'leche.jpg', 120, 3, 2);
+CALL sp_agregarProducto(5, 'Azúcar', 0.00, 0.00, 0.00, 'azucar.jpg', 90, 4, 2);
+
+call sp_agregarcompra(1, '2024-05-01', 'Producto 1', 100.00);
+call sp_agregarcompra(2, '2024-05-02', 'Producto 2', 150.00);
+call sp_agregarcompra(3, '2024-05-03', 'Producto 3', 200.00);
+call sp_agregarcompra(4, '2024-05-04', 'Producto 4', 250.00);
+call sp_agregarcompra(5, '2024-05-05', 'Producto 5', 300.00);
+
+CALL sp_crearDetalleCompra(2, 50.00, 10, 4, 2);
+CALL sp_crearDetalleCompra(3, 50.00, 10, 5, 3);
+
+CALL sp_crearEmpleado(2, 'Juan', 'Perez', 1500.00, 'Calle Falsa 123', 'Diurno', 2);
+CALL sp_crearEmpleado(3, 'Kevin', 'Mendez', 1500.00, 'Calle Real 321', 'Nocturno', 3);
+
+CALL sp_crearFactura(2, 'Pagada', 0.00, '2024-05-12', 2, 2);
+CALL sp_crearFactura(3, 'Pendiente', 0.00, '2024-05-12', 3, 3);
+
+CALL sp_crearDetalleFactura(1, 50.00, 10, 2, 1);
+CALL sp_crearDetalleFactura(3, 50.00, 10, 3, 3);
+
 
 
 

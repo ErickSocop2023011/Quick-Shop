@@ -1,15 +1,3 @@
-/* 
- .menubar{
-    -fx-background-color: transparent;
-    -fx-opacity: 0.5;
-    -fx-border-image-width: 2.0;
-}*/
-
-/* Estilo para la TableView y su contenido 
-.table-view, .table-row-cell {
-    -fx-background-color: rgba(31, 118, 59, 0.5); /* Verde más claro y semitransparente 
-    -fx-text-fill: white; /* Color del texto en blanco 
-} */
 
 /* Estilo para las celdas al pasar el cursor */
 .table-row-cell:hover {
@@ -45,18 +33,6 @@
     -fx-background-color: #FFA500; /* Naranja más claro */
 }
 
-/* Estilo para los botones */
-.button {
-    -fx-background-color: #FFFFFF; /* Color de fondo blanco */
-    -fx-text-fill: #000000; /* Color del texto negro */
-}
-
-/* Estilo para los botones al pasar el cursor */
-.button:hover {
-    -fx-background-color: #CCCCCC; /* Color de fondo ligeramente gris claro */
-    -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.2) , 5,0,0,1 ); /* Efecto de sombra al pasar el cursor */
-}
-
 .button-regresar {
     -fx-background-color: #FFFFFF; /* Color de fondo blanco */
     -fx-text-fill: #000000; /* Color del texto negro */
@@ -88,3 +64,21 @@
     -fx-background-color: #FFD699; /* Color de fondo naranja claro */
 }
 
+.menuItem:hover{
+    -fx-border-color:  #EF8E00;
+    -fx-border-width: 0px 0px 3px 0px;
+}
+
+.sidebarItem:hover{
+    -fx-background-color:  #EF8E00;
+    -fx-border-color: WHITE;
+    -fx-border-width: 0px 0px 0px 3px;
+}
+
+.root{
+    -fx-background-radius: 10px;
+}
+
+.stack-pane{
+    -fx-background-radius: 10px;
+}

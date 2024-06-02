@@ -4,6 +4,12 @@
  */
 package org.ericksocop.controller;
 
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXTextField;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcons;
+import javafx.scene.paint.Color;
 import java.net.URL;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,12 +21,11 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 import javax.swing.JOptionPane;
 import org.ericksocop.bean.CargoEmpleados;
 import org.ericksocop.bean.Empleados;
@@ -34,6 +39,18 @@ import org.ericksocop.system.Main;
  */
 public class EmpleadosViewController implements Initializable {
 
+    @FXML
+    private JFXButton btnCerrar;
+    @FXML
+    private AnchorPane anchorPane;
+    @FXML
+    private FontAwesomeIcon iconoCerrar;
+    @FXML
+    private JFXButton btnMinimizar;
+    @FXML
+    private FontAwesomeIcon iconMinimizar;
+    @FXML
+    private FontAwesomeIcon reporteIcono;
     @FXML
     private TableView tvEmpleados;
     @FXML
@@ -51,31 +68,37 @@ public class EmpleadosViewController implements Initializable {
     @FXML
     private TableColumn colCodCargEmp;
     @FXML
-    private Button btnAgregarE;
+    private JFXButton btnAgregarE;
     @FXML
-    private Button btnEditarE;
+    private JFXButton btnEditarE;
     @FXML
-    private Button btnEliminarE;
+    private JFXButton btnEliminarE;
     @FXML
-    private Button btnReportesE;
+    private JFXButton btnReportesE;
     @FXML
-    private TextField txtCodigoEmp;
+    private JFXTextField txtCodigoEmp;
     @FXML
-    private TextField txtnomEmp;
+    private JFXTextField txtnomEmp;
     @FXML
-    private TextField txtApellidosEmp;
+    private JFXTextField txtApellidosEmp;
     @FXML
-    private TextField txtSueldo;
+    private JFXTextField txtSueldo;
     @FXML
-    private TextField txtDireccionEmp;
+    private JFXTextField txtDireccionEmp;
     @FXML
-    private ComboBox cmbCargoEmp;
+    private JFXComboBox cmbCargoEmp;
     @FXML
-    private TextField txtTurno;
+    private JFXTextField txtTurno;
     @FXML
-    private Button btnRegresarE;
+    private JFXButton btnRegresarE;
     @FXML
-    private Button btnCargoE;
+    private JFXButton btnCargoE;
+    @FXML
+    private FontAwesomeIcon agregarIcono;
+    @FXML
+    private FontAwesomeIcon actualizarIcono;
+    @FXML
+    private FontAwesomeIcon eliminarIcono;
 
     private Main escenarioPrincipal;
     private ObservableList<Empleados> listaEmpleados;
@@ -185,7 +208,11 @@ public class EmpleadosViewController implements Initializable {
             case NINGUNO:
                 limpiarControles();
                 activarControles();
+                agregarIcono.setFill(Color.WHITE);
+                agregarIcono.setIcon(FontAwesomeIcons.SAVE);
                 btnAgregarE.setText("Guardar");
+                eliminarIcono.setFill(Color.WHITE);
+                eliminarIcono.setIcon(FontAwesomeIcons.CLOSE);
                 btnEliminarE.setText("Cancelar");
                 btnEditarE.setDisable(true);
                 btnReportesE.setDisable(true);
@@ -240,10 +267,14 @@ public class EmpleadosViewController implements Initializable {
         switch (tipoDeOperador) {
             case NINGUNO:
                 if (tvEmpleados.getSelectionModel().getSelectedItem() != null) {
-                    btnEditarE.setText("Actualizar");
+                    actualizarIcono.setFill(Color.WHITE);
+                    actualizarIcono.setIcon(FontAwesomeIcons.SAVE);
+                    btnEditarE.setText("Guardar");
                     btnReportesE.setText("Cancelar");
                     btnEliminarE.setDisable(true);
                     btnAgregarE.setDisable(true);
+                    reporteIcono.setFill(Color.WHITE);
+                    reporteIcono.setIcon(FontAwesomeIcons.CLOSE);
                     activarControles();
                     txtCodigoEmp.setEditable(false);
                     tipoDeOperador = operador.ACTUALIZAR;
@@ -257,7 +288,7 @@ public class EmpleadosViewController implements Initializable {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            btnEditarE.setText("Editar");
+            btnEditarE.setText("Actualizar");
             btnReportesE.setText("Reportes");
             btnAgregarE.setDisable(false);
             btnEliminarE.setDisable(false);
@@ -298,7 +329,11 @@ public class EmpleadosViewController implements Initializable {
             case ACTUALIZAR:
                 desactivarControles();
                 limpiarControles();
+                agregarIcono.setFill(Color.WHITE);
+                agregarIcono.setIcon(FontAwesomeIcons.USER_PLUS);
                 btnAgregarE.setText("Agregar");
+                eliminarIcono.setFill(Color.WHITE);
+                eliminarIcono.setIcon(FontAwesomeIcons.USER_TIMES);
                 btnEliminarE.setText("Eliminar");
                 btnEditarE.setDisable(false);
                 btnReportesE.setDisable(false);
@@ -352,7 +387,11 @@ public class EmpleadosViewController implements Initializable {
             case ACTUALIZAR:
                 desactivarControles();
                 limpiarControles();
-                btnEditarE.setText("Editar");
+                actualizarIcono.setFill(Color.WHITE);
+                actualizarIcono.setIcon(FontAwesomeIcons.EDIT);
+                btnEditarE.setText("Actualizar");
+                reporteIcono.setFill(Color.WHITE);
+                reporteIcono.setIcon(FontAwesomeIcons.FOLDER);
                 btnReportesE.setText("Reportes");
                 btnAgregarE.setDisable(false);
                 btnEliminarE.setDisable(false);
@@ -405,6 +444,13 @@ public class EmpleadosViewController implements Initializable {
         if (event.getSource() == btnCargoE) {
             escenarioPrincipal.cargoEmpleadosView();
         }
-    }
+        if (event.getSource() == iconoCerrar || event.getSource() == btnCerrar) {
+            System.exit(0);
+        }
+        if (event.getSource() == iconMinimizar || event.getSource() == btnMinimizar) {
+            Stage stage = (Stage) anchorPane.getScene().getWindow();
+            stage.setIconified(true);
+        }
 
+    }
 }

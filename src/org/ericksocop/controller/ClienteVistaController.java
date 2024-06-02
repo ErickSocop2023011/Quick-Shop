@@ -171,7 +171,6 @@ public class ClienteVistaController implements Initializable {
             case ACTUALIZAR:
                 guardar();
                 limpiarControles();
-
                 desactivarControles();
                 btnAgregar.setText("Agregar");
                 btnEliminar.setText("Eliminar");

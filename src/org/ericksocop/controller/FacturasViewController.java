@@ -5,6 +5,7 @@
 package org.ericksocop.controller;
 
 import com.jfoenix.controls.JFXDatePicker;
+import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.Date;
@@ -27,7 +28,9 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.FileChooser;
 import javax.swing.JOptionPane;
+import static javax.swing.JOptionPane.ERROR_MESSAGE;
 import org.ericksocop.bean.Clientes;
 import org.ericksocop.bean.Empleados;
 import org.ericksocop.bean.Facturas;
@@ -100,6 +103,7 @@ public class FacturasViewController implements Initializable {
         cmbClienteID.setItems(getClientes());
         cmbCodEmp.setItems(getEmpleados());
         desactivarControles();
+        txtTotalF.setDisable(true);
     }
 
     public void cargarDatos() {
@@ -113,21 +117,21 @@ public class FacturasViewController implements Initializable {
     }
 
     public void seleccionarElemento() {
-        try{
-        txtNumF.setText(String.valueOf(((Facturas) tvFacturas.getSelectionModel().getSelectedItem()).getNumeroDeFactura()));
-        txtEstadoF.setText(((Facturas) tvFacturas.getSelectionModel().getSelectedItem()).getEstado());
-        txtTotalF.setText(String.valueOf(((Facturas) tvFacturas.getSelectionModel().getSelectedItem()).getTotalFactura()));
-        Facturas facturaSeleccionada = (Facturas) tvFacturas.getSelectionModel().getSelectedItem();
-        if (facturaSeleccionada != null) {
-            String fechaFactura = facturaSeleccionada.getFechaFactura();
-            LocalDate localDate = LocalDate.parse(fechaFactura);
+        try {
+            txtNumF.setText(String.valueOf(((Facturas) tvFacturas.getSelectionModel().getSelectedItem()).getNumeroDeFactura()));
+            txtEstadoF.setText(((Facturas) tvFacturas.getSelectionModel().getSelectedItem()).getEstado());
+            txtTotalF.setText(String.valueOf(((Facturas) tvFacturas.getSelectionModel().getSelectedItem()).getTotalFactura()));
+            Facturas facturaSeleccionada = (Facturas) tvFacturas.getSelectionModel().getSelectedItem();
+            if (facturaSeleccionada != null) {
+                String fechaFactura = facturaSeleccionada.getFechaFactura();
+                LocalDate localDate = LocalDate.parse(fechaFactura);
 
-            jfxDatePicker.setValue(localDate);
-        }
+                jfxDatePicker.setValue(localDate);
+            }
 
-        cmbClienteID.getSelectionModel().select(buscarCliente((((Facturas) tvFacturas.getSelectionModel().getSelectedItem()).getClienteID())));
-        cmbCodEmp.getSelectionModel().select(buscarEmpleado((((Facturas) tvFacturas.getSelectionModel().getSelectedItem()).getCodigoEmpleado())));
-        }catch(Exception e){
+            cmbClienteID.getSelectionModel().select(buscarCliente((((Facturas) tvFacturas.getSelectionModel().getSelectedItem()).getClienteID())));
+            cmbCodEmp.getSelectionModel().select(buscarEmpleado((((Facturas) tvFacturas.getSelectionModel().getSelectedItem()).getCodigoEmpleado())));
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Por favor selecciona una fila válida", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -270,7 +274,7 @@ public class FacturasViewController implements Initializable {
         Facturas registro = new Facturas();
         registro.setNumeroDeFactura(Integer.parseInt(txtNumF.getText()));
         registro.setEstado(txtEstadoF.getText());
-        registro.setTotalFactura(Double.parseDouble(txtTotalF.getText()));
+        registro.setTotalFactura(Double.parseDouble("0.00"));
         if (jfxDatePicker.getValue() != null) {
             Date fechaFactura = Date.valueOf(jfxDatePicker.getValue());
             registro.setFechaFactura(fechaFactura.toString());
@@ -362,39 +366,47 @@ public class FacturasViewController implements Initializable {
     }
 
     public void eliminar() {
-    if (tvFacturas.getSelectionModel().getSelectedItem() != null) {
-        int respuesta = JOptionPane.showConfirmDialog(null, "¿Está seguro de eliminar el registro?", "Eliminar Factura", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-        if (respuesta == JOptionPane.YES_OPTION) {
-            try {
-                Facturas facturaSeleccionada = (Facturas) tvFacturas.getSelectionModel().getSelectedItem();
-                int numeroDeFactura = facturaSeleccionada.getNumeroDeFactura();
+        if (tvFacturas.getSelectionModel().getSelectedItem() != null) {
+            int respuesta = JOptionPane.showConfirmDialog(null, "¿Está seguro de eliminar el registro?", "Eliminar Factura", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            if (respuesta == JOptionPane.YES_OPTION) {
+                try {
+                    Facturas facturaSeleccionada = (Facturas) tvFacturas.getSelectionModel().getSelectedItem();
+                    int numeroDeFactura = facturaSeleccionada.getNumeroDeFactura();
 
-                // Primero, eliminar los detalles de la factura
-                PreparedStatement eliminarDetalleFactura = Conexion.getInstance().getConexion().prepareCall("{call sp_eliminarDetalleFacturaPorFactura(?)}");
-                eliminarDetalleFactura.setInt(1, numeroDeFactura);
-                eliminarDetalleFactura.execute();
+                    // Primero, eliminar los detalles de la factura
+                    PreparedStatement eliminarDetalleFactura = Conexion.getInstance().getConexion().prepareCall("{call sp_eliminarDetalleFacturaPorFactura(?)}");
+                    eliminarDetalleFactura.setInt(1, numeroDeFactura);
+                    eliminarDetalleFactura.execute();
 
-                // Luego, eliminar la factura
-                PreparedStatement eliminarFactura = Conexion.getInstance().getConexion().prepareCall("{call sp_eliminarFactura(?)}");
-                eliminarFactura.setInt(1, numeroDeFactura);
-                eliminarFactura.execute();
+                    // Luego, eliminar la factura
+                    PreparedStatement eliminarFactura = Conexion.getInstance().getConexion().prepareCall("{call sp_eliminarFactura(?)}");
+                    eliminarFactura.setInt(1, numeroDeFactura);
+                    eliminarFactura.execute();
 
-                listaFacturas.remove(facturaSeleccionada);
-                limpiarControles();
-                cargarDatos();
-                JOptionPane.showMessageDialog(null, "Factura eliminada correctamente");
-            } catch (SQLException e) {
-                JOptionPane.showMessageDialog(null, "Error al intentar eliminar la factura: " + e.getMessage());
-                e.printStackTrace();
+                    listaFacturas.remove(facturaSeleccionada);
+                    limpiarControles();
+                    cargarDatos();
+                    JOptionPane.showMessageDialog(null, "Factura eliminada correctamente");
+                } catch (SQLException e) {
+                    JOptionPane.showMessageDialog(null, "Error al intentar eliminar la factura: " + e.getMessage());
+                    e.printStackTrace();
+                }
             }
+        } else {
+            JOptionPane.showMessageDialog(null, "Debe seleccionar una factura para eliminar");
         }
-    } else {
-        JOptionPane.showMessageDialog(null, "Debe seleccionar una factura para eliminar");
     }
-}
 
-    public void reportes(){
+    public void reportes() {
         switch (tipoDeOperador) {
+            case NINGUNO:
+                try{
+                generarPDF();
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
+                tipoDeOperador = operador.ACTUALIZAR;
+                break;
             case ACTUALIZAR:
                 desactivarControles();
                 limpiarControles();
@@ -403,9 +415,23 @@ public class FacturasViewController implements Initializable {
                 btnAgregarF.setDisable(false);
                 btnEliminarF.setDisable(false);
                 tipoDeOperador = operador.NINGUNO;
-         }
+                break;
+        }
     }
 
+    public void generarPDF() {
+    try {
+        Facturas factura = (Facturas) tvFacturas.getSelectionModel().getSelectedItem();
+        if (factura != null) {
+            FacturaReportePDFController pdf = new FacturaReportePDFController();
+            pdf.FacturaPDF(factura, "src/org/ericksocop/resource/firmaE.PNG", "src/org/ericksocop/resource/membrete.PNG","src/org/ericksocop/report/");
+        } else {
+            JOptionPane.showMessageDialog(null, "Debe seleccionar una fila para realizar la factura", "ERROR",ERROR_MESSAGE);
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
 
     public void limpiarControles() {
         txtEstadoF.clear();
