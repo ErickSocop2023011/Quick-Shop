@@ -1301,3 +1301,6 @@ CALL sp_crearDetalleFactura(3, 50.00, 10, 3, 3);
 
 
 set global time_zone= '-6:00';
+-- ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'admin';
+-- flush privileges;
+-- ALTER DATABASE DB_QuickShop CHARACTER SET utf8 COLLATE utf8_general_ci;

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
-<?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon?>
 <?import java.lang.String?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -16,7 +16,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="665.0" prefWidth="1359.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.ericksocop.controller.EmpleadosViewController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="665.0" prefWidth="1359.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.ericksocop.controller.EmpleadosController">
    <children>
       <AnchorPane fx:id="anchorPane" prefHeight="200.0" prefWidth="200.0">
          <children>
@@ -64,7 +64,7 @@
                <left>
                   <AnchorPane prefHeight="200.0" prefWidth="250.0" styleClass="nav-form" stylesheets="@../resource/dashboardDesign.css" BorderPane.alignment="CENTER">
                      <children>
-                        <Line endX="100.0" layoutX="125.0" layoutY="191.0" startX="-100.0" />
+                        <Line endX="100.0" layoutX="125.0" layoutY="191.0" startX="-100.0" stroke="WHITE" />
                         <JFXButton fx:id="btnRegresarE" layoutX="25.0" layoutY="543.0" onAction="#handleButtonAction" prefHeight="50.0" prefWidth="90.0" text="Home" textFill="WHITE">
                            <graphic>
 
@@ -110,7 +110,7 @@
                               <FontAwesomeIcon fx:id="eliminarIcono" fill="WHITE" glyphName="TRASH" size="1.3em" text="" />
                            </graphic>
                         </JFXButton>
-                        <JFXButton fx:id="btnReportesE" layoutX="25.0" layoutY="410.0" onAction="#reporte" prefHeight="50.0" prefWidth="200.0" text="Reporte" textFill="WHITE">
+                        <JFXButton fx:id="btnReportesE" layoutX="25.0" layoutY="410.0" onAction="#reportes" prefHeight="50.0" prefWidth="200.0" text="Reportes" textFill="WHITE">
                            <font>
                               <Font name="System Bold" size="17.0" />
                            </font>
@@ -163,7 +163,7 @@
                                           <String fx:value="table-view" />
                                        </styleClass>
                                     </TableView>
-                                    <JFXTextField layoutX="15.0" layoutY="23.0" prefHeight="25.0" prefWidth="219.0" promptText="Buscar">
+                                    <JFXTextField fx:id="txtbuscarEmpleado" layoutX="15.0" layoutY="23.0" onKeyTyped="#buscarEmpleado" prefHeight="25.0" prefWidth="219.0" promptText="Buscar">
                                        <font>
                                           <Font name="System Bold" size="12.0" />
                                        </font>
@@ -196,12 +196,12 @@
                                     <Font name="System Bold" size="15.0" />
                                  </font>
                               </Label>
-                              <Label alignment="CENTER_RIGHT" contentDisplay="TOP" layoutX="127.0" layoutY="515.0" prefHeight="21.0" prefWidth="57.0" text="Sueldo">
+                              <Label alignment="CENTER_RIGHT" contentDisplay="TOP" layoutX="387.0" layoutY="360.0" prefHeight="21.0" prefWidth="57.0" text="Sueldo">
                                  <font>
                                     <Font name="System Bold" size="15.0" />
                                  </font>
                               </Label>
-                              <Label layoutX="377.0" layoutY="360.0" text="Dirección">
+                              <Label layoutX="117.0" layoutY="512.0" text="Dirección">
                                  <font>
                                     <Font name="System Bold" size="15.0" />
                                  </font>
@@ -216,17 +216,6 @@
                                     <Font name="System Bold" size="15.0" />
                                  </font>
                               </Label>
-                              <JFXComboBox fx:id="cmbCargoEmp" layoutX="456.0" layoutY="462.0" prefHeight="25.0" prefWidth="145.0">
-                                 <focusColor>
-                                    <RadialGradient centerX="0.5555555555555556" centerY="0.5" focusDistance="-0.18604651162790697" radius="0.5697674418604651">
-                                       <stops>
-                                          <Stop color="#ff5900" />
-                                          <Stop color="#ff5500" offset="0.6492870403286328" />
-                                          <Stop color="#ff2e2e" offset="1.0" />
-                                       </stops>
-                                    </RadialGradient>
-                                 </focusColor>
-                              </JFXComboBox>
                               <JFXTextField fx:id="txtTurno" layoutX="456.0" layoutY="410.0" prefHeight="25.0" prefWidth="145.0">
                                  <font>
                                     <Font name="System Bold" size="12.0" />
@@ -234,14 +223,14 @@
                                  <focusColor>
                                     <RadialGradient centerX="0.5555555555555556" centerY="0.5" focusDistance="-0.18604651162790697" radius="0.5697674418604651">
                                        <stops>
-                                          <Stop color="#ff5500" />
-                                          <Stop color="#ff5900" offset="0.6819923371647507" />
-                                          <Stop color="#ff2e2e" offset="1.0" />
+                                          <Stop color="#ff9662" />
+                                          <Stop color="#ff5900" offset="0.490421455938697" />
+                                          <Stop color="RED" offset="1.0" />
                                        </stops>
                                     </RadialGradient>
                                  </focusColor>
                               </JFXTextField>
-                              <JFXTextField fx:id="txtDireccionEmp" layoutX="456.0" layoutY="358.0" prefHeight="25.0" prefWidth="145.0">
+                              <JFXTextField fx:id="txtDireccionEmp" layoutX="196.0" layoutY="510.0" prefHeight="25.0" prefWidth="493.0">
                                  <font>
                                     <Font name="System Bold" size="12.0" />
                                  </font>
@@ -298,7 +287,7 @@
                                     </RadialGradient>
                                  </focusColor>
                               </JFXTextField>
-                              <JFXTextField fx:id="txtSueldo" layoutX="196.0" layoutY="513.0" prefHeight="25.0" prefWidth="145.0">
+                              <JFXTextField fx:id="txtSueldo" layoutX="456.0" layoutY="358.0" prefHeight="25.0" prefWidth="145.0">
                                  <font>
                                     <Font name="System Bold" size="12.0" />
                                  </font>
@@ -323,6 +312,7 @@
                                     <FontAwesomeIcon glyphName="LIST_ALT" size="1.5em" text="" />
                                  </graphic>
                               </JFXButton>
+                              <ComboBox fx:id="cmbCargoEmp" layoutX="454.0" layoutY="462.0" prefHeight="26.0" prefWidth="230.0" style="-fx-background-color: transparent; -fx-border-width: 0 0 1 0; -fx-border-color: BLACK;" />
 
                            </children>
                            <styleClass>

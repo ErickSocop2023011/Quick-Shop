@@ -14,18 +14,18 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import org.ericksocop.controller.CargoEmpleadosViewController;
-import org.ericksocop.controller.ClienteVistaController;
-import org.ericksocop.controller.ComprasViewController;
-import org.ericksocop.controller.DetalleCompraViewController;
-import org.ericksocop.controller.DetalleFacturaViewController;
-import org.ericksocop.controller.EmpleadosViewController;
-import org.ericksocop.controller.FacturasViewController;
+import org.ericksocop.controller.CargoEmpleadosController;
+import org.ericksocop.controller.ClienteController;
+import org.ericksocop.controller.ComprasController;
+import org.ericksocop.controller.DetalleCompraController;
+import org.ericksocop.controller.DetalleFacturaController;
+import org.ericksocop.controller.EmpleadosController;
+import org.ericksocop.controller.FacturasController;
 import org.ericksocop.controller.MenuPrincipalController;
-import org.ericksocop.controller.ProductosViewController;
-import org.ericksocop.controller.PrograViewController;
-import org.ericksocop.controller.ProveedorViewController;
-import org.ericksocop.controller.TipoProductoViewController;
+import org.ericksocop.controller.ProductosController;
+import org.ericksocop.controller.ProgramadorController;
+import org.ericksocop.controller.ProveedorController;
+import org.ericksocop.controller.TipoProductoController;
 
 /**
  *
@@ -75,7 +75,7 @@ public class Main extends Application {
 
     public void menuClienteView() {
         try {
-            ClienteVistaController menuClienteView = (ClienteVistaController) cambiarEscena("ClienteVista.fxml", 1034, 582);
+            ClienteController menuClienteView = (ClienteController) cambiarEscena("Cliente.fxml", 1359, 665);
             menuClienteView.setEscenarioPrincipal(this);
         } catch (Exception e) {
             //System.out.println(e.getMessage());
@@ -85,7 +85,7 @@ public class Main extends Application {
 
     public void programadorView() {
         try {
-            PrograViewController prograView = (PrograViewController) cambiarEscena("PrograView.fxml", 600, 300);
+            ProgramadorController prograView = (ProgramadorController) cambiarEscena("Programador.fxml", 1359, 300);
             prograView.setEscenarioPrincipal(this);
 
         } catch (Exception e) {
@@ -96,7 +96,7 @@ public class Main extends Application {
 
     public void cargoEmpleadosView() {
         try {
-            CargoEmpleadosViewController cargoView = (CargoEmpleadosViewController) cambiarEscena("CargoEmpleadosView.fxml", 1034, 582);
+            CargoEmpleadosController cargoView = (CargoEmpleadosController) cambiarEscena("CargoEmpleados.fxml", 1359, 665);
             cargoView.setEscenarioPrincipal(this);
         } catch (Exception e) {
             e.printStackTrace();
@@ -105,7 +105,7 @@ public class Main extends Application {
 
     public void tipoProductoView() {
         try {
-            TipoProductoViewController productoView = (TipoProductoViewController) cambiarEscena("tipoProductoView.fxml", 1034, 582);
+            TipoProductoController productoView = (TipoProductoController) cambiarEscena("tipoProducto.fxml", 1359, 665);
             productoView.setEscenarioPrincipal(this);
         } catch (Exception e) {
             e.printStackTrace();
@@ -114,7 +114,7 @@ public class Main extends Application {
 
     public void ProveedorView() {
         try {
-            ProveedorViewController proveedorView = (ProveedorViewController) cambiarEscena("ProveedorView.fxml", 1181, 665);
+            ProveedorController proveedorView = (ProveedorController) cambiarEscena("Proveedor.fxml", 1359, 665);
             proveedorView.setEscenarioPrincipal(this);
         } catch (Exception e) {
             e.printStackTrace();
@@ -123,7 +123,7 @@ public class Main extends Application {
 
     public void CompraView() {
         try {
-            ComprasViewController compraView = (ComprasViewController) cambiarEscena("ComprasView.fxml", 1034, 582);
+            ComprasController compraView = (ComprasController) cambiarEscena("Compras.fxml", 1359, 665);
             compraView.setEscenarioPrincipal(this);
         } catch (Exception e) {
             e.printStackTrace();
@@ -132,7 +132,7 @@ public class Main extends Application {
 
     public void ProductosView() {
         try {
-            ProductosViewController producView = (ProductosViewController) cambiarEscena("ProductosView.fxml", 1181, 665);
+            ProductosController producView = (ProductosController) cambiarEscena("Productos.fxml", 1359, 665);
             producView.setEscenarioPrincipal(this);
         } catch (Exception e) {
             e.printStackTrace();
@@ -141,7 +141,7 @@ public class Main extends Application {
 
     public void DetalleCompra() {
         try {
-            DetalleCompraViewController detalleComView = (DetalleCompraViewController) cambiarEscena("DetalleCompraView.fxml", 1181, 665);
+            DetalleCompraController detalleComView = (DetalleCompraController) cambiarEscena("DetalleCompra.fxml", 1359, 665);
             detalleComView.setEscenarioPrincipal(this);
         } catch (Exception e) {
             e.printStackTrace();
@@ -150,7 +150,7 @@ public class Main extends Application {
 
     public void EmpleadosView() {
         try {
-            EmpleadosViewController empleadoView = (EmpleadosViewController) cambiarEscena("Empleados.fxml", 1359, 665);
+            EmpleadosController empleadoView = (EmpleadosController) cambiarEscena("Empleados.fxml", 1359, 665);
             empleadoView.setEscenarioPrincipal(this);
         } catch (Exception e) {
             e.printStackTrace();
@@ -159,7 +159,7 @@ public class Main extends Application {
 
     public void FacturasView() {
         try {
-            FacturasViewController facturasView = (FacturasViewController) cambiarEscena("FacturasView.fxml", 1181, 665);
+            FacturasController facturasView = (FacturasController) cambiarEscena("Facturas.fxml", 1359, 665);
             facturasView.setEscenarioPrincipal(this);
         } catch (Exception e) {
             e.printStackTrace();
@@ -168,7 +168,7 @@ public class Main extends Application {
 
     public void DetalleFacturaView() {
         try {
-            DetalleFacturaViewController detalleFView = (DetalleFacturaViewController) cambiarEscena("DetalleFacturaView.fxml", 1181, 665);
+            DetalleFacturaController detalleFView = (DetalleFacturaController) cambiarEscena("DetalleFactura.fxml", 1359, 665);
             detalleFView.setEscenarioPrincipal(this);
         } catch (Exception e) {
             e.printStackTrace();

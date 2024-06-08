@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon?>
+<?import java.lang.String?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.paint.RadialGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="665.0" prefWidth="1359.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.ericksocop.controller.ProveedorController">
+   <children>
+      <AnchorPane fx:id="anchorPane" prefHeight="200.0" prefWidth="200.0">
+         <children>
+            <BorderPane prefHeight="665.0" prefWidth="1359.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <top>
+                  <AnchorPane prefHeight="45.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <AnchorPane layoutX="78.0" layoutY="-86.0" prefHeight="35.0" prefWidth="1359.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <children>
+                              <Label layoutX="14.0" layoutY="11.0" text="Gestión de proveedores">
+                                 <graphic>
+
+                                 </graphic>
+                                 <font>
+                                    <Font name="System Italic" size="15.0" />
+                                 </font>
+                              </Label>
+                              <JFXButton fx:id="btnCerrar" alignment="CENTER" contentDisplay="CENTER" ellipsisString="" layoutX="1304.0" layoutY="10.0" onAction="#handleButtonAction" prefHeight="40.0" prefWidth="74.0" styleClass="close" stylesheets="@../resource/dashboardDesign.css" text="x" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="2.0">
+                                 <graphic>
+
+                                 </graphic>
+                                 <font>
+                                    <Font />
+                                 </font>
+                                 <graphic>
+                                    <FontAwesomeIcon fx:id="iconoCerrar" glyphName="CLOSE" onMouseClicked="#handleButtonAction" size="2em" />
+                                 </graphic>
+                              </JFXButton>
+                              <JFXButton fx:id="btnMinimizar" alignment="CENTER" contentDisplay="CENTER" ellipsisString="" layoutX="1207.0" layoutY="2.0" onAction="#handleButtonAction" prefHeight="40.0" prefWidth="68.0" styleClass="minimize" stylesheets="@../resource/dashboardDesign.css" text="-">
+                                 <font>
+                                    <Font />
+                                 </font>
+                                 <graphic>
+
+                                 </graphic>
+                                 <graphic>
+                                    <FontAwesomeIcon fx:id="iconMinimizar" glyphName="MINUS" onMouseClicked="#handleButtonAction" size="2em" />
+                                 </graphic>
+                              </JFXButton>
+                           </children>
+                        </AnchorPane>
+                     </children>
+                  </AnchorPane>
+               </top>
+               <left>
+                  <AnchorPane prefHeight="200.0" prefWidth="250.0" styleClass="nav-form" stylesheets="@../resource/dashboardDesign.css" BorderPane.alignment="CENTER">
+                     <children>
+                        <Line endX="100.0" layoutX="125.0" layoutY="191.0" startX="-100.0" stroke="WHITE" />
+                        <JFXButton fx:id="btnRegresarP" layoutX="25.0" layoutY="543.0" onAction="#handleButtonAction" prefHeight="50.0" prefWidth="90.0" text="Home" textFill="WHITE">
+                           <graphic>
+
+                           </graphic>
+                           <font>
+                              <Font name="System Bold" size="13.0" />
+                           </font>
+                           <graphic>
+                              <FontAwesomeIcon fill="WHITE" glyphName="HOME" size="2em" />
+                           </graphic>
+                        </JFXButton>
+
+                        <JFXButton fx:id="btnAgregarP" layoutX="25.0" layoutY="260.0" onAction="#Agregar" prefHeight="50.0" prefWidth="200.0" text="Agregar" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="17.0" />
+                           </font>
+                           <graphic>
+
+                           </graphic>
+                           <graphic>
+                              <FontAwesomeIcon fx:id="agregarIcono" fill="WHITE" glyphName="PLUS" size="1.3em" text="" />
+                           </graphic>
+                        </JFXButton>
+                        <JFXButton fx:id="btnEditarP" layoutX="25.0" layoutY="310.0" onAction="#editar" prefHeight="50.0" prefWidth="200.0" text="Actualizar" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="17.0" />
+                           </font>
+                           <graphic>
+
+                           </graphic>
+                           <graphic>
+                              <FontAwesomeIcon fx:id="actualizarIcono" fill="WHITE" glyphName="EDIT" size="1.3em" />
+                           </graphic>
+                        </JFXButton>
+                        <JFXButton fx:id="btnEliminarP" alignment="CENTER" layoutX="25.0" layoutY="360.0" onAction="#eliminar" prefHeight="50.0" prefWidth="200.0" text="Eliminar" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="17.0" />
+                           </font>
+                           <graphic>
+
+                           </graphic>
+                           <graphic>
+                              <FontAwesomeIcon fx:id="eliminarIcono" fill="WHITE" glyphName="TRASH" size="1.3em" text="" />
+                           </graphic>
+                        </JFXButton>
+                        <JFXButton fx:id="btnReportesP" layoutX="25.0" layoutY="410.0" onAction="#reportes" prefHeight="50.0" prefWidth="200.0" text="Reportes" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="17.0" />
+                           </font>
+                           <graphic>
+                           </graphic>
+                           <graphic>
+                              <FontAwesomeIcon fx:id="reporteIcono" fill="WHITE" glyphName="FOLDER" size="1.3em" />
+                           </graphic>
+                        </JFXButton>
+                        <JFXButton layoutX="125.0" layoutY="543.0" prefHeight="50.0" prefWidth="90.0" text="Log out" textFill="WHITE">
+                           <graphic>
+
+                           </graphic>
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                           <graphic>
+                              <FontAwesomeIcon fill="WHITE" glyphName="SIGN_OUT" size="2em" />
+                           </graphic>
+                        </JFXButton>
+                        <FontAwesomeIcon fill="WHITE" glyphName="USER" layoutX="92.0" layoutY="126.0" size="7em" />
+
+                     </children>
+                  </AnchorPane>
+               </left>
+               <center>
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <AnchorPane layoutX="15.0" layoutY="17.0" prefHeight="586.0" prefWidth="1079.0" stylesheets="@../resource/dashboardDesign.css">
+                           <children>
+                              <AnchorPane prefHeight="319.0" prefWidth="1079.0" stylesheets="@../resource/dashboardDesign.css">
+                                 <styleClass>
+                                    <String fx:value="white-bg" />
+                                    <String fx:value="shadow" />
+                                 </styleClass>
+                                 <children>
+                                    <TableView fx:id="tvPoveedores" layoutX="15.0" layoutY="72.0" onMouseClicked="#seleccionarElemento" prefHeight="232.0" prefWidth="1050.0" stylesheets="@../resource/dashboardDesign.css">
+                                      <columns>
+                                        <TableColumn fx:id="colCodP" prefWidth="50.0" text="ID" />
+                                          <TableColumn fx:id="colNomP" prefWidth="111.11" text="Nombres" />
+                                          <TableColumn fx:id="colApeP" prefWidth="111.11" text="Apellidos" />
+                                        <TableColumn fx:id="colNITP" prefWidth="111.11" text="NIT" />
+                                          <TableColumn fx:id="colDireP" prefWidth="111.11" text="Direccion" />
+                                          <TableColumn fx:id="colRazonS" prefWidth="111.11" text="Razon Social" />
+                                          <TableColumn fx:id="colContactoP" prefWidth="111.11" text="Contacto" />
+                                          <TableColumn fx:id="colSitioWeb" prefWidth="111.11" text="Sitio Web" />
+                                          <TableColumn fx:id="colTelP" prefWidth="111.11" text="Teléfono" />
+                                          <TableColumn fx:id="colEmailP" prefWidth="111.11" text="Email" />
+                                      </columns>
+                                       <styleClass>
+                                          <String fx:value="column-header-background" />
+                                          <String fx:value="column-header" />
+                                          <String fx:value="table-view" />
+                                       </styleClass>
+                                    </TableView>
+                                    <JFXTextField fx:id="txtbuscarProv" layoutX="15.0" layoutY="23.0" onKeyTyped="#buscarProv" prefHeight="25.0" prefWidth="219.0" promptText="Buscar">
+                                       <font>
+                                          <Font name="System Bold" size="12.0" />
+                                       </font>
+                                       <focusColor>
+                                          <RadialGradient centerX="0.5555555555555556" centerY="0.5" focusDistance="-0.18604651162790697" radius="0.5697674418604651">
+                                             <stops>
+                                                <Stop color="#ff5500" />
+                                                <Stop color="#ff5900" offset="0.6819923371647507" />
+                                                <Stop color="#ff2e2e" offset="1.0" />
+                                             </stops>
+                                          </RadialGradient>
+                                       </focusColor>
+                                    </JFXTextField>
+                                    <FontAwesomeIcon glyphName="SEARCH" layoutX="217.0" layoutY="41.0" size="1.5em" />
+
+                                 </children>
+                              </AnchorPane>
+                              <Label layoutX="99.0" layoutY="361.0" text="Proveedor ID">
+                                 <font>
+                                    <Font name="System Bold" size="15.0" />
+                                 </font>
+                              </Label>
+                              <Label alignment="CENTER_RIGHT" contentDisplay="TOP" layoutX="117.0" layoutY="410.0" prefHeight="21.0" prefWidth="68.0" text="Nombres">
+                                 <font>
+                                    <Font name="System Bold" size="15.0" />
+                                 </font>
+                              </Label>
+                              <Label alignment="CENTER_RIGHT" layoutX="117.0" layoutY="464.0" text="Apellidos">
+                                 <font>
+                                    <Font name="System Bold" size="15.0" />
+                                 </font>
+                              </Label>
+                              <Label alignment="CENTER_RIGHT" contentDisplay="TOP" layoutX="107.0" layoutY="515.0" prefHeight="21.0" prefWidth="77.0" text="Dirección">
+                                 <font>
+                                    <Font name="System Bold" size="15.0" />
+                                 </font>
+                              </Label>
+                              <Label layoutX="410.0" layoutY="360.0" text="NIT">
+                                 <font>
+                                    <Font name="System Bold" size="15.0" />
+                                 </font>
+                              </Label>
+                              <Label alignment="CENTER_RIGHT" contentDisplay="TOP" layoutX="375.0" layoutY="412.0" prefHeight="21.0" prefWidth="69.0" text="R. Social">
+                                 <font>
+                                    <Font name="System Bold" size="15.0" />
+                                 </font>
+                              </Label>
+                              <Label alignment="CENTER_RIGHT" layoutX="380.0" layoutY="464.0" text="Contacto">
+                                 <font>
+                                    <Font name="System Bold" size="15.0" />
+                                 </font>
+                              </Label>
+                              <JFXTextField fx:id="txtRazonSocial" layoutX="456.0" layoutY="410.0" prefHeight="25.0" prefWidth="145.0">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                                 <focusColor>
+                                    <RadialGradient centerX="0.5555555555555556" centerY="0.5" focusDistance="-0.18604651162790697" radius="0.5697674418604651">
+                                       <stops>
+                                          <Stop color="#ff9662" />
+                                          <Stop color="#ff5900" offset="0.490421455938697" />
+                                          <Stop color="RED" offset="1.0" />
+                                       </stops>
+                                    </RadialGradient>
+                                 </focusColor>
+                              </JFXTextField>
+                              <JFXTextField fx:id="txtNITP" layoutX="456.0" layoutY="358.0" prefHeight="25.0" prefWidth="145.0">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                                 <focusColor>
+                                    <RadialGradient centerX="0.5555555555555556" centerY="0.5" focusDistance="-0.18604651162790697" radius="0.5697674418604651">
+                                       <stops>
+                                          <Stop color="#f8854b" />
+                                          <Stop color="#f8854b" offset="0.007662835249042145" />
+                                          <Stop color="#ff5900" offset="0.6819923371647507" />
+                                          <Stop color="#ff2e2e" offset="1.0" />
+                                       </stops>
+                                    </RadialGradient>
+                                 </focusColor>
+                              </JFXTextField>
+                              <JFXTextField fx:id="txtCodigoP" layoutX="198.0" layoutY="358.0" prefHeight="25.0" prefWidth="145.0">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                                 <focusColor>
+                                    <RadialGradient centerX="0.5555555555555556" centerY="0.5" focusDistance="-0.18604651162790697" radius="0.5697674418604651">
+                                       <stops>
+                                          <Stop color="#ff5500" />
+                                          <Stop color="#ff5900" offset="0.6819923371647507" />
+                                          <Stop color="#ff2e2e" offset="1.0" />
+                                       </stops>
+                                    </RadialGradient>
+                                 </focusColor>
+                              </JFXTextField>
+                              <JFXTextField fx:id="txtNombresP" layoutX="197.0" layoutY="410.0" prefHeight="25.0" prefWidth="145.0">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                                 <focusColor>
+                                    <RadialGradient centerX="0.5555555555555556" centerY="0.5" focusDistance="-0.18604651162790697" radius="0.5697674418604651">
+                                       <stops>
+                                          <Stop color="#ff5500" />
+                                          <Stop color="#ff5900" offset="0.6819923371647507" />
+                                          <Stop color="#ff2e2e" offset="1.0" />
+                                       </stops>
+                                    </RadialGradient>
+                                 </focusColor>
+                              </JFXTextField>
+                              <JFXTextField fx:id="txtApellidosP" layoutX="196.0" layoutY="462.0" prefHeight="25.0" prefWidth="145.0">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                                 <focusColor>
+                                    <RadialGradient centerX="0.5555555555555556" centerY="0.5" focusDistance="-0.18604651162790697" radius="0.5697674418604651">
+                                       <stops>
+                                          <Stop color="#ff5500" />
+                                          <Stop color="#ff5900" offset="0.6819923371647507" />
+                                          <Stop color="#ff2e2e" offset="1.0" />
+                                       </stops>
+                                    </RadialGradient>
+                                 </focusColor>
+                              </JFXTextField>
+                              <JFXTextField fx:id="txtDireccionP" layoutX="196.0" layoutY="513.0" prefHeight="25.0" prefWidth="432.0">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                                 <focusColor>
+                                    <RadialGradient centerX="0.5555555555555556" centerY="0.5" focusDistance="-0.18604651162790697" radius="0.5697674418604651">
+                                       <stops>
+                                          <Stop color="#ff5500" />
+                                          <Stop color="#ff5900" offset="0.6819923371647507" />
+                                          <Stop color="#ff2e2e" offset="1.0" />
+                                       </stops>
+                                    </RadialGradient>
+                                 </focusColor>
+                              </JFXTextField>
+                              <JFXTextField fx:id="txtContactoP" layoutX="456.0" layoutY="463.0" prefHeight="25.0" prefWidth="169.0">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                                 <focusColor>
+                                    <RadialGradient centerX="0.5555555555555556" centerY="0.5" focusDistance="-0.18604651162790697" radius="0.5697674418604651">
+                                       <stops>
+                                          <Stop color="#ff9662" />
+                                          <Stop color="#ff5900" offset="0.490421455938697" />
+                                          <Stop color="RED" offset="1.0" />
+                                       </stops>
+                                    </RadialGradient>
+                                 </focusColor>
+                              </JFXTextField>
+                              <Label alignment="CENTER_RIGHT" contentDisplay="TOP" layoutX="667.0" layoutY="478.0" prefHeight="21.0" prefWidth="77.0" text="S. Web">
+                                 <font>
+                                    <Font name="System Bold" size="15.0" />
+                                 </font>
+                              </Label>
+                              <JFXTextField fx:id="txtSitioWeb" layoutX="756.0" layoutY="476.0" prefHeight="25.0" prefWidth="145.0">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                                 <focusColor>
+                                    <RadialGradient centerX="0.5555555555555556" centerY="0.5" focusDistance="-0.18604651162790697" radius="0.5697674418604651">
+                                       <stops>
+                                          <Stop color="#ff5500" />
+                                          <Stop color="#ff5900" offset="0.6819923371647507" />
+                                          <Stop color="#ff2e2e" offset="1.0" />
+                                       </stops>
+                                    </RadialGradient>
+                                 </focusColor>
+                              </JFXTextField>
+                              <Label layoutX="683.0" layoutY="360.0" text="Teléfono">
+                                 <font>
+                                    <Font name="System Bold" size="15.0" />
+                                 </font>
+                              </Label>
+                              <JFXTextField fx:id="txtTelefono" layoutX="756.0" layoutY="358.0" prefHeight="25.0" prefWidth="145.0">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                                 <focusColor>
+                                    <RadialGradient centerX="0.5555555555555556" centerY="0.5" focusDistance="-0.18604651162790697" radius="0.5697674418604651">
+                                       <stops>
+                                          <Stop color="#f8854b" />
+                                          <Stop color="#f8854b" offset="0.007662835249042145" />
+                                          <Stop color="#ff5900" offset="0.6819923371647507" />
+                                          <Stop color="#ff2e2e" offset="1.0" />
+                                       </stops>
+                                    </RadialGradient>
+                                 </focusColor>
+                              </JFXTextField>
+                              <Label layoutX="707.0" layoutY="412.0" text="Email">
+                                 <font>
+                                    <Font name="System Bold" size="15.0" />
+                                 </font>
+                              </Label>
+                              <JFXTextField fx:id="txtEmailP" layoutX="756.0" layoutY="410.0" prefHeight="25.0" prefWidth="145.0">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                                 <focusColor>
+                                    <RadialGradient centerX="0.5555555555555556" centerY="0.5" focusDistance="-0.18604651162790697" radius="0.5697674418604651">
+                                       <stops>
+                                          <Stop color="#f8854b" />
+                                          <Stop color="#f8854b" offset="0.007662835249042145" />
+                                          <Stop color="#ff5900" offset="0.6819923371647507" />
+                                          <Stop color="#ff2e2e" offset="1.0" />
+                                       </stops>
+                                    </RadialGradient>
+                                 </focusColor>
+                              </JFXTextField>
+
+                           </children>
+                           <styleClass>
+                              <String fx:value="white-bg" />
+                              <String fx:value="shadow" />
+                           </styleClass>
+                        </AnchorPane>
+                     </children>
+                  </AnchorPane>
+               </center>
+            </BorderPane>
+         </children>
+      </AnchorPane>
+   </children>
+</StackPane>

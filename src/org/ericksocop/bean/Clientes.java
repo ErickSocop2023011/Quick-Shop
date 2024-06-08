@@ -89,7 +89,7 @@ public class Clientes {
 
     @Override
     public String toString() {
-        return getNombreClientes()+ "    |   " + getNITClientes() ;
+        return getClienteID()+ "    |   " +getNombreClientes()+ "    |   " + getNITClientes() ;
     }
 
     

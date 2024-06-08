@@ -54,7 +54,7 @@ public class FacturaReportePDFController {
                 document.add(firma);
             }
 
-            float[] ancho = {200f, 300f}; // Ancho de las dos columnas en puntos
+            float[] ancho = {200f, 300f}; 
             Table tabla = new Table(ancho);
             tabla.addCell(new Cell().add(new Paragraph("Número de factura ")).setFontColor(colorN).setFont(fuenteN));
             tabla.addCell(new Cell().add(new Paragraph(String.valueOf(factura.getNumeroDeFactura())).setTextAlignment(TextAlignment.RIGHT).setFontColor(colorGet).setFont(fuenteGet)));

@@ -8,13 +8,20 @@
   </information>
   <resources>
     <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
-    <jar href="QuickShop.jar" size="10953941" download="eager" />
+    <jar href="QuickShop.jar" size="24946208" download="eager" />
     <jar href="lib\barcodes-7.1.16.jar" size="150644" download="eager" />
+    <jar href="lib\commons-collections-3.2.1.jar" size="575389" download="eager" />
+    <jar href="lib\commons-digester-2.1.jar" size="196768" download="eager" />
+    <jar href="lib\commons-logging-1.1.jar" size="52592" download="eager" />
     <jar href="lib\font-asian-7.1.16.jar" size="2166123" download="eager" />
     <jar href="lib\fontawesomefx-8.2.jar" size="180341" download="eager" />
+    <jar href="lib\fontawesomefx-8.9.jar" size="571068" download="eager" />
     <jar href="lib\forms-7.1.16.jar" size="134069" download="eager" />
+    <jar href="lib\groovy-all-2.0.1.jar" size="6191960" download="eager" />
     <jar href="lib\hyph-7.1.16.jar" size="982343" download="eager" />
+    <jar href="lib\iText-2.1.7.js2.jar" size="1130575" download="eager" />
     <jar href="lib\io-7.1.16.jar" size="823411" download="eager" />
+    <jar href="lib\jasperreports-5.6.0.jar" size="4989676" download="eager" />
     <jar href="lib\jfoenix-8.0.10.jar" size="2710207" download="eager" />
     <jar href="lib\kernel-7.1.16.jar" size="1234892" download="eager" />
     <jar href="lib\layout-7.1.16.jar" size="534661" download="eager" />
@@ -22,6 +29,8 @@
     <jar href="lib\mysql-connector-java-8.0.12.jar" size="2020431" download="eager" />
     <jar href="lib\pdfa-7.1.16.jar" size="55607" download="eager" />
     <jar href="lib\pdftest-7.1.16.jar" size="31318" download="eager" />
+    <jar href="lib\poi-3.7-20101029.jar" size="1675036" download="eager" />
+    <jar href="lib\schudt-javafx-datepicker-0.0.2.jar" size="67087" download="eager" />
     <jar href="lib\sign-7.1.16.jar" size="129649" download="eager" />
     <jar href="lib\slf4j-api-1.7.9.jar" size="32121" download="eager" />
     <jar href="lib\slf4j-log4j12-1.7.9.jar" size="8867" download="eager" />

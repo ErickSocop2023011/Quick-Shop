@@ -80,6 +80,12 @@
     -fx-font-family:"Arial";
 }
 
+.combo-box{
+    -fx-font-family:"System";
+    -fx-font-size:12px;
+    -fx-font-weight: bold;
+    
+}
 
 
 .label-info{
