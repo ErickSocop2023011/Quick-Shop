@@ -13,6 +13,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+import javafx.animation.RotateTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -26,6 +27,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import javax.swing.JOptionPane;
 import org.ericksocop.bean.CargoEmpleados;
 import org.ericksocop.dao.Conexion;
@@ -48,6 +50,10 @@ public class CargoEmpleadosController implements Initializable {
     private AnchorPane anchorPane;
     @FXML
     private FontAwesomeIcon iconMinimizar;
+    @FXML
+    private JFXButton btnMaximizar;
+    @FXML
+    private FontAwesomeIcon iconMaximizar;
     @FXML
     private FontAwesomeIcon reporteIcono;
     @FXML
@@ -97,6 +103,9 @@ public class CargoEmpleadosController implements Initializable {
         // TODO
         cargarDatos();
         desactivarControles();
+        colCodigoCargoE.prefWidthProperty().bind(tvCargoE.widthProperty().multiply(0.0476));
+        colDescripcionC.prefWidthProperty().bind(tvCargoE.widthProperty().multiply(0.47620));
+        colNombreC.prefWidthProperty().bind(tvCargoE.widthProperty().multiply(0.47620));
     }
 
     public void cargarDatos() {
@@ -356,6 +365,27 @@ public class CargoEmpleadosController implements Initializable {
 
     public void setEscenarioPrincipal(Main escenarioPrincipal) {
         this.escenarioPrincipal = escenarioPrincipal;
+    }
+    
+    public void ventana(ActionEvent event) {
+        colCodigoCargoE.prefWidthProperty().bind(tvCargoE.widthProperty().multiply(0.0476));
+        colDescripcionC.prefWidthProperty().bind(tvCargoE.widthProperty().multiply(0.47620));
+        colNombreC.prefWidthProperty().bind(tvCargoE.widthProperty().multiply(0.47620));
+        if (event.getSource() == iconMaximizar || event.getSource() == btnMaximizar) {
+            Stage stage = (Stage) anchorPane.getScene().getWindow();
+            RotateTransition rotateTransition = new RotateTransition(Duration.seconds(0.5), iconMaximizar);
+            rotateTransition.setByAngle(180);
+            rotateTransition.setCycleCount(1);
+            rotateTransition.setAutoReverse(false);
+
+            if (stage.isMaximized()) {
+                stage.setMaximized(false);
+            } else {
+                stage.setMaximized(true);
+            }
+            rotateTransition.play();
+        }
+
     }
 
     @FXML

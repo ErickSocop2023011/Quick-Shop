@@ -14,6 +14,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+import javafx.animation.RotateTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -30,6 +31,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import javax.swing.JOptionPane;
 import org.ericksocop.bean.Compras;
 import org.ericksocop.bean.DetalleCompra;
@@ -88,7 +90,9 @@ public class DetalleCompraController implements Initializable {
     @FXML
     private FontAwesomeIcon iconMinimizar;
     @FXML
-    private JFXButton btnRegresarCE;
+    private JFXButton btnMaximizar;
+    @FXML
+    private FontAwesomeIcon iconMaximizar;
     @FXML
     private FontAwesomeIcon agregarIcono;
     @FXML
@@ -120,6 +124,11 @@ public class DetalleCompraController implements Initializable {
         cmbCodPro.setItems(getProducto());
         cmbNumDoc.setItems(getCompra());
         desactivarControles();
+        colCodDetCo.prefWidthProperty().bind(tvDetalleC.widthProperty().multiply(0.0476));
+        colCant.prefWidthProperty().bind(tvDetalleC.widthProperty().multiply(0.23810));
+        colCodPro.prefWidthProperty().bind(tvDetalleC.widthProperty().multiply(0.23810));
+        colCostU.prefWidthProperty().bind(tvDetalleC.widthProperty().multiply(0.23810));
+        colNumDoc.prefWidthProperty().bind(tvDetalleC.widthProperty().multiply(0.23810));
 
     }
 
@@ -528,6 +537,29 @@ public class DetalleCompraController implements Initializable {
         txtCantidad.clear();
         cmbCodPro.setValue(null);
         cmbNumDoc.setValue(null);
+    }
+
+    public void ventana(ActionEvent event) {
+        colCodDetCo.prefWidthProperty().bind(tvDetalleC.widthProperty().multiply(0.0476));
+        colCant.prefWidthProperty().bind(tvDetalleC.widthProperty().multiply(0.23810));
+        colCodPro.prefWidthProperty().bind(tvDetalleC.widthProperty().multiply(0.23810));
+        colCostU.prefWidthProperty().bind(tvDetalleC.widthProperty().multiply(0.23810));
+        colNumDoc.prefWidthProperty().bind(tvDetalleC.widthProperty().multiply(0.23810));
+        if (event.getSource() == iconMaximizar || event.getSource() == btnMaximizar) {
+            Stage stage = (Stage) anchorPane.getScene().getWindow();
+            RotateTransition rotateTransition = new RotateTransition(Duration.seconds(0.5), iconMaximizar);
+            rotateTransition.setByAngle(180);
+            rotateTransition.setCycleCount(1);
+            rotateTransition.setAutoReverse(false);
+
+            if (stage.isMaximized()) {
+                stage.setMaximized(false);
+            } else {
+                stage.setMaximized(true);
+            }
+            rotateTransition.play();
+        }
+
     }
 
     public void handleButtonAction(ActionEvent event) {

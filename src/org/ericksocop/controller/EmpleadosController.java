@@ -15,6 +15,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+import javafx.animation.RotateTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -28,6 +29,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import javax.swing.JOptionPane;
 import org.ericksocop.bean.CargoEmpleados;
 import org.ericksocop.bean.Empleados;
@@ -51,6 +53,10 @@ public class EmpleadosController implements Initializable {
     private JFXButton btnMinimizar;
     @FXML
     private FontAwesomeIcon iconMinimizar;
+    @FXML
+    private JFXButton btnMaximizar;
+    @FXML
+    private FontAwesomeIcon iconMaximizar;
     @FXML
     private FontAwesomeIcon reporteIcono;
     @FXML
@@ -122,6 +128,13 @@ public class EmpleadosController implements Initializable {
         cargarDatos();
         cmbCargoEmp.setItems(getCargoE());
         desactivarControles();
+        colCodEmp.prefWidthProperty().bind(tvEmpleados.widthProperty().multiply(0.0476));
+        colApeEmp.prefWidthProperty().bind(tvEmpleados.widthProperty().multiply(0.15873));
+        colCodCargEmp.prefWidthProperty().bind(tvEmpleados.widthProperty().multiply(0.15873));
+        colDireEmp.prefWidthProperty().bind(tvEmpleados.widthProperty().multiply(0.15873));
+        colNomEmp.prefWidthProperty().bind(tvEmpleados.widthProperty().multiply(0.15873));
+        colSueldoEmp.prefWidthProperty().bind(tvEmpleados.widthProperty().multiply(0.15873));
+        colTurnoEmp.prefWidthProperty().bind(tvEmpleados.widthProperty().multiply(0.15873));
     }
 
     public void cargarDatos() {
@@ -480,6 +493,31 @@ public class EmpleadosController implements Initializable {
         cmbCargoEmp.setValue(null);
     }
 
+    public void ventana(ActionEvent event) {
+        colCodEmp.prefWidthProperty().bind(tvEmpleados.widthProperty().multiply(0.0476));
+        colApeEmp.prefWidthProperty().bind(tvEmpleados.widthProperty().multiply(0.15873));
+        colCodCargEmp.prefWidthProperty().bind(tvEmpleados.widthProperty().multiply(0.15873));
+        colDireEmp.prefWidthProperty().bind(tvEmpleados.widthProperty().multiply(0.15873));
+        colNomEmp.prefWidthProperty().bind(tvEmpleados.widthProperty().multiply(0.15873));
+        colSueldoEmp.prefWidthProperty().bind(tvEmpleados.widthProperty().multiply(0.15873));
+        colTurnoEmp.prefWidthProperty().bind(tvEmpleados.widthProperty().multiply(0.15873));
+        if (event.getSource() == iconMaximizar || event.getSource() == btnMaximizar) {
+            Stage stage = (Stage) anchorPane.getScene().getWindow();
+            RotateTransition rotateTransition = new RotateTransition(Duration.seconds(0.5), iconMaximizar);
+            rotateTransition.setByAngle(180);
+            rotateTransition.setCycleCount(1);
+            rotateTransition.setAutoReverse(false);
+
+            if (stage.isMaximized()) {
+                stage.setMaximized(false);
+            } else {
+                stage.setMaximized(true);
+            }
+            rotateTransition.play();
+        }
+
+    }
+
     public Main getEscenarioPrincipal() {
         return escenarioPrincipal;
     }
@@ -493,7 +531,12 @@ public class EmpleadosController implements Initializable {
             escenarioPrincipal.menuPrincipalView();
         }
         if (event.getSource() == btnCargoE) {
-            escenarioPrincipal.cargoEmpleadosView();
+            try {
+                Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
+                escenarioPrincipal.cargoEmpleadosView(stage);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         if (event.getSource() == iconoCerrar || event.getSource() == btnCerrar) {
             System.exit(0);

@@ -45,7 +45,7 @@
                                     <FontAwesomeIcon fx:id="iconoCerrar" glyphName="CLOSE" onMouseClicked="#handleButtonAction" size="2em" />
                                  </graphic>
                               </JFXButton>
-                              <JFXButton fx:id="btnMinimizar" alignment="CENTER" contentDisplay="CENTER" ellipsisString="" layoutX="1207.0" layoutY="2.0" onAction="#handleButtonAction" prefHeight="40.0" prefWidth="68.0" styleClass="minimize" stylesheets="@../resource/dashboardDesign.css" text="-">
+                              <JFXButton fx:id="btnMinimizar" alignment="CENTER" contentDisplay="CENTER" ellipsisString="" layoutX="1147.0" layoutY="2.0" onAction="#handleButtonAction" prefHeight="40.0" prefWidth="68.0" styleClass="minimize" stylesheets="@../resource/dashboardDesign.css" text="-" AnchorPane.rightAnchor="144.0" AnchorPane.topAnchor="2.0">
                                  <font>
                                     <Font />
                                  </font>
@@ -54,6 +54,14 @@
                                  </graphic>
                                  <graphic>
                                     <FontAwesomeIcon fx:id="iconMinimizar" glyphName="MINUS" onMouseClicked="#handleButtonAction" size="2em" />
+                                 </graphic>
+                              </JFXButton>
+                              <JFXButton fx:id="btnMaximizar" alignment="CENTER" contentDisplay="CENTER" ellipsisString="" layoutX="1215.0" layoutY="2.0" onAction="#ventana" prefHeight="40.0" prefWidth="68.0" styleClass="minimize" stylesheets="@../resource/dashboardDesign.css" text="_" AnchorPane.rightAnchor="76.0" AnchorPane.topAnchor="2.0">
+                                 <font>
+                                    <Font />
+                                 </font>
+                                 <graphic>
+                                    <FontAwesomeIcon fx:id="iconMaximizar" glyphName="MINUS" onMouseClicked="#ventana" size="1.9em" text="" />
                                  </graphic>
                               </JFXButton>
                            </children>
@@ -65,7 +73,7 @@
                   <AnchorPane prefHeight="200.0" prefWidth="250.0" styleClass="nav-form" stylesheets="@../resource/dashboardDesign.css" BorderPane.alignment="CENTER">
                      <children>
                         <Line endX="100.0" layoutX="125.0" layoutY="191.0" startX="-100.0" stroke="WHITE" />
-                        <JFXButton fx:id="btnRegresarP" layoutX="25.0" layoutY="543.0" onAction="#handleButtonAction" prefHeight="50.0" prefWidth="90.0" text="Home" textFill="WHITE">
+                        <JFXButton fx:id="btnRegresarP" layoutX="25.0" layoutY="543.0" onAction="#handleButtonAction" prefHeight="50.0" prefWidth="90.0" text="Home" textFill="WHITE" AnchorPane.bottomAnchor="27.0" AnchorPane.leftAnchor="25.0">
                            <graphic>
 
                            </graphic>
@@ -120,7 +128,7 @@
                               <FontAwesomeIcon fx:id="reporteIcono" fill="WHITE" glyphName="FOLDER" size="1.3em" />
                            </graphic>
                         </JFXButton>
-                        <JFXButton layoutX="125.0" layoutY="543.0" prefHeight="50.0" prefWidth="90.0" text="Log out" textFill="WHITE">
+                        <JFXButton layoutX="125.0" layoutY="543.0" prefHeight="50.0" prefWidth="90.0" text="Log out" textFill="WHITE" AnchorPane.bottomAnchor="27.0" AnchorPane.leftAnchor="125.0">
                            <graphic>
 
                            </graphic>
@@ -139,25 +147,25 @@
                <center>
                   <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                      <children>
-                        <AnchorPane layoutX="15.0" layoutY="17.0" prefHeight="586.0" prefWidth="1079.0" stylesheets="@../resource/dashboardDesign.css">
+                        <AnchorPane layoutX="15.0" layoutY="17.0" prefHeight="586.0" prefWidth="1079.0" stylesheets="@../resource/dashboardDesign.css" AnchorPane.bottomAnchor="17.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="17.0">
                            <children>
-                              <AnchorPane prefHeight="319.0" prefWidth="1079.0" stylesheets="@../resource/dashboardDesign.css">
+                              <AnchorPane prefHeight="319.0" prefWidth="1079.0" stylesheets="@../resource/dashboardDesign.css" AnchorPane.bottomAnchor="267.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <styleClass>
                                     <String fx:value="white-bg" />
                                     <String fx:value="shadow" />
                                  </styleClass>
                                  <children>
-                                    <TableView fx:id="tvProductos" layoutX="15.0" layoutY="72.0" onMouseClicked="#seleccionarElemento" prefHeight="232.0" prefWidth="1050.0" stylesheets="@../resource/dashboardDesign.css">
+                                    <TableView fx:id="tvProductos" layoutX="15.0" layoutY="72.0" onMouseClicked="#seleccionarElemento" prefHeight="232.0" prefWidth="1050.0" stylesheets="@../resource/dashboardDesign.css" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="72.0">
                                       <columns>
-                                        <TableColumn fx:id="colCodProd" prefWidth="116.6" text="Producto ID" />
-                                        <TableColumn fx:id="colDescProd" prefWidth="116.6" text="Descripción" />
-                                          <TableColumn fx:id="colPrecioU" prefWidth="116.6" text="Precio Unit." />
-                                          <TableColumn fx:id="colPrecioD" prefWidth="116.6" text="Precio Doce." />
-                                          <TableColumn fx:id="colPrecioM" prefWidth="116.6" text="Precio Mayor" />
-                                          <TableColumn fx:id="colImagenP" prefWidth="116.6" text="Imagen" />
-                                          <TableColumn fx:id="colExistencia" prefWidth="116.6" text="Existencia" />
-                                          <TableColumn fx:id="colCodTipoProd" prefWidth="116.6" text="Tipo Prod. ID" />
-                                          <TableColumn fx:id="colCodProv" prefWidth="116.6" text="Proveedor ID" />
+                                        <TableColumn fx:id="colCodProd" prefWidth="50.0" text="ID" />
+                                        <TableColumn fx:id="colDescProd" prefWidth="125.0" text="Descripción" />
+                                          <TableColumn fx:id="colPrecioU" prefWidth="125.0" text="Precio Unit." />
+                                          <TableColumn fx:id="colPrecioD" prefWidth="125.0" text="Precio Doce." />
+                                          <TableColumn fx:id="colPrecioM" prefWidth="125.0" text="Precio Mayor" />
+                                          <TableColumn fx:id="colImagenP" prefWidth="125.0" text="Imagen" />
+                                          <TableColumn fx:id="colExistencia" prefWidth="125.0" text="Existencia" />
+                                          <TableColumn fx:id="colCodTipoProd" prefWidth="125.0" text="Tipo Prod. ID" />
+                                          <TableColumn fx:id="colCodProv" prefWidth="125.0" text="Proveedor ID" />
                                       </columns>
                                        <styleClass>
                                           <String fx:value="column-header-background" />
@@ -183,42 +191,42 @@
 
                                  </children>
                               </AnchorPane>
-                              <Label layoutX="72.0" layoutY="360.0" text="Producto ID">
+                              <Label layoutX="140.0" layoutY="360.0" text="ID" AnchorPane.bottomAnchor="205.0">
                                  <font>
                                     <Font name="System Bold" size="15.0" />
                                  </font>
                               </Label>
-                              <Label alignment="CENTER_RIGHT" contentDisplay="TOP" layoutX="74.0" layoutY="410.0" prefHeight="21.0" prefWidth="86.0" text="Descripción">
+                              <Label alignment="CENTER_RIGHT" contentDisplay="TOP" layoutX="74.0" layoutY="410.0" prefHeight="21.0" prefWidth="86.0" text="Descripción" AnchorPane.bottomAnchor="155.0">
                                  <font>
                                     <Font name="System Bold" size="15.0" />
                                  </font>
                               </Label>
-                              <Label alignment="CENTER_RIGHT" layoutX="73.0" layoutY="464.0" text="Precio Unit.">
+                              <Label alignment="CENTER_RIGHT" layoutX="73.0" layoutY="464.0" text="Precio Unit." AnchorPane.bottomAnchor="101.0">
                                  <font>
                                     <Font name="System Bold" size="15.0" />
                                  </font>
                               </Label>
-                              <Label alignment="CENTER_RIGHT" contentDisplay="TOP" layoutX="341.0" layoutY="360.0" prefHeight="21.0" prefWidth="103.0" text="Precio Mayor">
+                              <Label alignment="CENTER_RIGHT" contentDisplay="TOP" layoutX="341.0" layoutY="360.0" prefHeight="21.0" prefWidth="103.0" text="Precio Mayor" AnchorPane.bottomAnchor="205.0">
                                  <font>
                                     <Font name="System Bold" size="15.0" />
                                  </font>
                               </Label>
-                              <Label layoutX="73.0" layoutY="512.0" text="Precio Doce.">
+                              <Label layoutX="73.0" layoutY="512.0" text="Precio Doce." AnchorPane.bottomAnchor="53.0">
                                  <font>
                                     <Font name="System Bold" size="15.0" />
                                  </font>
                               </Label>
-                              <Label alignment="CENTER_RIGHT" contentDisplay="TOP" layoutX="386.0" layoutY="412.0" prefHeight="21.0" prefWidth="58.0" text="Imagen">
+                              <Label alignment="CENTER_RIGHT" contentDisplay="TOP" layoutX="386.0" layoutY="412.0" prefHeight="21.0" prefWidth="58.0" text="Imagen" AnchorPane.bottomAnchor="153.0">
                                  <font>
                                     <Font name="System Bold" size="15.0" />
                                  </font>
                               </Label>
-                              <Label alignment="CENTER_RIGHT" layoutX="380.0" layoutY="464.0" text="Existencia">
+                              <Label alignment="CENTER_RIGHT" layoutX="380.0" layoutY="464.0" text="Existencia" AnchorPane.bottomAnchor="101.0">
                                  <font>
                                     <Font name="System Bold" size="15.0" />
                                  </font>
                               </Label>
-                              <JFXTextField fx:id="txtImagenPro" layoutX="456.0" layoutY="410.0" prefHeight="25.0" prefWidth="145.0">
+                              <JFXTextField fx:id="txtImagenPro" layoutX="456.0" layoutY="410.0" prefHeight="25.0" prefWidth="145.0" AnchorPane.bottomAnchor="151.0">
                                  <font>
                                     <Font name="System Bold" size="12.0" />
                                  </font>
@@ -232,7 +240,7 @@
                                     </RadialGradient>
                                  </focusColor>
                               </JFXTextField>
-                              <JFXTextField fx:id="txtPrecioD" layoutX="171.0" layoutY="510.0" prefHeight="25.0" prefWidth="145.0" promptText="Se modifica auto.">
+                              <JFXTextField fx:id="txtPrecioD" layoutX="171.0" layoutY="510.0" prefHeight="25.0" prefWidth="145.0" promptText="Se modifica auto." AnchorPane.bottomAnchor="51.0">
                                  <font>
                                     <Font name="System Bold" size="12.0" />
                                  </font>
@@ -247,7 +255,7 @@
                                     </RadialGradient>
                                  </focusColor>
                               </JFXTextField>
-                              <JFXTextField fx:id="txtCodigoProd" layoutX="173.0" layoutY="358.0" prefHeight="25.0" prefWidth="145.0">
+                              <JFXTextField fx:id="txtCodigoProd" layoutX="173.0" layoutY="358.0" prefHeight="25.0" prefWidth="145.0" AnchorPane.bottomAnchor="203.0">
                                  <font>
                                     <Font name="System Bold" size="12.0" />
                                  </font>
@@ -261,7 +269,7 @@
                                     </RadialGradient>
                                  </focusColor>
                               </JFXTextField>
-                              <JFXTextField fx:id="txtDescPro" layoutX="172.0" layoutY="410.0" prefHeight="25.0" prefWidth="145.0">
+                              <JFXTextField fx:id="txtDescPro" layoutX="172.0" layoutY="410.0" prefHeight="25.0" prefWidth="145.0" AnchorPane.bottomAnchor="151.0">
                                  <font>
                                     <Font name="System Bold" size="12.0" />
                                  </font>
@@ -275,7 +283,7 @@
                                     </RadialGradient>
                                  </focusColor>
                               </JFXTextField>
-                              <JFXTextField fx:id="txtPrecioU" layoutX="171.0" layoutY="462.0" prefHeight="25.0" prefWidth="145.0" promptText="Se modifica auto.">
+                              <JFXTextField fx:id="txtPrecioU" layoutX="171.0" layoutY="462.0" prefHeight="25.0" prefWidth="145.0" promptText="Se modifica auto." AnchorPane.bottomAnchor="99.0">
                                  <font>
                                     <Font name="System Bold" size="12.0" />
                                  </font>
@@ -289,7 +297,7 @@
                                     </RadialGradient>
                                  </focusColor>
                               </JFXTextField>
-                              <JFXTextField fx:id="txtPrecioM" layoutX="456.0" layoutY="358.0" prefHeight="25.0" prefWidth="145.0" promptText="Se modifica auto.">
+                              <JFXTextField fx:id="txtPrecioM" layoutX="456.0" layoutY="358.0" prefHeight="25.0" prefWidth="145.0" promptText="Se modifica auto." AnchorPane.bottomAnchor="203.0">
                                  <font>
                                     <Font name="System Bold" size="12.0" />
                                  </font>
@@ -303,7 +311,7 @@
                                     </RadialGradient>
                                  </focusColor>
                               </JFXTextField>
-                              <JFXButton fx:id="btnTipoP" layoutX="857.0" layoutY="497.0" onAction="#handleButtonAction" prefHeight="50.0" prefWidth="200.0" text="Tipos de Prod.">
+                              <JFXButton fx:id="btnTipoP" layoutX="857.0" layoutY="497.0" onAction="#handleButtonAction" prefHeight="50.0" prefWidth="200.0" text="Tipos de Prod." AnchorPane.bottomAnchor="39.0" AnchorPane.rightAnchor="22.0">
                                  <font>
                                     <Font name="System Bold" size="17.0" />
                                  </font>
@@ -314,8 +322,8 @@
                                     <FontAwesomeIcon glyphName="LIST_ALT" size="1.5em" text="" />
                                  </graphic>
                               </JFXButton>
-                              <ComboBox fx:id="cmbCodigoTipoP" layoutX="452.0" layoutY="510.0" prefHeight="26.0" prefWidth="154.0" style="-fx-background-color: transparent; -fx-border-width: 0 0 1 0; -fx-border-color: BLACK;" />
-                              <JFXTextField fx:id="txtExistencia" layoutX="456.0" layoutY="462.0" prefHeight="25.0" prefWidth="145.0">
+                              <ComboBox fx:id="cmbCodigoTipoP" layoutX="452.0" layoutY="510.0" prefHeight="26.0" prefWidth="154.0" style="-fx-background-color: transparent; -fx-border-width: 0 0 1 0; -fx-border-color: BLACK;" AnchorPane.bottomAnchor="50.0" />
+                              <JFXTextField fx:id="txtExistencia" layoutX="456.0" layoutY="462.0" prefHeight="25.0" prefWidth="145.0" AnchorPane.bottomAnchor="99.0">
                                  <font>
                                     <Font name="System Bold" size="12.0" />
                                  </font>
@@ -329,13 +337,13 @@
                                     </RadialGradient>
                                  </focusColor>
                               </JFXTextField>
-                              <Label alignment="CENTER_RIGHT" layoutX="665.0" layoutY="360.0" text="Proveedor ID">
+                              <Label alignment="CENTER_RIGHT" layoutX="665.0" layoutY="360.0" text="Proveedor ID" AnchorPane.bottomAnchor="205.0">
                                  <font>
                                     <Font name="System Bold" size="15.0" />
                                  </font>
                               </Label>
-                              <ComboBox fx:id="cmbCodigoP" layoutX="780.0" layoutY="358.0" prefHeight="26.0" prefWidth="154.0" style="-fx-background-color: transparent; -fx-border-width: 0 0 1 0; -fx-border-color: BLACK;" />
-                              <Label alignment="CENTER_RIGHT" layoutX="356.0" layoutY="512.0" text="Tipo Prod. ID">
+                              <ComboBox fx:id="cmbCodigoP" layoutX="780.0" layoutY="358.0" prefHeight="26.0" prefWidth="154.0" style="-fx-background-color: transparent; -fx-border-width: 0 0 1 0; -fx-border-color: BLACK;" AnchorPane.bottomAnchor="202.0" />
+                              <Label alignment="CENTER_RIGHT" layoutX="356.0" layoutY="512.0" text="Tipo Prod. ID" AnchorPane.bottomAnchor="53.0">
                                  <font>
                                     <Font name="System Bold" size="15.0" />
                                  </font>

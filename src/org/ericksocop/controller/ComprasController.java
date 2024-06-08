@@ -28,11 +28,13 @@ import org.ericksocop.system.Main;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import javafx.animation.RotateTransition;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import javax.swing.JOptionPane;
 
 /**
@@ -52,6 +54,10 @@ public class ComprasController implements Initializable {
     private JFXButton btnMinimizar;
     @FXML
     private FontAwesomeIcon iconMinimizar;
+    @FXML
+    private JFXButton btnMaximizar;
+    @FXML
+    private FontAwesomeIcon iconMaximizar;
     @FXML
     private FontAwesomeIcon agregarIcono;
     @FXML
@@ -109,7 +115,11 @@ public class ComprasController implements Initializable {
         // TODO
         cargarDatos();
         desactivarControles();
-
+        colNumDoc.prefWidthProperty().bind(tvCompras.widthProperty().multiply(0.0476));
+        colDescCom.prefWidthProperty().bind(tvCompras.widthProperty().multiply(0.31746));
+        colFechaDoc.prefWidthProperty().bind(tvCompras.widthProperty().multiply(0.31746));
+        colTotalDoc.prefWidthProperty().bind(tvCompras.widthProperty().multiply(0.31746));
+        colNumDoc.prefWidthProperty().bind(tvCompras.widthProperty().multiply(0.31746));
     }
 
     public void cargarDatos() {
@@ -391,6 +401,29 @@ public class ComprasController implements Initializable {
         sortList.comparatorProperty().bind(tvCompras.comparatorProperty());
         tvCompras.setItems(sortList);
     }
+    
+    public void ventana(ActionEvent event) {
+        colNumDoc.prefWidthProperty().bind(tvCompras.widthProperty().multiply(0.0476));
+        colDescCom.prefWidthProperty().bind(tvCompras.widthProperty().multiply(0.31746));
+        colFechaDoc.prefWidthProperty().bind(tvCompras.widthProperty().multiply(0.31746));
+        colTotalDoc.prefWidthProperty().bind(tvCompras.widthProperty().multiply(0.31746));
+        colNumDoc.prefWidthProperty().bind(tvCompras.widthProperty().multiply(0.31746));
+        if (event.getSource() == iconMaximizar || event.getSource() == btnMaximizar) {
+            Stage stage = (Stage) anchorPane.getScene().getWindow();
+            RotateTransition rotateTransition = new RotateTransition(Duration.seconds(0.5), iconMaximizar);
+            rotateTransition.setByAngle(180);
+            rotateTransition.setCycleCount(1);
+            rotateTransition.setAutoReverse(false);
+
+            if (stage.isMaximized()) {
+                stage.setMaximized(false);
+            } else {
+                stage.setMaximized(true);
+            }
+            rotateTransition.play();
+        }
+
+    }
 
     public void desactivarControles() {
         txtNumDoc.setEditable(false);
@@ -429,7 +462,12 @@ public class ComprasController implements Initializable {
             escenarioPrincipal.menuPrincipalView();
         }
         if (event.getSource() == btnDetalleCompra) {
-            escenarioPrincipal.DetalleCompra();
+            try {
+            Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
+            escenarioPrincipal.DetalleCompraView(stage);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         }
         if (event.getSource() == iconoCerrar || event.getSource() == btnCerrar) {
             System.exit(0);

@@ -44,7 +44,7 @@
                                     <FontAwesomeIcon fx:id="iconoCerrar" glyphName="CLOSE" onMouseClicked="#handleButtonAction" size="2em" />
                                  </graphic>
                               </JFXButton>
-                              <JFXButton fx:id="btnMinimizar" alignment="CENTER" contentDisplay="CENTER" ellipsisString="" layoutX="1207.0" layoutY="2.0" onAction="#handleButtonAction" prefHeight="40.0" prefWidth="68.0" styleClass="minimize" stylesheets="@../resource/dashboardDesign.css" text="-">
+                              <JFXButton fx:id="btnMinimizar" alignment="CENTER" contentDisplay="CENTER" ellipsisString="" layoutX="1147.0" layoutY="3.0" onAction="#handleButtonAction" prefHeight="40.0" prefWidth="68.0" styleClass="minimize" stylesheets="@../resource/dashboardDesign.css" text="-" AnchorPane.rightAnchor="144.0" AnchorPane.topAnchor="2.0">
                                  <font>
                                     <Font />
                                  </font>
@@ -53,6 +53,14 @@
                                  </graphic>
                                  <graphic>
                                     <FontAwesomeIcon fx:id="iconMinimizar" glyphName="MINUS" onMouseClicked="#handleButtonAction" size="2em" />
+                                 </graphic>
+                              </JFXButton>
+                              <JFXButton fx:id="btnMaximizar" alignment="CENTER" contentDisplay="CENTER" ellipsisString="" layoutX="1215.0" layoutY="2.0" onAction="#ventana" prefHeight="40.0" prefWidth="68.0" styleClass="minimize" stylesheets="@../resource/dashboardDesign.css" text="_" AnchorPane.rightAnchor="76.0" AnchorPane.topAnchor="2.0">
+                                 <font>
+                                    <Font />
+                                 </font>
+                                 <graphic>
+                                    <FontAwesomeIcon fx:id="iconMaximizar" glyphName="MINUS" onMouseClicked="#ventana" size="1.9em" text="" />
                                  </graphic>
                               </JFXButton>
                            </children>
@@ -64,7 +72,7 @@
                   <AnchorPane prefHeight="200.0" prefWidth="250.0" styleClass="nav-form" stylesheets="@../resource/dashboardDesign.css" BorderPane.alignment="CENTER">
                      <children>
                         <Line endX="100.0" layoutX="125.0" layoutY="191.0" startX="-100.0" stroke="WHITE" />
-                        <JFXButton fx:id="btnRegresarCE" layoutX="61.0" layoutY="539.0" onAction="#handleButtonAction" prefHeight="50.0" prefWidth="129.0" text="Empleados" textFill="WHITE">
+                        <JFXButton fx:id="btnRegresarCE" layoutX="61.0" layoutY="539.0" onAction="#handleButtonAction" prefHeight="50.0" prefWidth="129.0" text="Empleados" textFill="WHITE" AnchorPane.bottomAnchor="31.0" AnchorPane.leftAnchor="61.0">
                            <graphic>
 
                            </graphic>
@@ -127,19 +135,19 @@
                <center>
                   <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                      <children>
-                        <AnchorPane layoutX="15.0" layoutY="17.0" prefHeight="586.0" prefWidth="1079.0" stylesheets="@../resource/dashboardDesign.css">
+                        <AnchorPane layoutX="15.0" layoutY="17.0" prefHeight="586.0" prefWidth="1079.0" stylesheets="@../resource/dashboardDesign.css" AnchorPane.bottomAnchor="17.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="17.0">
                            <children>
-                              <AnchorPane prefHeight="319.0" prefWidth="1079.0" stylesheets="@../resource/dashboardDesign.css">
+                              <AnchorPane prefHeight="319.0" prefWidth="1079.0" stylesheets="@../resource/dashboardDesign.css" AnchorPane.bottomAnchor="267.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <styleClass>
                                     <String fx:value="white-bg" />
                                     <String fx:value="shadow" />
                                  </styleClass>
                                  <children>
-                                    <TableView fx:id="tvCargoE" layoutX="15.0" layoutY="72.0" onMouseClicked="#seleccionarElemento" prefHeight="232.0" prefWidth="1050.0" stylesheets="@../resource/dashboardDesign.css">
+                                    <TableView fx:id="tvCargoE" layoutX="15.0" layoutY="72.0" onMouseClicked="#seleccionarElemento" prefHeight="232.0" prefWidth="1050.0" stylesheets="@../resource/dashboardDesign.css" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="72.0">
                                       <columns>
-                                        <TableColumn fx:id="colCodigoCargoE" prefWidth="150.0" text="Cargo ID" />
-                                        <TableColumn fx:id="colNombreC" prefWidth="350.0" text="Tipo de cargo" />
-                                          <TableColumn fx:id="colDescripcionC" prefWidth="550.0" text="Descripción" />
+                                        <TableColumn fx:id="colCodigoCargoE" prefWidth="50.0" text="ID" />
+                                        <TableColumn fx:id="colNombreC" prefWidth="500.0" text="Tipo de cargo" />
+                                          <TableColumn fx:id="colDescripcionC" prefWidth="500.0" text="Descripción" />
                                       </columns>
                                        <styleClass>
                                           <String fx:value="column-header-background" />
@@ -165,22 +173,22 @@
 
                                  </children>
                               </AnchorPane>
-                              <Label layoutX="119.0" layoutY="360.0" prefHeight="20.0" prefWidth="62.0" text="Cargo ID">
+                              <Label alignment="CENTER_RIGHT" layoutX="119.0" layoutY="360.0" prefHeight="20.0" prefWidth="62.0" text="ID" AnchorPane.bottomAnchor="205.0">
                                  <font>
                                     <Font name="System Bold" size="15.0" />
                                  </font>
                               </Label>
-                              <Label alignment="CENTER_RIGHT" contentDisplay="TOP" layoutX="81.0" layoutY="410.0" prefHeight="21.0" prefWidth="104.0" text="Tipo de cargo">
+                              <Label alignment="CENTER_RIGHT" contentDisplay="TOP" layoutX="81.0" layoutY="410.0" prefHeight="21.0" prefWidth="104.0" text="Tipo de cargo" AnchorPane.bottomAnchor="155.0">
                                  <font>
                                     <Font name="System Bold" size="15.0" />
                                  </font>
                               </Label>
-                              <Label alignment="CENTER_RIGHT" layoutX="101.0" layoutY="464.0" text="Descripción">
+                              <Label alignment="CENTER_RIGHT" layoutX="101.0" layoutY="464.0" text="Descripción" AnchorPane.bottomAnchor="101.0">
                                  <font>
                                     <Font name="System Bold" size="15.0" />
                                  </font>
                               </Label>
-                              <JFXTextField fx:id="txtCodigoCargoE" layoutX="198.0" layoutY="358.0" prefHeight="25.0" prefWidth="145.0">
+                              <JFXTextField fx:id="txtCodigoCargoE" layoutX="198.0" layoutY="358.0" prefHeight="25.0" prefWidth="145.0" AnchorPane.bottomAnchor="203.0">
                                  <font>
                                     <Font name="System Bold" size="12.0" />
                                  </font>
@@ -194,7 +202,7 @@
                                     </RadialGradient>
                                  </focusColor>
                               </JFXTextField>
-                              <JFXTextField fx:id="txtNombreCargo" layoutX="197.0" layoutY="410.0" prefHeight="25.0" prefWidth="145.0">
+                              <JFXTextField fx:id="txtNombreCargo" layoutX="197.0" layoutY="410.0" prefHeight="25.0" prefWidth="145.0" AnchorPane.bottomAnchor="151.0">
                                  <font>
                                     <Font name="System Bold" size="12.0" />
                                  </font>
@@ -208,7 +216,7 @@
                                     </RadialGradient>
                                  </focusColor>
                               </JFXTextField>
-                              <JFXTextField fx:id="txtDescripcionC" layoutX="196.0" layoutY="462.0" prefHeight="25.0" prefWidth="450.0">
+                              <JFXTextField fx:id="txtDescripcionC" layoutX="196.0" layoutY="462.0" prefHeight="25.0" prefWidth="450.0" AnchorPane.bottomAnchor="99.0">
                                  <font>
                                     <Font name="System Bold" size="12.0" />
                                  </font>
@@ -229,14 +237,6 @@
                               <String fx:value="shadow" />
                            </styleClass>
                         </AnchorPane>
-                        <JFXButton fx:id="btnCargoE" layoutX="867.0" layoutY="507.0" onAction="#handleButtonAction" prefHeight="50.0" prefWidth="200.0" text="Detalle Compra">
-                           <font>
-                              <Font name="System Bold" size="17.0" />
-                           </font>
-                           <graphic>
-                              <FontAwesomeIcon glyphName="LIST_ALT" size="1.5em" text="" />
-                           </graphic>
-                        </JFXButton>
                      </children>
                   </AnchorPane>
                </center>

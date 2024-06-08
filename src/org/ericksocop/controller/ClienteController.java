@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
+import javafx.animation.RotateTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -27,10 +28,10 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import javax.swing.JOptionPane;
 import org.ericksocop.bean.Clientes;
 import org.ericksocop.dao.Conexion;
@@ -43,11 +44,6 @@ import org.ericksocop.system.Main;
  * @author mauco
  */
 public class ClienteController implements Initializable {
-
-
-    @FXML
-    private void handleButtonAction(MouseEvent event) {
-    }
 
     private enum operador {
         AGREGRAR, ELIMINAR, EDITAR, ACTUALIZAR, CANCELAR, NINGUNO
@@ -62,6 +58,10 @@ public class ClienteController implements Initializable {
     private JFXButton btnCerrar;
     @FXML
     private FontAwesomeIcon iconoCerrar;
+    @FXML
+    private JFXButton btnMaximizar;
+    @FXML
+    private FontAwesomeIcon iconMaximizar;
     @FXML
     private JFXButton btnMinimizar;
     @FXML
@@ -125,6 +125,13 @@ public class ClienteController implements Initializable {
         // TODO
         cargarDatos();
         desactivarControles();
+        colClienteID.prefWidthProperty().bind(tvCliente.widthProperty().multiply(0.0476));
+        colApellidosClientes.prefWidthProperty().bind(tvCliente.widthProperty().multiply(0.15873));
+        colCorreoClientes.prefWidthProperty().bind(tvCliente.widthProperty().multiply(0.15873));
+        colDireccionClientes.prefWidthProperty().bind(tvCliente.widthProperty().multiply(0.15873));
+        colNit.prefWidthProperty().bind(tvCliente.widthProperty().multiply(0.15873));
+        colNombreCliente.prefWidthProperty().bind(tvCliente.widthProperty().multiply(0.15873));
+        colTelefonoClientes.prefWidthProperty().bind(tvCliente.widthProperty().multiply(0.15873));
     }
 
     public void cargarDatos() {
@@ -444,8 +451,35 @@ public class ClienteController implements Initializable {
         txtTelefonoCli.clear();
         txtCorreoCliente.clear();
     }
+    
+    public void ventana(ActionEvent event) {
+        colClienteID.prefWidthProperty().bind(tvCliente.widthProperty().multiply(0.0476));
+        colApellidosClientes.prefWidthProperty().bind(tvCliente.widthProperty().multiply(0.15873));
+        colCorreoClientes.prefWidthProperty().bind(tvCliente.widthProperty().multiply(0.15873));
+        colDireccionClientes.prefWidthProperty().bind(tvCliente.widthProperty().multiply(0.15873));
+        colNit.prefWidthProperty().bind(tvCliente.widthProperty().multiply(0.15873));
+        colNombreCliente.prefWidthProperty().bind(tvCliente.widthProperty().multiply(0.15873));
+        colTelefonoClientes.prefWidthProperty().bind(tvCliente.widthProperty().multiply(0.15873));
+        
+        if (event.getSource() == iconMaximizar || event.getSource() == btnMaximizar) {
+            Stage stage = (Stage) anchorPane.getScene().getWindow();
+            RotateTransition rotateTransition = new RotateTransition(Duration.seconds(0.5), iconMaximizar);
+            rotateTransition.setByAngle(180);
+            rotateTransition.setCycleCount(1);
+            rotateTransition.setAutoReverse(false);
 
-    @FXML
+            if (stage.isMaximized()) {
+                stage.setMaximized(false);
+                
+            } else {
+                stage.setMaximized(true);
+            }
+            rotateTransition.play();
+        }
+
+    }
+
+    
     public void handleButtonAction(ActionEvent event) {
         if (event.getSource() == btnRegresar) {
             escenarioPrincipal.menuPrincipalView();
@@ -457,8 +491,8 @@ public class ClienteController implements Initializable {
             Stage stage = (Stage) anchorPane.getScene().getWindow();
             stage.setIconified(true);
         }
-
     }
+    
 
     public Main getEscenarioPrincipal() {
         return escenarioPrincipal;

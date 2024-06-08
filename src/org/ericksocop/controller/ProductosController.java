@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
+import javafx.animation.RotateTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -30,6 +31,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import javax.swing.JOptionPane;
 import org.ericksocop.bean.Productos;
 import org.ericksocop.bean.Proveedores;
@@ -106,6 +108,10 @@ public class ProductosController implements Initializable {
     @FXML
     private FontAwesomeIcon iconMinimizar;
     @FXML
+    private JFXButton btnMaximizar;
+    @FXML
+    private FontAwesomeIcon iconMaximizar;
+    @FXML
     private FontAwesomeIcon agregarIcono;
     @FXML
     private FontAwesomeIcon actualizarIcono;
@@ -135,6 +141,15 @@ public class ProductosController implements Initializable {
         cmbCodigoTipoP.setItems(getTipoP());
         cmbCodigoP.setItems(getProveedores());
         desactivarControles();
+        colCodProd.prefWidthProperty().bind(tvProductos.widthProperty().multiply(0.0476));
+        colCodProv.prefWidthProperty().bind(tvProductos.widthProperty().multiply(0.11905));
+        colCodTipoProd.prefWidthProperty().bind(tvProductos.widthProperty().multiply(0.11905));
+        colDescProd.prefWidthProperty().bind(tvProductos.widthProperty().multiply(0.11905));
+        colExistencia.prefWidthProperty().bind(tvProductos.widthProperty().multiply(0.11905));
+        colImagenP.prefWidthProperty().bind(tvProductos.widthProperty().multiply(0.11905));
+        colPrecioD.prefWidthProperty().bind(tvProductos.widthProperty().multiply(0.11905));
+        colPrecioM.prefWidthProperty().bind(tvProductos.widthProperty().multiply(0.11905));
+        colPrecioU.prefWidthProperty().bind(tvProductos.widthProperty().multiply(0.11905));
     }
 
     public void cargarDatos() {
@@ -272,7 +287,6 @@ public class ProductosController implements Initializable {
 
         return listaTipoP = FXCollections.observableList(lista);
     }
-
 
     public void Agregar() {
         switch (tipoDeOperador) {
@@ -499,7 +513,7 @@ public class ProductosController implements Initializable {
                 if (newValue == null || newValue.isEmpty()) {
                     return true;
                 }
-                
+
                 String param = newValue.toLowerCase();
                 String productoID = String.valueOf(predicateProducto.getCodigoProducto());
                 String precioU = String.valueOf(predicateProducto.getPrecioUnitario());
@@ -508,29 +522,29 @@ public class ProductosController implements Initializable {
                 String existencia = String.valueOf(predicateProducto.getExistencia());
                 String tipoProdID = String.valueOf(predicateProducto.getCodigoTipoProducto());
                 String proveedorID = String.valueOf(predicateProducto.getCodigoProveedor());
-                
-                if(productoID.contains(param)){
+
+                if (productoID.contains(param)) {
                     return true;
-                } else if(predicateProducto.getDescripcionProducto().toLowerCase().contains(param)){
+                } else if (predicateProducto.getDescripcionProducto().toLowerCase().contains(param)) {
                     return true;
-                }else if(precioU.contains(param)){
+                } else if (precioU.contains(param)) {
                     return true;
-                }else if(precioD.contains(param)){
+                } else if (precioD.contains(param)) {
                     return true;
-                }else if (precioM.contains(param)){
+                } else if (precioM.contains(param)) {
                     return true;
-                }else if(existencia.contains(param)){
+                } else if (existencia.contains(param)) {
                     return true;
-                }else if(tipoProdID.contains(param)){
+                } else if (tipoProdID.contains(param)) {
                     return true;
-                }else if(proveedorID.contains(param)){
+                } else if (proveedorID.contains(param)) {
                     return true;
-                }else{
-                return false;
+                } else {
+                    return false;
                 }
             });
         });
-        SortedList<Productos> sortList = new SortedList <>(filtro);
+        SortedList<Productos> sortList = new SortedList<>(filtro);
         sortList.comparatorProperty().bind(tvProductos.comparatorProperty());
         tvProductos.setItems(sortList);
     }
@@ -585,7 +599,12 @@ public class ProductosController implements Initializable {
             escenarioPrincipal.menuPrincipalView();
         }
         if (event.getSource() == btnTipoP) {
-            escenarioPrincipal.tipoProductoView();
+            try {
+                Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
+                escenarioPrincipal.tipoProductoView(stage);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         if (event.getSource() == iconoCerrar || event.getSource() == btnCerrar) {
             System.exit(0);
@@ -595,5 +614,43 @@ public class ProductosController implements Initializable {
             stage.setIconified(true);
         }
     }
+
+    public void ventana(ActionEvent event) {
+
+        if (event.getSource() == iconMaximizar || event.getSource() == btnMaximizar) {
+            Stage stage = (Stage) anchorPane.getScene().getWindow();
+            RotateTransition rotateTransition = new RotateTransition(Duration.seconds(0.5), iconMaximizar);
+            rotateTransition.setByAngle(180);
+            rotateTransition.setCycleCount(1);
+            rotateTransition.setAutoReverse(false);
+
+            if (stage.isMaximized()) {
+                colCodProd.prefWidthProperty().bind(tvProductos.widthProperty().multiply(0.0476));
+                colCodProv.prefWidthProperty().bind(tvProductos.widthProperty().multiply(0.11905));
+                colCodTipoProd.prefWidthProperty().bind(tvProductos.widthProperty().multiply(0.11905));
+                colDescProd.prefWidthProperty().bind(tvProductos.widthProperty().multiply(0.11905));
+                colExistencia.prefWidthProperty().bind(tvProductos.widthProperty().multiply(0.11905));
+                colImagenP.prefWidthProperty().bind(tvProductos.widthProperty().multiply(0.11905));
+                colPrecioD.prefWidthProperty().bind(tvProductos.widthProperty().multiply(0.11905));
+                colPrecioM.prefWidthProperty().bind(tvProductos.widthProperty().multiply(0.11905));
+                colPrecioU.prefWidthProperty().bind(tvProductos.widthProperty().multiply(0.11905));
+                stage.setMaximized(false);
+            } else {
+                stage.setMaximized(true);
+            }
+            rotateTransition.play();
+        }
+    }
+        
+        public void verificacionRotacion(){
+            Stage stage = (Stage) anchorPane.getScene().getWindow();
+            if(stage.isMaximized()){
+                RotateTransition rotateTransition = new RotateTransition(Duration.seconds(0.5), iconMaximizar);
+            rotateTransition.setByAngle(180);
+            rotateTransition.setCycleCount(1);
+            rotateTransition.setAutoReverse(false);
+            stage.setMaximized(false);
+            }
+        }
 
 }

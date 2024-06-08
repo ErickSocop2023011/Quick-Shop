@@ -24,7 +24,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -49,6 +48,7 @@ public class TipoProductoController implements Initializable {
     private FontAwesomeIcon iconoCerrar;
     @FXML
     private JFXButton btnMinimizar;
+    @FXML
     private FontAwesomeIcon iconMinimizar;
     @FXML
     private FontAwesomeIcon agregarIcono;
@@ -101,6 +101,8 @@ public class TipoProductoController implements Initializable {
         // TODO
         cargarDatos();
         desactivarControles();
+        colCodigoP.prefWidthProperty().bind(tvDescripcionP.widthProperty().divide(2));
+        colDescripcionP.prefWidthProperty().bind(tvDescripcionP.widthProperty().divide(2));
     }
 
     public void cargarDatos() {
@@ -363,22 +365,23 @@ public class TipoProductoController implements Initializable {
     }
 
     public void ventana(ActionEvent event) {
+        colCodigoP.prefWidthProperty().bind(tvDescripcionP.widthProperty().divide(2));
+        colDescripcionP.prefWidthProperty().bind(tvDescripcionP.widthProperty().divide(2));
         if (event.getSource() == iconMaximizar || event.getSource() == btnMaximizar) {
             Stage stage = (Stage) anchorPane.getScene().getWindow();
-            // Configurar la rotación del icono
             RotateTransition rotateTransition = new RotateTransition(Duration.seconds(0.5), iconMaximizar);
-            rotateTransition.setByAngle(180); // Rotación de 180 grados
-            rotateTransition.setCycleCount(1); // Número de ciclos de la animación
-            rotateTransition.setAutoReverse(false); // No revertir la animación
+            rotateTransition.setByAngle(180);
+            rotateTransition.setCycleCount(1);
+            rotateTransition.setAutoReverse(false);
 
             if (stage.isMaximized()) {
-                rotateTransition.play(); // Reproducir la animación de rotación
                 stage.setMaximized(false);
             } else {
-                rotateTransition.play(); // Reproducir la animación de rotación
                 stage.setMaximized(true);
             }
+            rotateTransition.play();
         }
+        
     }
 
 }

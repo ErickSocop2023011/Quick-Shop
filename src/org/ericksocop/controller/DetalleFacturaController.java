@@ -14,6 +14,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+import javafx.animation.RotateTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -28,6 +29,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import javax.swing.JOptionPane;
 import org.ericksocop.bean.DetalleFactura;
 import org.ericksocop.bean.Facturas;
@@ -73,6 +75,10 @@ public class DetalleFacturaController implements Initializable {
     @FXML
     private ComboBox cmbNumF;
     @FXML
+    private JFXButton btnMaximizar;
+    @FXML
+    private FontAwesomeIcon iconMaximizar;
+    @FXML
     private JFXButton btnRegresarDetF;
     @FXML
     private AnchorPane anchorPane;
@@ -116,7 +122,11 @@ public class DetalleFacturaController implements Initializable {
         cmbNumF.setItems(getFacturas());
         txtPrecioU.setDisable(true);
         desactivarControles();
-
+        colCodDetalleF.prefWidthProperty().bind(tvDetalleF.widthProperty().multiply(0.0476));
+        colCant.prefWidthProperty().bind(tvDetalleF.widthProperty().multiply(0.23810));
+        colCodP.prefWidthProperty().bind(tvDetalleF.widthProperty().multiply(0.23810));
+        colNumF.prefWidthProperty().bind(tvDetalleF.widthProperty().multiply(0.23810));
+        colPrecioU.prefWidthProperty().bind(tvDetalleF.widthProperty().multiply(0.23810));
     }
 
     public void cargarDatos() {
@@ -440,7 +450,7 @@ public class DetalleFacturaController implements Initializable {
 
         }
     }
-    
+
     public void buscarDetFact() {
         limpiarControles();
         FilteredList<DetalleFactura> filtro = new FilteredList<>(listaDetalleFactura, e -> true);
@@ -507,6 +517,29 @@ public class DetalleFacturaController implements Initializable {
 
     public void setEscenarioPrincipal(Main escenarioPrincipal) {
         this.escenarioPrincipal = escenarioPrincipal;
+    }
+
+    public void ventana(ActionEvent event) {
+        colCodDetalleF.prefWidthProperty().bind(tvDetalleF.widthProperty().multiply(0.0476));
+        colCant.prefWidthProperty().bind(tvDetalleF.widthProperty().multiply(0.23810));
+        colCodP.prefWidthProperty().bind(tvDetalleF.widthProperty().multiply(0.23810));
+        colNumF.prefWidthProperty().bind(tvDetalleF.widthProperty().multiply(0.23810));
+        colPrecioU.prefWidthProperty().bind(tvDetalleF.widthProperty().multiply(0.23810));
+        if (event.getSource() == iconMaximizar || event.getSource() == btnMaximizar) {
+            Stage stage = (Stage) anchorPane.getScene().getWindow();
+            RotateTransition rotateTransition = new RotateTransition(Duration.seconds(0.5), iconMaximizar);
+            rotateTransition.setByAngle(180);
+            rotateTransition.setCycleCount(1);
+            rotateTransition.setAutoReverse(false);
+
+            if (stage.isMaximized()) {
+                stage.setMaximized(false);
+            } else {
+                stage.setMaximized(true);
+            }
+            rotateTransition.play();
+        }
+
     }
 
     public void handleButtonAction(ActionEvent event) {

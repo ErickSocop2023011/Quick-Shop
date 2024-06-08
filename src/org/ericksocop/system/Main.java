@@ -9,6 +9,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.fxml.JavaFXBuilderFactory;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
@@ -32,9 +33,7 @@ import org.ericksocop.controller.TipoProductoController;
  * @author mauco
  */
 public class Main extends Application {
-
     private Stage escenarioPrincipal;
-    private Scene escena;
 
     @Override
     public void start(Stage escenarioPrincipal) throws Exception {
@@ -42,31 +41,42 @@ public class Main extends Application {
         this.escenarioPrincipal.setTitle("QuickShop");
         menuPrincipalView();
         escenarioPrincipal.getIcons().add(new Image("/org/ericksocop/resource/Isotipo.png"));
-        // Parent root = FXMLLoader.load(getClass().getResource("/org/ericksocop/view/MenuPrincipalView.fxml"));
-        //Scene escena = new Scene(root);
-        //escenarioPrincipal.setScene(escena);
         escenarioPrincipal.initStyle(StageStyle.UNDECORATED);
         escenarioPrincipal.show();
     }
 
-    public Initializable cambiarEscena(String fxmlname, int width, int height) throws Exception {
+    public Initializable cambiarEscena(String fxmlname, Stage parentStage) throws Exception {
         Initializable resultado;
         FXMLLoader loader = new FXMLLoader();
         InputStream file = Main.class.getResourceAsStream("/org/ericksocop/view/" + fxmlname);
         loader.setBuilderFactory(new JavaFXBuilderFactory());
         loader.setLocation(Main.class.getResource("/org/ericksocop/view/" + fxmlname));
-        escena = new Scene((StackPane) loader.load(file), width, height);
-        escenarioPrincipal.setScene(escena);
-        escenarioPrincipal.sizeToScene();
+        Parent root = loader.load(file);
+
+        // Verificar si la ventana padre está maximizada
+        boolean isMaximized = parentStage.isMaximized();
+
+        // Configurar la nueva escena
+        if (isMaximized) {
+            parentStage.setScene(new Scene(root, parentStage.getWidth(), parentStage.getHeight()));
+            parentStage.setMaximized(true);
+        } else {
+            // Valores por defecto
+            parentStage.setScene(new Scene(root, 1359, 665)); 
+        }
+        parentStage.sizeToScene();
 
         resultado = (Initializable) loader.getController();
-
         return resultado;
+    }
+
+    public Initializable cambiarEscena(String fxmlname) throws Exception {
+        return cambiarEscena(fxmlname, escenarioPrincipal);
     }
 
     public void menuPrincipalView() {
         try {
-            MenuPrincipalController menuPrincipalView = (MenuPrincipalController) cambiarEscena("MenuPrincipal.fxml", 1359, 665);
+            MenuPrincipalController menuPrincipalView = (MenuPrincipalController) cambiarEscena("MenuPrincipal.fxml");
             menuPrincipalView.setEscenarioPrincipal(this);
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -75,17 +85,17 @@ public class Main extends Application {
 
     public void menuClienteView() {
         try {
-            ClienteController menuClienteView = (ClienteController) cambiarEscena("Cliente.fxml", 1359, 665);
+            ClienteController menuClienteView = (ClienteController) cambiarEscena("Cliente.fxml");
             menuClienteView.setEscenarioPrincipal(this);
         } catch (Exception e) {
-            //System.out.println(e.getMessage());
+            // System.out.println(e.getMessage());
             e.printStackTrace();
         }
     }
 
     public void programadorView() {
         try {
-            ProgramadorController prograView = (ProgramadorController) cambiarEscena("Programador.fxml", 1359, 300);
+            ProgramadorController prograView = (ProgramadorController) cambiarEscena("Programador.fxml");
             prograView.setEscenarioPrincipal(this);
 
         } catch (Exception e) {
@@ -94,18 +104,18 @@ public class Main extends Application {
         }
     }
 
-    public void cargoEmpleadosView() {
+    public void cargoEmpleadosView(Stage parentStage) {
         try {
-            CargoEmpleadosController cargoView = (CargoEmpleadosController) cambiarEscena("CargoEmpleados.fxml", 1359, 665);
+            CargoEmpleadosController cargoView = (CargoEmpleadosController) cambiarEscena("CargoEmpleados.fxml", parentStage);
             cargoView.setEscenarioPrincipal(this);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void tipoProductoView() {
+    public void tipoProductoView(Stage parentStage) {
         try {
-            TipoProductoController productoView = (TipoProductoController) cambiarEscena("tipoProducto.fxml", 1359, 665);
+            TipoProductoController productoView = (TipoProductoController) cambiarEscena("tipoProducto.fxml", parentStage);
             productoView.setEscenarioPrincipal(this);
         } catch (Exception e) {
             e.printStackTrace();
@@ -114,7 +124,7 @@ public class Main extends Application {
 
     public void ProveedorView() {
         try {
-            ProveedorController proveedorView = (ProveedorController) cambiarEscena("Proveedor.fxml", 1359, 665);
+            ProveedorController proveedorView = (ProveedorController) cambiarEscena("Proveedor.fxml");
             proveedorView.setEscenarioPrincipal(this);
         } catch (Exception e) {
             e.printStackTrace();
@@ -123,7 +133,7 @@ public class Main extends Application {
 
     public void CompraView() {
         try {
-            ComprasController compraView = (ComprasController) cambiarEscena("Compras.fxml", 1359, 665);
+            ComprasController compraView = (ComprasController) cambiarEscena("Compras.fxml");
             compraView.setEscenarioPrincipal(this);
         } catch (Exception e) {
             e.printStackTrace();
@@ -132,16 +142,16 @@ public class Main extends Application {
 
     public void ProductosView() {
         try {
-            ProductosController producView = (ProductosController) cambiarEscena("Productos.fxml", 1359, 665);
+            ProductosController producView = (ProductosController) cambiarEscena("Productos.fxml");
             producView.setEscenarioPrincipal(this);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void DetalleCompra() {
+    public void DetalleCompraView(Stage parentStage) {
         try {
-            DetalleCompraController detalleComView = (DetalleCompraController) cambiarEscena("DetalleCompra.fxml", 1359, 665);
+            DetalleCompraController detalleComView = (DetalleCompraController) cambiarEscena("DetalleCompra.fxml", parentStage);
             detalleComView.setEscenarioPrincipal(this);
         } catch (Exception e) {
             e.printStackTrace();
@@ -150,7 +160,7 @@ public class Main extends Application {
 
     public void EmpleadosView() {
         try {
-            EmpleadosController empleadoView = (EmpleadosController) cambiarEscena("Empleados.fxml", 1359, 665);
+            EmpleadosController empleadoView = (EmpleadosController) cambiarEscena("Empleados.fxml");
             empleadoView.setEscenarioPrincipal(this);
         } catch (Exception e) {
             e.printStackTrace();
@@ -159,23 +169,21 @@ public class Main extends Application {
 
     public void FacturasView() {
         try {
-            FacturasController facturasView = (FacturasController) cambiarEscena("Facturas.fxml", 1359, 665);
+            FacturasController facturasView = (FacturasController) cambiarEscena("Facturas.fxml");
             facturasView.setEscenarioPrincipal(this);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void DetalleFacturaView() {
+    public void DetalleFacturaView(Stage parentStage) {
         try {
-            DetalleFacturaController detalleFView = (DetalleFacturaController) cambiarEscena("DetalleFactura.fxml", 1359, 665);
+            DetalleFacturaController detalleFView = (DetalleFacturaController) cambiarEscena("DetalleFactura.fxml", parentStage);
             detalleFView.setEscenarioPrincipal(this);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
-  
 
     /**
      * @param args the command line arguments

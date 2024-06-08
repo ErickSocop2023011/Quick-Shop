@@ -18,6 +18,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+import javafx.animation.RotateTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -33,6 +34,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
+import javafx.util.Duration;
 import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.ERROR_MESSAGE;
 import org.ericksocop.bean.Clientes;
@@ -106,6 +109,10 @@ public class FacturasController implements Initializable {
     private FontAwesomeIcon reporteIcono;
     @FXML
     private JFXTextField txtbuscarFactura;
+    @FXML
+    private JFXButton btnMaximizar;
+    @FXML
+    private FontAwesomeIcon iconMaximizar;
 
     private Main escenarioPrincipal;
     private ObservableList<Facturas> listaFacturas;
@@ -128,6 +135,12 @@ public class FacturasController implements Initializable {
         cmbCodEmp.setItems(getEmpleados());
         desactivarControles();
         txtTotalF.setDisable(true);
+        colClienteID.prefWidthProperty().bind(tvFacturas.widthProperty().multiply(0.19048));
+        colCodEmp.prefWidthProperty().bind(tvFacturas.widthProperty().multiply(0.19048));
+        colEstadoF.prefWidthProperty().bind(tvFacturas.widthProperty().multiply(0.19048));
+        colFechaF.prefWidthProperty().bind(tvFacturas.widthProperty().multiply(0.19048));
+        colNumF.prefWidthProperty().bind(tvFacturas.widthProperty().multiply(0.0476));
+        colTotalF.prefWidthProperty().bind(tvFacturas.widthProperty().multiply(0.19048));
     }
 
     public void cargarDatos() {
@@ -561,7 +574,12 @@ public class FacturasController implements Initializable {
             escenarioPrincipal.menuPrincipalView();
         }
         if (event.getSource() == btnDetalleFact) {
-            escenarioPrincipal.DetalleFacturaView();
+            try {
+                Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
+                escenarioPrincipal.DetalleFacturaView(stage);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         if (event.getSource() == iconoCerrar || event.getSource() == btnCerrar) {
             System.exit(0);
@@ -569,6 +587,29 @@ public class FacturasController implements Initializable {
         if (event.getSource() == iconMinimizar || event.getSource() == btnMinimizar) {
             Stage stage = (Stage) anchorPane.getScene().getWindow();
             stage.setIconified(true);
+        }
+    }
+
+    public void ventana(ActionEvent event) {
+        colClienteID.prefWidthProperty().bind(tvFacturas.widthProperty().multiply(0.19048));
+        colCodEmp.prefWidthProperty().bind(tvFacturas.widthProperty().multiply(0.19048));
+        colEstadoF.prefWidthProperty().bind(tvFacturas.widthProperty().multiply(0.19048));
+        colFechaF.prefWidthProperty().bind(tvFacturas.widthProperty().multiply(0.19048));
+        colNumF.prefWidthProperty().bind(tvFacturas.widthProperty().multiply(0.0476));
+        colTotalF.prefWidthProperty().bind(tvFacturas.widthProperty().multiply(0.19048));
+        if (event.getSource() == iconMaximizar || event.getSource() == btnMaximizar) {
+            Stage stage = (Stage) anchorPane.getScene().getWindow();
+            RotateTransition rotateTransition = new RotateTransition(Duration.seconds(0.5), iconMaximizar);
+            rotateTransition.setByAngle(180);
+            rotateTransition.setCycleCount(1);
+            rotateTransition.setAutoReverse(false);
+
+            if (stage.isMaximized()) {
+                stage.setMaximized(false);
+            } else {
+                stage.setMaximized(true);
+            }
+            rotateTransition.play();
         }
     }
 

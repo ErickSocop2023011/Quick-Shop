@@ -13,6 +13,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+import javafx.animation.RotateTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -20,14 +21,13 @@ import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import javax.swing.JOptionPane;
 import org.ericksocop.bean.Proveedores;
 import org.ericksocop.dao.Conexion;
@@ -58,6 +58,10 @@ public class ProveedorController implements Initializable {
     private FontAwesomeIcon actualizarIcono;
     @FXML
     private FontAwesomeIcon eliminarIcono;
+    @FXML
+    private JFXButton btnMaximizar;
+    @FXML
+    private FontAwesomeIcon iconMaximizar;
     @FXML
     private FontAwesomeIcon reporteIcono;
     @FXML
@@ -128,6 +132,16 @@ public class ProveedorController implements Initializable {
         // TODO
         cargarDatos();
         desactivarControles();
+        colCodP.prefWidthProperty().bind(tvPoveedores.widthProperty().multiply(0.0476));
+        colApeP.prefWidthProperty().bind(tvPoveedores.widthProperty().multiply(0.10582));
+        colContactoP.prefWidthProperty().bind(tvPoveedores.widthProperty().multiply(0.10582));
+        colDireP.prefWidthProperty().bind(tvPoveedores.widthProperty().multiply(0.10582));
+        colEmailP.prefWidthProperty().bind(tvPoveedores.widthProperty().multiply(0.10582));
+        colNITP.prefWidthProperty().bind(tvPoveedores.widthProperty().multiply(0.10582));
+        colNomP.prefWidthProperty().bind(tvPoveedores.widthProperty().multiply(0.10582));
+        colRazonS.prefWidthProperty().bind(tvPoveedores.widthProperty().multiply(0.10582));
+        colSitioWeb.prefWidthProperty().bind(tvPoveedores.widthProperty().multiply(0.10582));
+        colTelP.prefWidthProperty().bind(tvPoveedores.widthProperty().multiply(0.10582));
     }
 
     public void cargarDatos() {
@@ -390,7 +404,7 @@ public class ProveedorController implements Initializable {
             procedimiento.setString(9, registro.getTelefonoProveedor());
             procedimiento.setString(10, registro.getEmailProveedor());
             procedimiento.execute();
-        } catch (Exception e) { 
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -405,37 +419,37 @@ public class ProveedorController implements Initializable {
                 }
                 String param = newValue.toLowerCase();
                 String provID = String.valueOf(predicateProveedor.getCodigoProveedor());
-                
-                if(provID.contains(param)){
+
+                if (provID.contains(param)) {
                     return true;
-                } else if(predicateProveedor.getNombresProveedor().toLowerCase().contains(param)){
+                } else if (predicateProveedor.getNombresProveedor().toLowerCase().contains(param)) {
                     return true;
-                }else if(predicateProveedor.getApellidosProveedor().toLowerCase().contains(param)){
+                } else if (predicateProveedor.getApellidosProveedor().toLowerCase().contains(param)) {
                     return true;
-                }else if(predicateProveedor.getNITProveedor().toLowerCase().contains(param)){
+                } else if (predicateProveedor.getNITProveedor().toLowerCase().contains(param)) {
                     return true;
-                }else if(predicateProveedor.getDireccionProveedor().toLowerCase().contains(param)){
+                } else if (predicateProveedor.getDireccionProveedor().toLowerCase().contains(param)) {
                     return true;
-                }else if(predicateProveedor.getRazonSocial().toLowerCase().contains(param)){
+                } else if (predicateProveedor.getRazonSocial().toLowerCase().contains(param)) {
                     return true;
-                }else if(predicateProveedor.getContactoPrincipal().toLowerCase().contains(param)){
+                } else if (predicateProveedor.getContactoPrincipal().toLowerCase().contains(param)) {
                     return true;
-                }else if(predicateProveedor.getPaginaWeb().toLowerCase().contains(param)){
+                } else if (predicateProveedor.getPaginaWeb().toLowerCase().contains(param)) {
                     return true;
-                }else if(predicateProveedor.getTelefonoProveedor().toLowerCase().contains(param)){
+                } else if (predicateProveedor.getTelefonoProveedor().toLowerCase().contains(param)) {
                     return true;
-                }else if(predicateProveedor.getEmailProveedor().toLowerCase().contains(param)){
+                } else if (predicateProveedor.getEmailProveedor().toLowerCase().contains(param)) {
                     return true;
-                }else{
-                
-                return false;
+                } else {
+
+                    return false;
                 }
             });
         });
         SortedList<Proveedores> sortList = new SortedList<>(filtro);
-        sortList.comparatorProperty().bind(tvPoveedores .comparatorProperty());
+        sortList.comparatorProperty().bind(tvPoveedores.comparatorProperty());
         tvPoveedores.setItems(sortList);
-        
+
     }
 
     public void desactivarControles() {
@@ -485,13 +499,42 @@ public class ProveedorController implements Initializable {
     public void handleButtonAction(ActionEvent event) {
         if (event.getSource() == btnRegresarP) {
             escenarioPrincipal.menuPrincipalView();
-        }if (event.getSource() == iconoCerrar || event.getSource() == btnCerrar) {
+        }
+        if (event.getSource() == iconoCerrar || event.getSource() == btnCerrar) {
             System.exit(0);
         }
         if (event.getSource() == iconMinimizar || event.getSource() == btnMinimizar) {
             Stage stage = (Stage) anchorPane.getScene().getWindow();
             stage.setIconified(true);
         }
+    }
+
+    public void ventana(ActionEvent event) {
+        colCodP.prefWidthProperty().bind(tvPoveedores.widthProperty().multiply(0.0476));
+        colApeP.prefWidthProperty().bind(tvPoveedores.widthProperty().multiply(0.10582));
+        colContactoP.prefWidthProperty().bind(tvPoveedores.widthProperty().multiply(0.10582));
+        colDireP.prefWidthProperty().bind(tvPoveedores.widthProperty().multiply(0.10582));
+        colEmailP.prefWidthProperty().bind(tvPoveedores.widthProperty().multiply(0.10582));
+        colNITP.prefWidthProperty().bind(tvPoveedores.widthProperty().multiply(0.10582));
+        colNomP.prefWidthProperty().bind(tvPoveedores.widthProperty().multiply(0.10582));
+        colRazonS.prefWidthProperty().bind(tvPoveedores.widthProperty().multiply(0.10582));
+        colSitioWeb.prefWidthProperty().bind(tvPoveedores.widthProperty().multiply(0.10582));
+        colTelP.prefWidthProperty().bind(tvPoveedores.widthProperty().multiply(0.10582));
+        if (event.getSource() == iconMaximizar || event.getSource() == btnMaximizar) {
+            Stage stage = (Stage) anchorPane.getScene().getWindow();
+            RotateTransition rotateTransition = new RotateTransition(Duration.seconds(0.5), iconMaximizar);
+            rotateTransition.setByAngle(180);
+            rotateTransition.setCycleCount(1);
+            rotateTransition.setAutoReverse(false);
+
+            if (stage.isMaximized()) {
+                stage.setMaximized(false);
+            } else {
+                stage.setMaximized(true);
+            }
+            rotateTransition.play();
+        }
+
     }
 
     public Main getEscenarioPrincipal() {
