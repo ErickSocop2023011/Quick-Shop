@@ -538,6 +538,14 @@ public class DetalleCompraController implements Initializable {
         cmbCodPro.setValue(null);
         cmbNumDoc.setValue(null);
     }
+    
+    public void actualizarIconoMaximizar(boolean isMaximized) {
+        if (isMaximized) {
+            iconMaximizar.setRotate(180);
+        } else {
+            iconMaximizar.setRotate(0); 
+        }
+    }
 
     public void ventana(ActionEvent event) {
         colCodDetCo.prefWidthProperty().bind(tvDetalleC.widthProperty().multiply(0.0476));
@@ -551,15 +559,16 @@ public class DetalleCompraController implements Initializable {
             rotateTransition.setByAngle(180);
             rotateTransition.setCycleCount(1);
             rotateTransition.setAutoReverse(false);
-
             if (stage.isMaximized()) {
                 stage.setMaximized(false);
+                escenarioPrincipal.setIsMaximized(false);
+                iconMaximizar.setRotate(180);
             } else {
                 stage.setMaximized(true);
+                escenarioPrincipal.setIsMaximized(true);
             }
             rotateTransition.play();
         }
-
     }
 
     public void handleButtonAction(ActionEvent event) {

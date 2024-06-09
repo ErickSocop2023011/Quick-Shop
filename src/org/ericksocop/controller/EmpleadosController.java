@@ -492,6 +492,14 @@ public class EmpleadosController implements Initializable {
         txtTurno.clear();
         cmbCargoEmp.setValue(null);
     }
+    
+    public void actualizarIconoMaximizar(boolean isMaximized) {
+        if (isMaximized) {
+            iconMaximizar.setRotate(180);
+        } else {
+            iconMaximizar.setRotate(0);
+        }
+    }
 
     public void ventana(ActionEvent event) {
         colCodEmp.prefWidthProperty().bind(tvEmpleados.widthProperty().multiply(0.0476));
@@ -510,8 +518,12 @@ public class EmpleadosController implements Initializable {
 
             if (stage.isMaximized()) {
                 stage.setMaximized(false);
+                escenarioPrincipal.setIsMaximized(false);
+                iconMaximizar.setRotate(180);
             } else {
                 stage.setMaximized(true);
+                escenarioPrincipal.setIsMaximized(true);
+               // iconMaximizar.setRotate(180);
             }
             rotateTransition.play();
         }

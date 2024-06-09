@@ -495,7 +495,6 @@ public class ProveedorController implements Initializable {
         escenarioPrincipal.menuPrincipalView();
     }
 
-    @FXML
     public void handleButtonAction(ActionEvent event) {
         if (event.getSource() == btnRegresarP) {
             escenarioPrincipal.menuPrincipalView();
@@ -506,6 +505,14 @@ public class ProveedorController implements Initializable {
         if (event.getSource() == iconMinimizar || event.getSource() == btnMinimizar) {
             Stage stage = (Stage) anchorPane.getScene().getWindow();
             stage.setIconified(true);
+        }
+    }
+    
+    public void actualizarIconoMaximizar(boolean isMaximized) {
+        if (isMaximized) {
+            iconMaximizar.setRotate(180);
+        } else {
+            iconMaximizar.setRotate(0);
         }
     }
 
@@ -529,8 +536,11 @@ public class ProveedorController implements Initializable {
 
             if (stage.isMaximized()) {
                 stage.setMaximized(false);
+                escenarioPrincipal.setIsMaximized(false);
+                iconMaximizar.setRotate(180);
             } else {
                 stage.setMaximized(true);
+                escenarioPrincipal.setIsMaximized(true);
             }
             rotateTransition.play();
         }

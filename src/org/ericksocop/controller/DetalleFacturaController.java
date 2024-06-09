@@ -518,6 +518,14 @@ public class DetalleFacturaController implements Initializable {
     public void setEscenarioPrincipal(Main escenarioPrincipal) {
         this.escenarioPrincipal = escenarioPrincipal;
     }
+    
+    public void actualizarIconoMaximizar(boolean isMaximized) {
+        if (isMaximized) {
+            iconMaximizar.setRotate(180);
+        } else {
+            iconMaximizar.setRotate(0);
+        }
+    }
 
     public void ventana(ActionEvent event) {
         colCodDetalleF.prefWidthProperty().bind(tvDetalleF.widthProperty().multiply(0.0476));
@@ -534,8 +542,11 @@ public class DetalleFacturaController implements Initializable {
 
             if (stage.isMaximized()) {
                 stage.setMaximized(false);
+                escenarioPrincipal.setIsMaximized(false);
+                iconMaximizar.setRotate(180);
             } else {
                 stage.setMaximized(true);
+                escenarioPrincipal.setIsMaximized(true);
             }
             rotateTransition.play();
         }

@@ -363,6 +363,14 @@ public class TipoProductoController implements Initializable {
         }
 
     }
+    
+    public void actualizarIconoMaximizar(boolean isMaximized) {
+        if (isMaximized) {
+            iconMaximizar.setRotate(180); 
+        } else {
+            iconMaximizar.setRotate(0);
+        }
+    }
 
     public void ventana(ActionEvent event) {
         colCodigoP.prefWidthProperty().bind(tvDescripcionP.widthProperty().divide(2));
@@ -376,8 +384,11 @@ public class TipoProductoController implements Initializable {
 
             if (stage.isMaximized()) {
                 stage.setMaximized(false);
+                escenarioPrincipal.setIsMaximized(false);
+                iconMaximizar.setRotate(180);
             } else {
                 stage.setMaximized(true);
+                escenarioPrincipal.setIsMaximized(true);
             }
             rotateTransition.play();
         }

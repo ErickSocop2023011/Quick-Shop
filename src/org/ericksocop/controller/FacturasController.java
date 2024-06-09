@@ -34,7 +34,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 import javafx.util.Duration;
 import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.ERROR_MESSAGE;
@@ -589,6 +588,14 @@ public class FacturasController implements Initializable {
             stage.setIconified(true);
         }
     }
+    
+    public void actualizarIconoMaximizar(boolean isMaximized) {
+        if (isMaximized) {
+            iconMaximizar.setRotate(180);
+        } else {
+            iconMaximizar.setRotate(0);
+        }
+    }
 
     public void ventana(ActionEvent event) {
         colClienteID.prefWidthProperty().bind(tvFacturas.widthProperty().multiply(0.19048));
@@ -606,8 +613,11 @@ public class FacturasController implements Initializable {
 
             if (stage.isMaximized()) {
                 stage.setMaximized(false);
+                escenarioPrincipal.setIsMaximized(false);
+                iconMaximizar.setRotate(180);
             } else {
                 stage.setMaximized(true);
+                escenarioPrincipal.setIsMaximized(true);
             }
             rotateTransition.play();
         }

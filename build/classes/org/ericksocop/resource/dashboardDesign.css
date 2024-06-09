@@ -87,6 +87,16 @@
     
 }
 
+.table-row-cell:selected {
+    -fx-background-color: linear-gradient(to bottom right, #f8844a,#ff5500, #ff2e2e);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.table-row-cell:selected .text {
+    -fx-fill: white;
+    -fx-font-weight: bold;
+}
 
 .label-info{
     -fx-background-color:transparent;

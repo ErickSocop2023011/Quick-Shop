@@ -359,12 +359,12 @@ public class CargoEmpleadosController implements Initializable {
         txtNombreCargo.setEditable(false);
     }
 
-    public Main getEscenarioPrincipal() {
-        return escenarioPrincipal;
-    }
-
-    public void setEscenarioPrincipal(Main escenarioPrincipal) {
-        this.escenarioPrincipal = escenarioPrincipal;
+    public void actualizarIconoMaximizar(boolean isMaximized) {
+        if (isMaximized) {
+            iconMaximizar.setRotate(180);
+        } else {
+            iconMaximizar.setRotate(0);
+        }
     }
     
     public void ventana(ActionEvent event) {
@@ -380,15 +380,17 @@ public class CargoEmpleadosController implements Initializable {
 
             if (stage.isMaximized()) {
                 stage.setMaximized(false);
+                escenarioPrincipal.setIsMaximized(false);
+                iconMaximizar.setRotate(180);
             } else {
                 stage.setMaximized(true);
+                escenarioPrincipal.setIsMaximized(true);
+                //iconMaximizar.setRotate(180);
             }
             rotateTransition.play();
         }
-
     }
 
-    @FXML
     public void handleButtonAction(ActionEvent event) {
         if (event.getSource() == btnRegresarCE) {
             escenarioPrincipal.EmpleadosView();
@@ -399,5 +401,13 @@ public class CargoEmpleadosController implements Initializable {
             Stage stage = (Stage) anchorPane.getScene().getWindow();
             stage.setIconified(true);
         }
+    }
+    
+    public Main getEscenarioPrincipal() {
+        return escenarioPrincipal;
+    }
+
+    public void setEscenarioPrincipal(Main escenarioPrincipal) {
+        this.escenarioPrincipal = escenarioPrincipal;
     }
 }

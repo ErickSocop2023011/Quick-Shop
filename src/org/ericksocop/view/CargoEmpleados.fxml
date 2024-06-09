@@ -152,7 +152,6 @@
                                        <styleClass>
                                           <String fx:value="column-header-background" />
                                           <String fx:value="column-header" />
-                                          <String fx:value="table-view" />
                                        </styleClass>
                                     </TableView>
                                     <JFXTextField fx:id="txtbuscarCargoEmp" layoutX="15.0" layoutY="23.0" onKeyTyped="#buscarCargoEmp" prefHeight="25.0" prefWidth="219.0" promptText="Buscar">

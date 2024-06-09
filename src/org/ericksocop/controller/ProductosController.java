@@ -615,7 +615,24 @@ public class ProductosController implements Initializable {
         }
     }
 
+    public void actualizarIconoMaximizar(boolean isMaximized) {
+        if (isMaximized) {
+            iconMaximizar.setRotate(180); // Rotar el ícono para mostrar la opción de restaurar
+        } else {
+            iconMaximizar.setRotate(0); // Rotar el ícono para mostrar la opción de maximizar
+        }
+    }
+
     public void ventana(ActionEvent event) {
+        colCodProd.prefWidthProperty().bind(tvProductos.widthProperty().multiply(0.0476));
+        colCodProv.prefWidthProperty().bind(tvProductos.widthProperty().multiply(0.11905));
+        colCodTipoProd.prefWidthProperty().bind(tvProductos.widthProperty().multiply(0.11905));
+        colDescProd.prefWidthProperty().bind(tvProductos.widthProperty().multiply(0.11905));
+        colExistencia.prefWidthProperty().bind(tvProductos.widthProperty().multiply(0.11905));
+        colImagenP.prefWidthProperty().bind(tvProductos.widthProperty().multiply(0.11905));
+        colPrecioD.prefWidthProperty().bind(tvProductos.widthProperty().multiply(0.11905));
+        colPrecioM.prefWidthProperty().bind(tvProductos.widthProperty().multiply(0.11905));
+        colPrecioU.prefWidthProperty().bind(tvProductos.widthProperty().multiply(0.11905));
 
         if (event.getSource() == iconMaximizar || event.getSource() == btnMaximizar) {
             Stage stage = (Stage) anchorPane.getScene().getWindow();
@@ -625,32 +642,27 @@ public class ProductosController implements Initializable {
             rotateTransition.setAutoReverse(false);
 
             if (stage.isMaximized()) {
-                colCodProd.prefWidthProperty().bind(tvProductos.widthProperty().multiply(0.0476));
-                colCodProv.prefWidthProperty().bind(tvProductos.widthProperty().multiply(0.11905));
-                colCodTipoProd.prefWidthProperty().bind(tvProductos.widthProperty().multiply(0.11905));
-                colDescProd.prefWidthProperty().bind(tvProductos.widthProperty().multiply(0.11905));
-                colExistencia.prefWidthProperty().bind(tvProductos.widthProperty().multiply(0.11905));
-                colImagenP.prefWidthProperty().bind(tvProductos.widthProperty().multiply(0.11905));
-                colPrecioD.prefWidthProperty().bind(tvProductos.widthProperty().multiply(0.11905));
-                colPrecioM.prefWidthProperty().bind(tvProductos.widthProperty().multiply(0.11905));
-                colPrecioU.prefWidthProperty().bind(tvProductos.widthProperty().multiply(0.11905));
+
                 stage.setMaximized(false);
+                escenarioPrincipal.setIsMaximized(false);
+                iconMaximizar.setRotate(180);
             } else {
                 stage.setMaximized(true);
+                escenarioPrincipal.setIsMaximized(true);
             }
             rotateTransition.play();
         }
     }
-        
-        public void verificacionRotacion(){
-            Stage stage = (Stage) anchorPane.getScene().getWindow();
-            if(stage.isMaximized()){
-                RotateTransition rotateTransition = new RotateTransition(Duration.seconds(0.5), iconMaximizar);
+
+    public void verificacionRotacion() {
+        Stage stage = (Stage) anchorPane.getScene().getWindow();
+        if (stage.isMaximized()) {
+            RotateTransition rotateTransition = new RotateTransition(Duration.seconds(0.5), iconMaximizar);
             rotateTransition.setByAngle(180);
             rotateTransition.setCycleCount(1);
             rotateTransition.setAutoReverse(false);
             stage.setMaximized(false);
-            }
         }
+    }
 
 }

@@ -12,7 +12,6 @@ import javafx.fxml.JavaFXBuilderFactory;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.ericksocop.controller.CargoEmpleadosController;
@@ -34,6 +33,7 @@ import org.ericksocop.controller.TipoProductoController;
  */
 public class Main extends Application {
     private Stage escenarioPrincipal;
+    private boolean isMaximized = false;
 
     @Override
     public void start(Stage escenarioPrincipal) throws Exception {
@@ -52,34 +52,72 @@ public class Main extends Application {
         loader.setBuilderFactory(new JavaFXBuilderFactory());
         loader.setLocation(Main.class.getResource("/org/ericksocop/view/" + fxmlname));
         Parent root = loader.load(file);
-
-        // Verificar si la ventana padre está maximizada
-        boolean isMaximized = parentStage.isMaximized();
-
-        // Configurar la nueva escena
+        isMaximized = parentStage.isMaximized();
         if (isMaximized) {
             parentStage.setScene(new Scene(root, parentStage.getWidth(), parentStage.getHeight()));
             parentStage.setMaximized(true);
         } else {
-            // Valores por defecto
-            parentStage.setScene(new Scene(root, 1359, 665)); 
+            parentStage.setScene(new Scene(root, 1359, 665));
         }
         parentStage.sizeToScene();
 
         resultado = (Initializable) loader.getController();
+
+        if (resultado instanceof ClienteController) {
+            ((ClienteController) resultado).setEscenarioPrincipal(this);
+            ((ClienteController) resultado).actualizarIconoMaximizar(isMaximized);
+        }else if (resultado instanceof CargoEmpleadosController) {
+            ((CargoEmpleadosController) resultado).setEscenarioPrincipal(this);
+            ((CargoEmpleadosController) resultado).actualizarIconoMaximizar(isMaximized);
+        }else if (resultado instanceof EmpleadosController) {
+            ((EmpleadosController) resultado).setEscenarioPrincipal(this);
+            ((EmpleadosController) resultado).actualizarIconoMaximizar(isMaximized);
+        }else if (resultado instanceof ComprasController) {
+            ((ComprasController) resultado).setEscenarioPrincipal(this);
+            ((ComprasController) resultado).actualizarIconoMaximizar(isMaximized);
+        }else if (resultado instanceof DetalleCompraController) {
+            ((DetalleCompraController) resultado).setEscenarioPrincipal(this);
+            ((DetalleCompraController) resultado).actualizarIconoMaximizar(isMaximized);
+        }else if (resultado instanceof DetalleFacturaController) {
+            ((DetalleFacturaController) resultado).setEscenarioPrincipal(this);
+            ((DetalleFacturaController) resultado).actualizarIconoMaximizar(isMaximized);
+        }else if (resultado instanceof FacturasController) {
+            ((FacturasController) resultado).setEscenarioPrincipal(this);
+            ((FacturasController) resultado).actualizarIconoMaximizar(isMaximized);
+        }else if (resultado instanceof ProductosController) {
+            ((ProductosController) resultado).setEscenarioPrincipal(this);
+            ((ProductosController) resultado).actualizarIconoMaximizar(isMaximized);
+        }else if (resultado instanceof ProveedorController) {
+            ((ProveedorController) resultado).setEscenarioPrincipal(this);
+            ((ProveedorController) resultado).actualizarIconoMaximizar(isMaximized);
+        }else if (resultado instanceof TipoProductoController) {
+            ((TipoProductoController) resultado).setEscenarioPrincipal(this);
+            ((TipoProductoController) resultado).actualizarIconoMaximizar(isMaximized);
+        }
+
         return resultado;
     }
+
 
     public Initializable cambiarEscena(String fxmlname) throws Exception {
         return cambiarEscena(fxmlname, escenarioPrincipal);
     }
+
+    public boolean isMaximized() {
+        return isMaximized;
+    }
+
+    public void setIsMaximized(boolean isMaximized) {
+        this.isMaximized = isMaximized;
+    }
+
 
     public void menuPrincipalView() {
         try {
             MenuPrincipalController menuPrincipalView = (MenuPrincipalController) cambiarEscena("MenuPrincipal.fxml");
             menuPrincipalView.setEscenarioPrincipal(this);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+           e.printStackTrace();
         }
     }
 
@@ -88,7 +126,6 @@ public class Main extends Application {
             ClienteController menuClienteView = (ClienteController) cambiarEscena("Cliente.fxml");
             menuClienteView.setEscenarioPrincipal(this);
         } catch (Exception e) {
-            // System.out.println(e.getMessage());
             e.printStackTrace();
         }
     }
@@ -99,7 +136,6 @@ public class Main extends Application {
             prograView.setEscenarioPrincipal(this);
 
         } catch (Exception e) {
-            System.out.println(e.getMessage());
             e.printStackTrace();
         }
     }
