@@ -104,3 +104,8 @@
     -fx-border-radius:4px;
     -fx-padding:0px 0px 0px 8px;
 }
+
+.imageViewProducto {
+    -fx-border-color: black; /* Color del borde */
+    -fx-border-width: 2px; /* Ancho del borde */
+}

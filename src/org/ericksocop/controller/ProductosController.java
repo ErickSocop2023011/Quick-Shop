@@ -8,7 +8,14 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcons;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.sql.Blob;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -28,10 +35,14 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import javax.sql.rowset.serial.SerialBlob;
 import javax.swing.JOptionPane;
 import org.ericksocop.bean.Productos;
 import org.ericksocop.bean.Proveedores;
@@ -47,6 +58,10 @@ import org.ericksocop.system.Main;
  */
 public class ProductosController implements Initializable {
 
+    @FXML
+    private ImageView imageViewProducto;
+    @FXML
+    private JFXButton btnSeleccionarImagen;
     @FXML
     private TableView tvProductos;
     @FXML
@@ -71,8 +86,6 @@ public class ProductosController implements Initializable {
     private JFXTextField txtPrecioD;
     @FXML
     private JFXTextField txtPrecioM;
-    @FXML
-    private JFXTextField txtImagenPro;
     @FXML
     private JFXTextField txtExistencia;
     @FXML
@@ -131,6 +144,8 @@ public class ProductosController implements Initializable {
     }
     private operador tipoDeOperador = operador.NINGUNO;
 
+    private File archivoSeleccionado;
+
     /**
      * Initializes the controller class.
      */
@@ -152,6 +167,11 @@ public class ProductosController implements Initializable {
         colPrecioU.prefWidthProperty().bind(tvProductos.widthProperty().multiply(0.11905));
     }
 
+    private Image byteArrayToImage(byte[] byteArray) {
+        ByteArrayInputStream bais = new ByteArrayInputStream(byteArray);
+        return new Image(bais);
+    }
+
     public void cargarDatos() {
         tvProductos.setItems(getProducto());
         colCodProd.setCellValueFactory(new PropertyValueFactory<Productos, String>("codigoProducto"));
@@ -159,23 +179,31 @@ public class ProductosController implements Initializable {
         colPrecioU.setCellValueFactory(new PropertyValueFactory<Productos, Double>("precioUnitario"));
         colPrecioD.setCellValueFactory(new PropertyValueFactory<Productos, Double>("precioDocena"));
         colPrecioM.setCellValueFactory(new PropertyValueFactory<Productos, Double>("precioMayor"));
-        colImagenP.setCellValueFactory(new PropertyValueFactory<Productos, String>("imagenProducto"));
+        //colImagenP.setCellValueFactory(new PropertyValueFactory<Productos, Blob>("imagenProducto"));
         colExistencia.setCellValueFactory(new PropertyValueFactory<Productos, Integer>("existencia"));
         colCodTipoProd.setCellValueFactory(new PropertyValueFactory<Productos, Integer>("CodigoTipoProducto"));
         colCodProv.setCellValueFactory(new PropertyValueFactory<Productos, Integer>("codigoProveedor"));
     }
 
     public void seleccionarElemento() {
+        imageViewProducto.setImage(null);
         try {
-            txtCodigoProd.setText(String.valueOf(((Productos) tvProductos.getSelectionModel().getSelectedItem()).getCodigoProducto()));
-            txtDescPro.setText((((Productos) tvProductos.getSelectionModel().getSelectedItem()).getDescripcionProducto()));
-            txtPrecioU.setText(String.valueOf(((Productos) tvProductos.getSelectionModel().getSelectedItem()).getPrecioUnitario()));
-            txtPrecioD.setText(String.valueOf(((Productos) tvProductos.getSelectionModel().getSelectedItem()).getPrecioDocena()));
-            txtPrecioM.setText(String.valueOf(((Productos) tvProductos.getSelectionModel().getSelectedItem()).getPrecioMayor()));
-            txtImagenPro.setText((((Productos) tvProductos.getSelectionModel().getSelectedItem()).getImagenProducto()));
-            txtExistencia.setText(String.valueOf(((Productos) tvProductos.getSelectionModel().getSelectedItem()).getExistencia()));
-            cmbCodigoTipoP.getSelectionModel().select(buscarTipoProducto(((Productos) tvProductos.getSelectionModel().getSelectedItem()).getCodigoTipoProducto()));
-            cmbCodigoP.getSelectionModel().select(buscarProveedor(((Productos) tvProductos.getSelectionModel().getSelectedItem()).getCodigoProveedor()));
+            Productos productoSeleccionado = (Productos) tvProductos.getSelectionModel().getSelectedItem();
+            txtCodigoProd.setText(String.valueOf(productoSeleccionado.getCodigoProducto()));
+            txtDescPro.setText(productoSeleccionado.getDescripcionProducto());
+            txtPrecioU.setText(String.valueOf(productoSeleccionado.getPrecioUnitario()));
+            txtPrecioD.setText(String.valueOf(productoSeleccionado.getPrecioDocena()));
+            txtPrecioM.setText(String.valueOf(productoSeleccionado.getPrecioMayor()));
+            txtExistencia.setText(String.valueOf(productoSeleccionado.getExistencia()));
+            cmbCodigoTipoP.getSelectionModel().select(buscarTipoProducto(productoSeleccionado.getCodigoTipoProducto()));
+            cmbCodigoP.getSelectionModel().select(buscarProveedor(productoSeleccionado.getCodigoProveedor()));
+
+            if (productoSeleccionado.getImagenProducto() != null) {
+                Blob imagenBlob = productoSeleccionado.getImagenProducto();
+                byte[] imagenBytes = imagenBlob.getBytes(1, (int) imagenBlob.length());
+                Image image = byteArrayToImage(imagenBytes);
+                imageViewProducto.setImage(image);
+            }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Por favor selecciona una fila válida", "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -197,6 +225,7 @@ public class ProductosController implements Initializable {
         }
 
         return resultado;
+
     }
 
     public Proveedores buscarProveedor(int codigoProveedor) {
@@ -235,7 +264,7 @@ public class ProductosController implements Initializable {
                         resultado.getDouble("precioUnitario"),
                         resultado.getDouble("precioDocena"),
                         resultado.getDouble("precioMayor"),
-                        resultado.getString("imagenProducto"),
+                        resultado.getBlob("imagenProducto"),
                         resultado.getInt("existencia"),
                         resultado.getInt("CodigoTipoProducto"),
                         resultado.getInt("codigoProveedor")
@@ -328,16 +357,44 @@ public class ProductosController implements Initializable {
         }
     }
 
+    public byte[] convertImageToBlob(File file) throws IOException {
+        return Files.readAllBytes(file.toPath());
+    }
+
     public void guardar() {
         Productos registro = new Productos();
-        registro.setCodigoProducto(Integer.parseInt(txtCodigoProd.getText()));
+        try {
+            registro.setCodigoProducto(Integer.parseInt(txtCodigoProd.getText()));
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "El ID de Producto no puede ser nulo/vacío", "Error", JOptionPane.ERROR_MESSAGE);
+        }
         registro.setCodigoProveedor(((Proveedores) cmbCodigoP.getSelectionModel().getSelectedItem()).getCodigoProveedor());
         registro.setCodigoTipoProducto(((TipoProducto) cmbCodigoTipoP.getSelectionModel().getSelectedItem()).getCodigoTipoProducto());
         registro.setDescripcionProducto(txtDescPro.getText());
+
+        try {
+            registro.setExistencia(Integer.parseInt(txtExistencia.getText()));
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Existencias no puede ser nulo/vacío" + "\n"
+                    + "Valor Predefinido 1", "Error", JOptionPane.INFORMATION_MESSAGE);
+            registro.setExistencia(1);
+        }
+
+        if (archivoSeleccionado
+                != null) {
+            try {
+                byte[] imageBytes = leerArchivo(archivoSeleccionado
+                );
+                registro.setImagenProducto(new SerialBlob(imageBytes));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            registro.setImagenProducto(null);
+        }
+
         registro.setPrecioDocena(Double.parseDouble("0.00"));
         registro.setPrecioMayor(Double.parseDouble("0.00"));
-        registro.setExistencia(Integer.parseInt(txtExistencia.getText()));
-        registro.setImagenProducto(txtImagenPro.getText());
         registro.setPrecioUnitario(Double.parseDouble("0.00"));
 
         try {
@@ -347,7 +404,11 @@ public class ProductosController implements Initializable {
             procedimiento.setDouble(3, registro.getPrecioUnitario());
             procedimiento.setDouble(4, registro.getPrecioDocena());
             procedimiento.setDouble(5, registro.getPrecioMayor());
-            procedimiento.setString(6, registro.getImagenProducto());
+            if (registro.getImagenProducto() != null) {
+                procedimiento.setBlob(6, registro.getImagenProducto());
+            } else {
+                procedimiento.setNull(6, java.sql.Types.BLOB);
+            }
             procedimiento.setInt(7, registro.getExistencia());
             procedimiento.setInt(8, registro.getCodigoTipoProducto());
             procedimiento.setInt(9, registro.getCodigoProveedor());
@@ -387,7 +448,11 @@ public class ProductosController implements Initializable {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            btnEditarPro.setText("Editar");
+            actualizarIcono.setFill(Color.WHITE);
+            actualizarIcono.setIcon(FontAwesomeIcons.EDIT);
+            btnEditarPro.setText("Actualizar");
+            reporteIcono.setFill(Color.WHITE);
+            reporteIcono.setIcon(FontAwesomeIcons.FOLDER);
             btnReportesPro.setText("Reportes");
             btnAgregarPro.setDisable(false);
             btnEliminarPro.setDisable(false);
@@ -401,22 +466,49 @@ public class ProductosController implements Initializable {
 
     public void actualizar() {
         try {
-            PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_editarProducto(?,?,?,?,?,?,?,?,?)}");
             Productos registro = (Productos) tvProductos.getSelectionModel().getSelectedItem();
+            if (registro == null) {
+                return;
+            }
+            PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_editarProducto(?,?,?,?,?,?,?,?,?)}");
+
             registro.setCodigoProveedor(((Proveedores) cmbCodigoP.getSelectionModel().getSelectedItem()).getCodigoProveedor());
             registro.setCodigoTipoProducto((((TipoProducto) cmbCodigoTipoP.getSelectionModel().getSelectedItem()).getCodigoTipoProducto()));
             registro.setDescripcionProducto(txtDescPro.getText());
+
+            // Validar y actualizar los campos numéricos
             registro.setPrecioDocena(Double.parseDouble(txtPrecioD.getText()));
             registro.setPrecioMayor(Double.parseDouble(txtPrecioM.getText()));
-            registro.setExistencia(Integer.parseInt(txtExistencia.getText()));
-            registro.setImagenProducto(txtImagenPro.getText());
             registro.setPrecioUnitario(Double.parseDouble(txtPrecioU.getText()));
+
+            try {
+                registro.setExistencia(Integer.parseInt(txtExistencia.getText()));
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "Existencias no puede ser nulo/vacío" + "\n"
+                        + "Valor Predefinido 1", "Error", JOptionPane.INFORMATION_MESSAGE);
+                registro.setExistencia(1);
+            }
+
+            // Leer la imagen seleccionada y convertirla a Blob
+            if (archivoSeleccionado != null) {
+                byte[] imageBytes = leerArchivo(archivoSeleccionado);
+                Blob imagenBlob = new SerialBlob(imageBytes);
+                registro.setImagenProducto(imagenBlob);
+            }
+
+            // Configurar los parámetros del procedimiento almacenado
             procedimiento.setInt(1, registro.getCodigoProducto());
             procedimiento.setString(2, registro.getDescripcionProducto());
             procedimiento.setDouble(3, registro.getPrecioUnitario());
             procedimiento.setDouble(4, registro.getPrecioDocena());
             procedimiento.setDouble(5, registro.getPrecioMayor());
-            procedimiento.setString(6, registro.getImagenProducto());
+
+            if (registro.getImagenProducto() != null) {
+                procedimiento.setBlob(6, registro.getImagenProducto());
+            } else {
+                procedimiento.setNull(6, java.sql.Types.BLOB);
+            }
+
             procedimiento.setInt(7, registro.getExistencia());
             procedimiento.setInt(8, registro.getCodigoTipoProducto());
             procedimiento.setInt(9, registro.getCodigoProveedor());
@@ -553,36 +645,39 @@ public class ProductosController implements Initializable {
         txtCodigoProd.setEditable(false);
         txtDescPro.setEditable(false);
         txtExistencia.setEditable(false);
-        txtImagenPro.setEditable(false);
+        btnSeleccionarImagen.setDisable(true);
         txtPrecioD.setEditable(false);
         txtPrecioM.setEditable(false);
         txtPrecioU.setEditable(false);
         cmbCodigoTipoP.setDisable(true);
         cmbCodigoP.setDisable(true);
+        // imageViewProducto.setVisible(false);
     }
 
     public void activarControles() {
         txtCodigoProd.setEditable(true);
         txtDescPro.setEditable(true);
         txtExistencia.setEditable(true);
-        txtImagenPro.setEditable(true);
+        btnSeleccionarImagen.setDisable(false);
         txtPrecioD.setEditable(true);
         txtPrecioM.setEditable(true);
         txtPrecioU.setEditable(true);
         cmbCodigoTipoP.setDisable(false);
         cmbCodigoP.setDisable(false);
+        // imageViewProducto.setVisible(true);
     }
 
     public void limpiarControles() {
         txtCodigoProd.clear();
         txtDescPro.clear();
         txtExistencia.clear();
-        txtImagenPro.clear();
+        //  txtImagenPro.clear();
         txtPrecioD.clear();
         txtPrecioM.clear();
         txtPrecioU.clear();
         cmbCodigoTipoP.setValue(null);
         cmbCodigoP.setValue(null);
+        imageViewProducto.setImage(null);
     }
 
     public Main getEscenarioPrincipal() {
@@ -617,9 +712,9 @@ public class ProductosController implements Initializable {
 
     public void actualizarIconoMaximizar(boolean isMaximized) {
         if (isMaximized) {
-            iconMaximizar.setRotate(180); // Rotar el ícono para mostrar la opción de restaurar
+            iconMaximizar.setRotate(180);
         } else {
-            iconMaximizar.setRotate(0); // Rotar el ícono para mostrar la opción de maximizar
+            iconMaximizar.setRotate(0);
         }
     }
 
@@ -662,6 +757,40 @@ public class ProductosController implements Initializable {
             rotateTransition.setCycleCount(1);
             rotateTransition.setAutoReverse(false);
             stage.setMaximized(false);
+        }
+    }
+
+    public void abrirImagen(Stage stage) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg"));
+        File file = fileChooser.showOpenDialog(stage);
+        if (file != null) {
+        }
+    }
+
+    public void seleccionarImagen() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg")
+        );
+        archivoSeleccionado
+                = fileChooser.showOpenDialog(new Stage());
+        if (archivoSeleccionado
+                != null) {
+            Image image = new Image(archivoSeleccionado
+                    .toURI().toString());
+            imageViewProducto.setImage(image);
+        }
+    }
+
+    private byte[] leerArchivo(File file) throws IOException {
+        try (FileInputStream fis = new FileInputStream(file); ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+            byte[] buffer = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = fis.read(buffer)) != -1) {
+                baos.write(buffer, 0, bytesRead);
+            }
+            return baos.toByteArray();
         }
     }
 

@@ -181,7 +181,7 @@ public class DetalleFacturaController implements Initializable {
                         resultado.getDouble("precioUnitario"),
                         resultado.getDouble("precioDocena"),
                         resultado.getDouble("precioMayor"),
-                        resultado.getString("imagenProducto"),
+                        resultado.getBlob("imagenProducto"),
                         resultado.getInt("existencia"),
                         resultado.getInt("CodigoTipoProducto"),
                         resultado.getInt("codigoProveedor")
@@ -226,7 +226,7 @@ public class DetalleFacturaController implements Initializable {
                         registro.getDouble("precioUnitario"),
                         registro.getDouble("precioDocena"),
                         registro.getDouble("precioMayor"),
-                        registro.getString("imagenProducto"),
+                        registro.getBlob("imagenProducto"),
                         registro.getInt("existencia"),
                         registro.getInt("CodigoTipoProducto"),
                         registro.getInt("codigoProveedor")
@@ -297,7 +297,11 @@ public class DetalleFacturaController implements Initializable {
 
     public void guardar() {
         DetalleFactura registro = new DetalleFactura();
-        registro.setCodigoDetalleFactura(Integer.parseInt(txtCodDetF.getText()));
+        try {
+            registro.setCodigoDetalleFactura(Integer.parseInt(txtCodDetF.getText()));
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "El ID de Detalle Factura no puede ser nulo/vacío", "Error", JOptionPane.ERROR_MESSAGE);
+        }
         registro.setPrecioUnitario(Double.parseDouble("0.00"));
         //registro.setPrecioUnitario(Double.parseDouble(txtPrecioU.getText()));
         registro.setCantidad(Integer.parseInt(txtCantidad.getText()));

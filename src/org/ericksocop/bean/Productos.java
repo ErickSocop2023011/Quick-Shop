@@ -4,6 +4,8 @@
  */
 package org.ericksocop.bean;
 
+import java.sql.Blob;
+
 /**
  *
  * @author mauco
@@ -14,7 +16,7 @@ public class Productos {
     private double precioUnitario;
     private double precioDocena;
     private double precioMayor;
-    private String imagenProducto;
+    private Blob imagenProducto;
     private int existencia;
     private int codigoTipoProducto;
     private int codigoProveedor;
@@ -22,7 +24,7 @@ public class Productos {
     public Productos() {
     }
 
-    public Productos(int codigoProducto, String descripcionProducto, double precioUnitario, double precioDocena, double precioMayor, String imagenProducto, int existencia, int codigoTipoProducto, int codigoProveedor) {
+    public Productos(int codigoProducto, String descripcionProducto, double precioUnitario, double precioDocena, double precioMayor, Blob imagenProducto, int existencia, int codigoTipoProducto, int codigoProveedor) {
         this.codigoProducto = codigoProducto;
         this.descripcionProducto = descripcionProducto;
         this.precioUnitario = precioUnitario;
@@ -74,11 +76,11 @@ public class Productos {
         this.precioMayor = precioMayor;
     }
 
-    public String getImagenProducto() {
+    public Blob getImagenProducto() {
         return imagenProducto;
     }
 
-    public void setImagenProducto(String imagenProducto) {
+    public void setImagenProducto(Blob imagenProducto) {
         this.imagenProducto = imagenProducto;
     }
 

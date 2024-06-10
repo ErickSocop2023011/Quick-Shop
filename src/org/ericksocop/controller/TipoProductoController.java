@@ -178,7 +178,11 @@ public class TipoProductoController implements Initializable {
 
     public void guardar() {
         TipoProducto registro = new TipoProducto();
-        registro.setCodigoTipoProducto(Integer.parseInt(txtCodigoP.getText()));
+        try {
+            registro.setCodigoTipoProducto(Integer.parseInt(txtCodigoP.getText()));
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "El ID de Producto no puede ser nulo/vacío", "Error", JOptionPane.ERROR_MESSAGE);
+        }
         registro.setDesrcipcionProducto(txtDescripcionP.getText());
         try {
             PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_agregarTipoProducto(?,?)}");

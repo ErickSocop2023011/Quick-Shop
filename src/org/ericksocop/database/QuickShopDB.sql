@@ -56,7 +56,7 @@ CREATE TABLE Productos(
     precioUnitario DECIMAL(10,2),
     precioDocena DECIMAL(10,2),
     precioMayor DECIMAL(10,2),
-    imagenProducto VARCHAR(45),
+    imagenProducto blob,
     existencia INT,
     codigoTipoProducto INT,
     codigoProveedor INT,
@@ -568,7 +568,7 @@ CREATE PROCEDURE sp_agregarProducto(
     IN p_precioUnitario DECIMAL(10,2),
     IN p_precioDocena DECIMAL(10,2),
     IN p_precioMayor DECIMAL(10,2),
-    IN p_imagenProducto VARCHAR(45),
+    IN p_imagenProducto blob,
     IN p_existencia INT,
     IN p_codigoTipoProducto INT,
     IN p_codigoProveedor INT
@@ -632,7 +632,7 @@ CREATE PROCEDURE sp_editarProducto(
     IN p_nuevoPrecioUnitario DECIMAL(10,2),
     IN p_nuevoPrecioDocena DECIMAL(10,2),
     IN p_nuevoPrecioMayor DECIMAL(10,2),
-    IN p_nuevaImagenProducto VARCHAR(45),
+    IN p_nuevaImagenProducto blob,
     IN p_nuevaExistencia INT,
     IN p_nuevoCodigoTipoProducto INT,
     IN p_nuevoCodigoProveedor INT

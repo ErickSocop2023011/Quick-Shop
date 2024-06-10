@@ -116,7 +116,6 @@ public class CargoEmpleadosController implements Initializable {
 
     }
 
-    @FXML
     public void seleccionarElemento() {
         try {
             txtCodigoCargoE.setText(String.valueOf(((CargoEmpleados) tvCargoE.getSelectionModel().getSelectedItem()).getCodigoCargoEmpleado()));
@@ -131,6 +130,7 @@ public class CargoEmpleadosController implements Initializable {
         ArrayList<CargoEmpleados> lista = new ArrayList<>();
         try {
             PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_mostrarCargoEmpleado()}");
+
             ResultSet resultado = procedimiento.executeQuery();
             while (resultado.next()) {
                 lista.add(new CargoEmpleados(resultado.getInt("codigoCargoEmpleado"),
@@ -184,7 +184,12 @@ public class CargoEmpleadosController implements Initializable {
 
     public void guardar() {
         CargoEmpleados registro = new CargoEmpleados();
-        registro.setCodigoCargoEmpleado(Integer.parseInt(txtCodigoCargoE.getText()));
+        try {
+            registro.setCodigoCargoEmpleado(Integer.parseInt(txtCodigoCargoE.getText()));
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "El ID de Cargo Empleados no puede ser nulo/vacio", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
         registro.setNombreCargo(txtNombreCargo.getText());
         registro.setDescripcionCargo(txtDescripcionC.getText());
         try {
@@ -198,7 +203,6 @@ public class CargoEmpleadosController implements Initializable {
             e.printStackTrace();
         }
     }
-
 
     public void eliminar() {
         switch (tipoDeOperador) {
@@ -281,6 +285,8 @@ public class CargoEmpleadosController implements Initializable {
 
     public void reportes() {
         switch (tipoDeOperador) {
+            case NINGUNO:
+                break;
             case ACTUALIZAR:
                 desactivarControles();
                 limpiarControles();
@@ -293,7 +299,7 @@ public class CargoEmpleadosController implements Initializable {
                 btnAgregarCE.setDisable(false);
                 btnEliminarCE.setDisable(false);
                 tipoDeOperador = operador.NINGUNO;
-
+                break;
         }
     }
 
@@ -320,23 +326,23 @@ public class CargoEmpleadosController implements Initializable {
                 if (newValue == null || newValue.isEmpty()) {
                     return true;
                 }
-                
+
                 String param = newValue.toLowerCase();
                 String codigoCargoEmpleado = String.valueOf(predicateCargoEmpleado.getCodigoCargoEmpleado());
-                
-                if(codigoCargoEmpleado.contains(param)){
+
+                if (codigoCargoEmpleado.contains(param)) {
                     return true;
-                }else if(predicateCargoEmpleado.getNombreCargo().toLowerCase().contains(param)){
+                } else if (predicateCargoEmpleado.getNombreCargo().toLowerCase().contains(param)) {
                     return true;
-                }else if(predicateCargoEmpleado.getDescripcionCargo().toLowerCase().contains(param)){
+                } else if (predicateCargoEmpleado.getDescripcionCargo().toLowerCase().contains(param)) {
                     return true;
-                }else{
-                return false;
+                } else {
+                    return false;
                 }
             });
         });
-        
-        SortedList <CargoEmpleados> sortList = new SortedList <>(filtro);
+
+        SortedList<CargoEmpleados> sortList = new SortedList<>(filtro);
         sortList.comparatorProperty().bind(tvCargoE.comparatorProperty());
         tvCargoE.setItems(sortList);
     }
@@ -366,7 +372,7 @@ public class CargoEmpleadosController implements Initializable {
             iconMaximizar.setRotate(0);
         }
     }
-    
+
     public void ventana(ActionEvent event) {
         colCodigoCargoE.prefWidthProperty().bind(tvCargoE.widthProperty().multiply(0.0476));
         colDescripcionC.prefWidthProperty().bind(tvCargoE.widthProperty().multiply(0.47620));
@@ -394,7 +400,8 @@ public class CargoEmpleadosController implements Initializable {
     public void handleButtonAction(ActionEvent event) {
         if (event.getSource() == btnRegresarCE) {
             escenarioPrincipal.EmpleadosView();
-        }if (event.getSource() == iconoCerrar || event.getSource() == btnCerrar) {
+        }
+        if (event.getSource() == iconoCerrar || event.getSource() == btnCerrar) {
             System.exit(0);
         }
         if (event.getSource() == iconMinimizar || event.getSource() == btnMinimizar) {
@@ -402,7 +409,7 @@ public class CargoEmpleadosController implements Initializable {
             stage.setIconified(true);
         }
     }
-    
+
     public Main getEscenarioPrincipal() {
         return escenarioPrincipal;
     }

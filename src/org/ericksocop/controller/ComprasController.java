@@ -213,7 +213,11 @@ public class ComprasController implements Initializable {
 
     public void guardar() {
         Compras registro = new Compras();
-        registro.setNumeroDocumento(Integer.parseInt(txtNumDoc.getText()));
+        try {
+            registro.setNumeroDocumento(Integer.parseInt(txtNumDoc.getText()));
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "El ID de Compra no puede ser nulo/vacío", "Error", JOptionPane.ERROR_MESSAGE);
+        }
         if (jfxDatePicker.getValue() != null) {
             // Convertir LocalDate a Date
             Date fechaDocumento = Date.valueOf(jfxDatePicker.getValue());

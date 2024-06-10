@@ -316,7 +316,11 @@ public class FacturasController implements Initializable {
 
     public void guardar() {
         Facturas registro = new Facturas();
-        registro.setNumeroDeFactura(Integer.parseInt(txtNumF.getText()));
+        try {
+            registro.setNumeroDeFactura(Integer.parseInt(txtNumF.getText()));
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "El ID de Producto no puede ser nulo/vacío", "Error", JOptionPane.ERROR_MESSAGE);
+        }
         registro.setEstado(txtEstadoF.getText());
         registro.setTotalFactura(Double.parseDouble("0.00"));
         if (jfxDatePicker.getValue() != null) {

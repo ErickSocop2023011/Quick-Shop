@@ -223,7 +223,12 @@ public class ClienteController implements Initializable {
 
     public void guardar() {
         Clientes registro = new Clientes();
-        registro.setClienteID(Integer.parseInt(txtClienteID.getText()));
+        try {
+            registro.setClienteID(Integer.parseInt(txtClienteID.getText()));
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "El ID del Cliente"
+                    + " no puede ser nulo/vacío", "Error", JOptionPane.ERROR_MESSAGE);
+        }
         registro.setNombreClientes(txtNombreCliente.getText());
         registro.setApellidoClientes(txtApellidoCliente.getText());
         registro.setDireccionClientes(txtDireccionCliente.getText());

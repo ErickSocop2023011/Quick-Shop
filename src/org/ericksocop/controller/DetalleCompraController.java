@@ -184,7 +184,7 @@ public class DetalleCompraController implements Initializable {
                         registro.getDouble("precioUnitario"),
                         registro.getDouble("precioDocena"),
                         registro.getDouble("precioMayor"),
-                        registro.getString("imagenProducto"),
+                        registro.getBlob("imagenProducto"),
                         registro.getInt("existencia"),
                         registro.getInt("CodigoTipoProducto"),
                         registro.getInt("codigoProveedor")
@@ -227,7 +227,7 @@ public class DetalleCompraController implements Initializable {
                         resultado.getDouble("precioUnitario"),
                         resultado.getDouble("precioDocena"),
                         resultado.getDouble("precioMayor"),
-                        resultado.getString("imagenProducto"),
+                        resultado.getBlob("imagenProducto"),
                         resultado.getInt("existencia"),
                         resultado.getInt("CodigoTipoProducto"),
                         resultado.getInt("codigoProveedor")
@@ -296,7 +296,11 @@ public class DetalleCompraController implements Initializable {
 
     public void guardar() {
         DetalleCompra registro = new DetalleCompra();
-        registro.setCodigoDetalleCompra(Integer.parseInt(txtCodDetC.getText()));
+        try {
+            registro.setCodigoDetalleCompra(Integer.parseInt(txtCodDetC.getText()));
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "El ID de Detalle Compra no puede ser nulo/vacío", "Error", JOptionPane.ERROR_MESSAGE);
+        }
         registro.setCantidad(Integer.parseInt(txtCantidad.getText()));
         registro.setCostoUnitario(Double.parseDouble(txtCostoU.getText()));
         registro.setCodigoProducto((((Productos) cmbCodPro.getSelectionModel().getSelectedItem()).getCodigoProducto()));

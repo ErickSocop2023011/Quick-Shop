@@ -262,8 +262,11 @@ public class EmpleadosController implements Initializable {
 
     public void guardar() {
         Empleados registro = new Empleados();
-        tvEmpleados.setDisable(false);
-        registro.setCodigoEmpleado(Integer.parseInt(txtCodigoEmp.getText()));
+        try {
+            registro.setCodigoEmpleado(Integer.parseInt(txtCodigoEmp.getText()));
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "El ID del Empleado no puede ser nulo/vacío", "Error", JOptionPane.ERROR_MESSAGE);
+        }
         registro.setNombresEmpleado(txtnomEmp.getText());
         registro.setApellidosEmpleado(txtApellidosEmp.getText());
         registro.setSueldo(Double.parseDouble(txtSueldo.getText()));

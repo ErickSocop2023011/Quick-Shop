@@ -237,7 +237,11 @@ public class ProveedorController implements Initializable {
 
     public void guardar() {
         Proveedores registro = new Proveedores();
-        registro.setCodigoProveedor(Integer.parseInt(txtCodigoP.getText()));
+        try {
+            registro.setCodigoProveedor(Integer.parseInt(txtCodigoP.getText()));
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "El ID del Proveedor no puede ser nulo/vacío", "Error", JOptionPane.ERROR_MESSAGE);
+        }
         registro.setNITProveedor(txtNITP.getText());
         registro.setNombresProveedor(txtNombresP.getText());
         registro.setApellidosProveedor(txtApellidosP.getText());
@@ -511,6 +515,7 @@ public class ProveedorController implements Initializable {
     public void actualizarIconoMaximizar(boolean isMaximized) {
         if (isMaximized) {
             iconMaximizar.setRotate(180);
+            
         } else {
             iconMaximizar.setRotate(0);
         }

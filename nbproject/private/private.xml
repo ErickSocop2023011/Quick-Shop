@@ -4,16 +4,13 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/Users/mauco/OneDrive/Documentos/Kinal%202024/Taller/QuickShop/src/org/ericksocop/controller/TipoProductoController.java</file>
-            <file>file:/C:/Users/mauco/OneDrive/Documentos/Kinal%202024/Taller/QuickShop/src/org/ericksocop/controller/ClienteController.java</file>
-            <file>file:/C:/Users/mauco/OneDrive/Documentos/Kinal%202024/Taller/QuickShop/src/org/ericksocop/controller/DetalleCompraController.java</file>
-            <file>file:/C:/Users/mauco/OneDrive/Documentos/Kinal%202024/Taller/QuickShop/src/org/ericksocop/controller/ProgramadorController.java</file>
-            <file>file:/C:/Users/mauco/OneDrive/Documentos/Kinal%202024/Taller/QuickShop/src/org/ericksocop/controller/DetalleFacturaController.java</file>
-            <file>file:/C:/Users/mauco/OneDrive/Documentos/Kinal%202024/Taller/QuickShop/src/org/ericksocop/controller/CargoEmpleadosController.java</file>
+            <file>file:/C:/Users/mauco/OneDrive/Documentos/Kinal%202024/Taller/QuickShop/src/org/ericksocop/bean/Productos.java</file>
+            <file>file:/C:/Users/mauco/OneDrive/Documentos/Kinal%202024/Taller/QuickShop/src/org/ericksocop/resource/QuickShopCSS.css</file>
             <file>file:/C:/Users/mauco/OneDrive/Documentos/Kinal%202024/Taller/QuickShop/src/org/ericksocop/controller/ProveedorController.java</file>
-            <file>file:/C:/Users/mauco/OneDrive/Documentos/Kinal%202024/Taller/QuickShop/src/org/ericksocop/controller/ComprasController.java</file>
-            <file>file:/C:/Users/mauco/OneDrive/Documentos/Kinal%202024/Taller/QuickShop/src/org/ericksocop/controller/FacturasController.java</file>
             <file>file:/C:/Users/mauco/OneDrive/Documentos/Kinal%202024/Taller/QuickShop/src/org/ericksocop/controller/EmpleadosController.java</file>
-            <file>file:/C:/Users/mauco/OneDrive/Documentos/Kinal%202024/Taller/QuickShop/src/org/ericksocop/system/Main.java</file>
+            <file>file:/C:/Users/mauco/OneDrive/Documentos/Kinal%202024/Taller/QuickShop/src/org/ericksocop/controller/FacturasController.java</file>
+            <file>file:/C:/Users/mauco/OneDrive/Documentos/Kinal%202024/Taller/QuickShop/src/org/ericksocop/controller/ProductosController.java</file>
+            <file>file:/C:/Users/mauco/OneDrive/Documentos/Kinal%202024/Taller/QuickShop/src/org/ericksocop/resource/dashboardDesign.css</file>
         </group>
     </open-files>
 </project-private>
