@@ -34,9 +34,11 @@
 }
 
 .button-regresar {
-    -fx-background-color: #FFFFFF; /* Color de fondo blanco */
+    -fx-background-color: DD880B; 
     -fx-text-fill: #000000; /* Color del texto negro */
 }
+
+
 
 /* Estilo para el botón de regresar al pasar el cursor */
 .button-regresar:hover {
@@ -68,6 +70,12 @@
     -fx-border-color:  #EF8E00;
     -fx-border-width: 0px 0px 3px 0px;
 }
+
+.label:hover{
+    -fx-border-color:  #EF8E00;
+    -fx-border-width: 0px 0px 3px 0px;
+}
+
 
 .sidebarItem:hover{
     -fx-background-color:  #EF8E00;

@@ -556,6 +556,17 @@ end $$
 
 delimiter ;
 
+delimiter $$
+create procedure sp_actualizarComprasTotal(in numDoc int,in total decimal(10,2))
+begin
+	update Compras 
+	set 
+		Compras.totalDocumento=total
+    where
+		Compras.numeroDocumento=numDoc;
+end $$
+delimiter ;
+
 
 call sp_editarcompra(1, '2024-05-01', 'Producto modificado', 150.00);
 
@@ -652,6 +663,19 @@ END$$
 DELIMITER ;
 
 call sp_editarProducto(1, 'Pollo', 0.00, 0.00, 0.00, 'pollo.jpg', 100, 2, 2);
+
+delimiter $$
+create procedure sp_actualizarPreciosProductos(in codProd varchar(15),in precUnit decimal(10,2),in precDoc decimal(10,5), in precMay decimal(10,2))
+begin
+	update Productos 
+	set 
+		Productos.precioUnitario=precUnit,
+		Productos.precioDocena=precDoc,
+        Productos.precioMayor=precMay
+	where
+		Productos.codigoProducto=codProd;
+end $$
+delimiter ;
 
 Delimiter $$
 CREATE PROCEDURE sp_eliminarProducto(IN _codigoProducto VARCHAR(15))
@@ -852,7 +876,16 @@ BEGIN
 END$$
 DELIMITER ;
 
-
+delimiter $$
+create procedure sp_actualizarFacturaTotal(in numFac int,in total decimal(10,2))
+begin
+	update Factura 
+	set 
+		Factura.totalFactura=total
+    where
+		Factura.numeroDeFactura=numFac;
+end $$
+delimiter ;
 
 
 DELIMITER $$
@@ -1013,230 +1046,243 @@ call sp_mostrarDetallesCompra();
 call sp_mostrarEmpleados();
 call sp_mostrarProductos();
 
--- Trigger para actualización del total en la tabla Facturas al insertar un DetalleFactura
-DELIMITER $$
-CREATE TRIGGER ActualizarTotalFacturaInsert AFTER INSERT ON DetalleFactura
-FOR EACH ROW
-BEGIN
-    UPDATE Factura
-    SET totalFactura = totalFactura + NEW.precioUnitario * NEW.cantidad
-    WHERE numeroDeFactura = NEW.numeroDeFactura;
-END
-$$
-DELIMITER ;
+-- traer el precio unitario
+delimiter $$
+create function fn_TraerPrecioUnitario(codProd varchar(15)) returns decimal(10,2)
+deterministic
+begin
+	declare precio decimal(10,2);
+	set precio= (select DetalleCompra.costoUnitario from DetalleCompra
+    where DetalleCompra.codigoProducto=codProd);
+	return precio;
+end $$
 
--- Trigger para actualización del total en la tabla Facturas al actualizar un DetalleFactura
-DELIMITER $$
-CREATE TRIGGER ActualizarTotalFacturaUpdate AFTER UPDATE ON DetalleFactura
-FOR EACH ROW
-BEGIN
-    UPDATE Factura
-    SET totalFactura = totalFactura + (NEW.precioUnitario * NEW.cantidad) - (OLD.precioUnitario * OLD.cantidad)
-    WHERE numeroDeFactura = NEW.numeroDeFactura;
-END $$
-DELIMITER ;
+delimiter ;
 
 
+-- Precios Detalle factura
+-- insertar Precios Detalle factura
+delimiter $$
+create trigger tr_insertarPreciosDetalleFactura_Before_Insert
+before insert on DetalleFactura
+for each row
+	begin
+        		
+        set new.precioUnitario= (select precioUnitario from Productos
+		where Productos.codigoProducto=new.codigoProducto);
+        
+	end $$
+delimiter ;
 
--- Trigger para actualización del total en la tabla Facturas al eliminar un DetalleFactura
-DELIMITER $$
-CREATE TRIGGER ActualizarTotalFacturaDelete AFTER DELETE ON DetalleFactura
-FOR EACH ROW
-BEGIN
-    UPDATE Factura
-    SET totalFactura = totalFactura - OLD.precioUnitario * OLD.cantidad
-    WHERE numeroDeFactura = OLD.numeroDeFactura;
-END $$
-DELIMITER ;
+-- actualizar DetalleFactura
+delimiter $$
+create procedure sp_actualizarPrecioDetalleFactura(in codProd varchar(15), in precUnit decimal(10,2) )
+begin
+	update DetalleFactura 
+	set 
+		DetalleFactura.precioUnitario=precUnit
+    where
+		DetalleFactura.codigoProducto=codProd;
+end $$
+delimiter ;
 
--- Procedimiento para actualizar el stock de un producto al insertar un DetalleFactura
-DELIMITER $$
-CREATE PROCEDURE ActualizarStockInsertarDetalle(
-    IN p_codigoProducto int,
-    IN p_cantidad INT
-)
-BEGIN
-    UPDATE Productos
-    SET existencia = existencia - p_cantidad
-    WHERE codigoProducto = p_codigoProducto;
-END$$
-DELIMITER ;
+-- actualizar Precios Detalle factura
+delimiter $$
+create trigger tr_actualizarPreciosDetalleFactura_after_update
+after update on Productos
+for each row
+	begin
+		call sp_actualizarPrecioDetalleFactura(new.codigoProducto,
+        (select new.precioUnitario from Productos where Productos.codigoProducto=new.codigoProducto));
+        
+	end $$
+delimiter ;
 
--- Procedimiento para actualizar el stock de un producto al eliminar un DetalleFactura
-DELIMITER $$
-CREATE PROCEDURE ActualizarStockEliminarDetalle(
-    IN p_productoID varchar(15),
-    IN p_cantidad INT
-)
-BEGIN
-    UPDATE Productos
-    SET existencia = existencia + p_cantidad
-    WHERE codigoProducto = p_productoID;
-END $$
-DELIMITER ;
 
-DELIMITER $$
-CREATE TRIGGER ActualizarStockInsert AFTER INSERT ON DetalleFactura
-FOR EACH ROW
-BEGIN
-    CALL ActualizarStockInsertarDetalle(NEW.codigoProducto, NEW.cantidad);
-END;
-$$
-DELIMITER ;
+-- insertar precios en Productos
+delimiter $$
+create trigger tr_insertarPreciosProductos_after_Insert
+after insert on DetalleCompra
+for each row
+	begin
+    call sp_actualizarPreciosProductos(new.codigoProducto, 
+									(fn_TraerPrecioUnitario(new.codigoProducto)+(fn_TraerPrecioUnitario(new.codigoProducto)*0.40)),
+									(fn_TraerPrecioUnitario(new.codigoProducto)+(fn_TraerPrecioUnitario(new.codigoProducto)*0.35)),
+                                    (fn_TraerPrecioUnitario(new.codigoProducto)+(fn_TraerPrecioUnitario(new.codigoProducto)*0.25)));
+                                    
+	end $$
+delimiter ;
 
--- Trigger para actualizar el stock al eliminar un DetalleFactura
-DELIMITER $$
-CREATE TRIGGER ActualizarStockDelete AFTER DELETE ON DetalleFactura
-FOR EACH ROW
-BEGIN
-    CALL ActualizarStockEliminarDetalle(OLD.codigoProducto, OLD.cantidad);
-END;
-$$
-DELIMITER ;
 
-DELIMITER $$
+-- actualizar precios en Productos
+delimiter $$
+create trigger tr_actualizarPreciosProductos_after_update
+after update on DetalleCompra
+for each row
+	begin
+    call sp_actualizarPreciosProductos(new.codigoProducto, 
+									(fn_TraerPrecioUnitario(new.codigoProducto)+(fn_TraerPrecioUnitario(new.codigoProducto)*0.40)),
+									(fn_TraerPrecioUnitario(new.codigoProducto)+(fn_TraerPrecioUnitario(new.codigoProducto)*0.35)),
+                                    (fn_TraerPrecioUnitario(new.codigoProducto)+(fn_TraerPrecioUnitario(new.codigoProducto)*0.25)));
+                                    
+	end $$
+delimiter ;
 
-CREATE TRIGGER AfterInsertDetalleCompra
-AFTER INSERT ON DetalleCompra
-FOR EACH ROW
-BEGIN
-    DECLARE precioUnidad DECIMAL(10,2);
-    DECLARE precioDocena DECIMAL(10,2);
-    DECLARE precioMayor DECIMAL(10,2);
+-- eliminar precios en Productos
+delimiter $$
+create trigger tr_eliminarPreciosProductos_after_delete
+after delete on DetalleCompra
+for each row
+	begin
+    call sp_actualizarPreciosProductos(old.codigoProducto, 0,0,0);
+                                    
+	end $$
+delimiter ;
 
-    -- Calcular precios
-    SET precioUnidad = NEW.costoUnitario * 1.40;
-    SET precioDocena = NEW.costoUnitario * 1.35;
-    SET precioMayor = NEW.costoUnitario * 1.25;
 
-    -- Actualizar productos con los precios calculados
-    UPDATE Productos
-    SET precioUnitario = precioUnidad,
-        precioDocena = precioDocena,
-        precioMayor = precioMayor
-    WHERE codigoProducto = NEW.codigoProducto;
+-- insertar total compra
+delimiter $$
+create trigger tr_insertarTotalCompra_after_Insert
+after insert on DetalleCompra
+for each row
+	begin
+    declare total decimal(10,2);
     
-END $$
-
-
-CREATE TRIGGER AfterUpdateDetalleCompra
-AFTER UPDATE ON DetalleCompra
-FOR EACH ROW
-BEGIN
-    DECLARE nuevoPrecioUnidad DECIMAL(10,2);
-    DECLARE nuevoPrecioDocena DECIMAL(10,2);
-    DECLARE nuevoPrecioMayor DECIMAL(10,2);
-
-    SET nuevoPrecioUnidad = NEW.costoUnitario * 1.40;
-    SET nuevoPrecioDocena = NEW.costoUnitario * 1.35;
-    SET nuevoPrecioMayor = NEW.costoUnitario * 1.25;
-
-    UPDATE Productos
-    SET precioUnitario = nuevoPrecioProveedor,
-        precioDocena = nuevoPrecioDocena,
-        precioMayor = nuevoPrecioMayor
-    WHERE codigoProducto = NEW.codigoProducto;
+    set total=((select sum(costoUnitario*cantidad) from DetalleCompra where DetalleCompra.numeroDocumento=new.numeroDocumento));
     
-END $$
+    call sp_actualizarComprasTotal(new.numeroDocumento, total);
+                                    
+	end $$
+delimiter ;
 
-DELIMITER ;
+-- actualizar total compra
+delimiter $$
+create trigger tr_actualizarTotalCompra_after_update
+after update on DetalleCompra
+for each row
+	begin
+    declare total decimal(10,2);
+    
+    set total=((select sum(new.costoUnitario*new.cantidad) from DetalleCompra where DetalleCompra.numeroDocumento=new.numeroDocumento));
+    
+    call sp_actualizarComprasTotal(new.numeroDocumento, total);
+                                    
+	end $$
+delimiter ;
 
-DELIMITER $$
+-- total compra
+delimiter $$
+create function fn_TotalCompra(numDocumento int) returns decimal(10,2)
+deterministic
+begin
+    declare sumatoria decimal(10,2);
+    
+    set sumatoria = (select sum(cantidad*costoUnitario) from DetalleCompra 
+					where numeroDocumento=numDocumento) ;
+    return sumatoria;
+end $$
+delimiter ;
 
-CREATE TRIGGER AfterDeleteDetalleCompra
-AFTER DELETE ON DetalleCompra
-FOR EACH ROW
-BEGIN
-    UPDATE Productos
-    SET precioUnitario = 0,
-        precioDocena = 0,
-        precioMayor = 0
-    WHERE codigoProducto = OLD.codigoProducto;
-END $$
+-- eliminar total compra
+delimiter $$
+create trigger tr_eliminarTotalCompra_after_delete
+after delete on DetalleCompra
+for each row
+	begin
+    declare total decimal(10,2);
+    
+    set total=fn_TotalCompra(old.numeroDocumento);
+    
+    call sp_actualizarComprasTotal(old.numeroDocumento, total);
+                                    
+	end $$
+delimiter ;
 
-DELIMITER ;
 
--- Trigger para la actualización del precioUnitario en la entidad detalleFactura
-DELIMITER $$
+-- insertar total factura
+delimiter $$
+create trigger tr_insertarTotalFactura_after_Insert
+after insert on DetalleFactura
+for each row
+	begin
+    declare total decimal(10,2);
+    
+    set total=((select sum(precioUnitario*cantidad) from DetalleFactura where DetalleFactura.numeroDeFactura=new.numeroDeFactura ));
+    
+    call sp_actualizarFacturaTotal(new.numeroDeFactura, total);                                    
+	end $$
+delimiter ;
 
-CREATE TRIGGER BeforeInsertDetalleFactura
-BEFORE INSERT ON DetalleFactura
-FOR EACH ROW
-BEGIN
-    DECLARE precioDetalleF DECIMAL(10,2);
+-- actualizar total factura
+delimiter $$
+create trigger tr_actualizarTotalFactura_after_update
+after update on DetalleFactura
+for each row
+	begin
+    declare total decimal(10,2);
+    
+    set total=((select sum(new.precioUnitario*cantidad) from DetalleFactura where DetalleFactura.numeroDeFactura=new.numeroDeFactura ));
+    
+    call sp_actualizarFacturaTotal(new.numeroDeFactura, total);
+                                    
+	end $$
+delimiter ;
 
-    SELECT precioUnitario INTO precioDetalleF
-    FROM Productos
-    WHERE codigoProducto = NEW.codigoProducto;
 
-    SET NEW.precioUnitario = precioDetalleF;
-END $$
+-- total factura
+delimiter $$
+create function fn_TotalFactura(numFact int) returns decimal(10,2)
+deterministic
+begin
+    declare sumatoria decimal(10,2);
+    
+    set sumatoria = (select sum(precioUnitario*cantidad) from DetalleFactura 
+					where numeroFactura=numFact) ;
+    return sumatoria;
+end $$
+delimiter ;
 
-DELIMITER ;
+-- eliminar total factura
+delimiter $$
+create trigger tr_eliminarTotalFactura_after_delete
+after delete on DetalleFactura
+for each row
+	begin
+    declare total decimal(10,2);
+    
+    set total=fn_TotalFactura(old.numeroDeFactura);
+    
+    call sp_actualizarFacturaTotal(old.numeroDeFactura, total);
+                                    
+	end $$
+delimiter ;
 
-DELIMITER $$
 
-CREATE TRIGGER AfterUpdateDetalleCompraEnProductos
-AFTER UPDATE ON DetalleCompra
-FOR EACH ROW
-BEGIN
-    UPDATE Productos
-    SET precioUnitario = NEW.costoUnitario
-    WHERE codigoProducto = NEW.codigoProducto;
+-- existencias
+-- proceso almacenado
+delimiter $$
+create procedure sp_actualizarExistenciaProductos(in codProd varchar(15), in exist int )
+begin
+	update Productos 
+	set 
+		Productos.existencia=exist
+    where
+		Productos.codigoProducto=codProd;
+end $$
+delimiter ;
 
-    UPDATE detalleFactura
-    SET precioUnitario = NEW.costoUnitario
-    WHERE codigoProducto = NEW.codigoProducto;
-END $$
+-- traer el precio unitario
+delimiter $$
+create function fn_TraerExistencias(codProd varchar(15)) returns int
+deterministic
+begin
+	declare existencias int;
+	set existencias= (select existencia from Productos where codigoProducto=codProd);
+	return existencias;
+end $$
 
-DELIMITER ;
+delimiter ;
 
-DELIMITER $$
-
-CREATE TRIGGER AfterDeleteDetalleCompraEnProductos
-AFTER DELETE ON DetalleCompra
-FOR EACH ROW
-BEGIN
-    UPDATE detalleFactura
-    SET precioUnitario = 0
-    WHERE codigoProducto = OLD.codigoProducto;
-END $$
-
-DELIMITER ;
-
--- Trigger para actualización del total en la tabla Facturas al insertar un DetalleCompra
-DELIMITER $$
-CREATE TRIGGER ActualizarTotalCompraInsert AFTER INSERT ON DetalleCompra
-FOR EACH ROW
-BEGIN
-    UPDATE Compras
-    SET totalDocumento = totalDocumento + NEW.costoUnitario * NEW.cantidad
-    WHERE numeroDocumento = NEW.numeroDocumento;
-END
-$$
-DELIMITER ;
-
--- Trigger para actualización del total en la tabla Compras al actualizar un DetalleCompra
-DELIMITER $$
-CREATE TRIGGER ActualizarTotalCompraUpdate AFTER UPDATE ON DetalleCompra
-FOR EACH ROW
-BEGIN
-    UPDATE Compras
-    SET totalDocumento = totalDocumento + (NEW.costoUnitario * NEW.cantidad) - (OLD.costoUnitario * OLD.cantidad)
-    WHERE numeroDocumento = NEW.numeroDocumento;
-END $$
-DELIMITER ;
-
--- Trigger para actualización del total en la tabla Facturas al eliminar un DetalleFactura
-DELIMITER $$
-CREATE TRIGGER ActualizarTotalCompraDelete AFTER DELETE ON DetalleCompra
-FOR EACH ROW
-BEGIN
-    UPDATE Compras
-    SET totalDocumento = totalDocumento - OLD.costoUnitario * OLD.cantidad
-    WHERE numeroDocumento = OLD.numeroDocumento;
-END $$
-DELIMITER ;
 
 delimiter $$
 create procedure sp_eliminarProductoPorProveedor(in codProveedor int)
@@ -1294,10 +1340,16 @@ CALL sp_crearEmpleado(3, 'Kevin', 'Mendez', 1500.00, 'Calle Real 321', 'Nocturno
 CALL sp_crearFactura(2, 'Pagada', 0.00, '2024-05-12', 2, 2);
 CALL sp_crearFactura(3, 'Pendiente', 0.00, '2024-05-12', 3, 3);
 
-CALL sp_crearDetalleFactura(1, 50.00, 10, 2, 1);
+CALL sp_crearDetalleFactura(1, 50.00, 10, 2, 3);
 CALL sp_crearDetalleFactura(3, 50.00, 10, 3, 3);
 
 
+-- select Productos.descripcionProducto, Productos.precioUnitario, Productos.precioDocena, Productos.precioMayor, Productos.existencia, TipoProducto.descripcionProducto, Proveedores.contactoPrincipal
+-- from Productos
+-- inner join TipoProducto on Productos.codigoTipoProducto=TipoProducto.codigoTipoProducto
+-- inner join Proveedores on Productos.codigoProveedor=Proveedores.codigoProveedor;
+
+call sp_mostrarProductos();
 
 
 set global time_zone= '-6:00';

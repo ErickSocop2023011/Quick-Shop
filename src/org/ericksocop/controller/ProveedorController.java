@@ -12,6 +12,8 @@ import java.net.URL;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.animation.RotateTransition;
 import javafx.collections.FXCollections;
@@ -31,6 +33,7 @@ import javafx.util.Duration;
 import javax.swing.JOptionPane;
 import org.ericksocop.bean.Proveedores;
 import org.ericksocop.dao.Conexion;
+import org.ericksocop.report.GenerarReportes;
 import org.ericksocop.system.Main;
 
 /**
@@ -369,6 +372,9 @@ public class ProveedorController implements Initializable {
 
     public void reportes() {
         switch (tipoDeOperador) {
+            case NINGUNO:
+                imprimirReporte();
+                break;
             case ACTUALIZAR:
                 desactivarControles();
                 limpiarControles();
@@ -381,8 +387,14 @@ public class ProveedorController implements Initializable {
                 btnAgregarP.setDisable(false);
                 btnEliminarP.setDisable(false);
                 tipoDeOperador = operador.NINGUNO;
-
+                break;
         }
+    }
+    
+    public void imprimirReporte(){
+        Map parametros = new HashMap();
+        parametros.put("codigoProveedor", null);
+        GenerarReportes.mostrarReportes("reportProveedores.jasper", "Reporte de Proveedores", parametros);
     }
 
     public void actualizar() {

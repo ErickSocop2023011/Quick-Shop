@@ -28,6 +28,14 @@
     -fx-background-color:#ddd;
 }
 
+.btnBack{
+    -fx-background-color:transparent;
+    -fx-cursor:hand;
+}
+.btnBack:hover{
+    -fx-background-color:#DD880B;
+}
+
 .nav-form{
     -fx-background-color:linear-gradient(to bottom right, #f8844a,#ff5500, #ff2e2e);
 }

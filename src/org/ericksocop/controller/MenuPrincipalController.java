@@ -5,6 +5,7 @@
 package org.ericksocop.controller;
 
 import com.jfoenix.controls.JFXButton;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.animation.TranslateTransition;
@@ -26,8 +27,6 @@ import org.ericksocop.system.Main;
 public class MenuPrincipalController implements Initializable {
 
     private Main escenarioPrincipal;
-    @FXML
-    private ImageView exit;
     @FXML
     private AnchorPane anchorPane;
     @FXML
@@ -53,7 +52,13 @@ public class MenuPrincipalController implements Initializable {
     @FXML
     private JFXButton btnFacturas;
     @FXML
-    private ImageView minimize;
+    private JFXButton btnCerrar;
+    @FXML
+    private FontAwesomeIcon iconoCerrar;
+    @FXML
+    private JFXButton btnMinimizar;
+    @FXML
+    private FontAwesomeIcon iconMinimizar;
     
 
     @Override
@@ -118,22 +123,16 @@ public class MenuPrincipalController implements Initializable {
         }if (event.getSource() == btnProveedores) {
             escenarioPrincipal.ProveedorView();
         }
-    }
-    
-
-    public void minimizar(MouseEvent event) {
-        if(event.getSource() == minimize){
-            Stage stage = (Stage)anchorPane.getScene().getWindow();
+        if (event.getSource() == iconoCerrar || event.getSource() == btnCerrar) {
+            System.exit(0);
+        }
+        if (event.getSource() == iconMinimizar || event.getSource() == btnMinimizar) {
+            Stage stage = (Stage) anchorPane.getScene().getWindow();
             stage.setIconified(true);
         }
     }
     
-    @FXML
-    public void salir(MouseEvent event) {
-        if (event.getSource() == exit) {
-            System.exit(0);
-        }
-    }
+
 
     public Main getEscenarioPrincipal() {
         return escenarioPrincipal;
