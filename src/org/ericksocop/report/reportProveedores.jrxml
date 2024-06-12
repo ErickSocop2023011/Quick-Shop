@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reportProveedores" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="d21847ea-b6e1-45b6-8b13-2af820fb3e24">
 	<property name="ireport.zoom" value="1.9487171000000043"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="24"/>
+	<property name="ireport.y" value="408"/>
 	<queryString>
 		<![CDATA[call sp_mostrarProveedores()]]>
 	</queryString>
@@ -56,28 +56,30 @@
 		<band height="66" splitType="Stretch"/>
 	</pageHeader>
 	<columnHeader>
-		<band height="129" splitType="Stretch"/>
+		<band height="124" splitType="Stretch"/>
 	</columnHeader>
 	<detail>
-		<band height="34" splitType="Stretch">
+		<band height="37" splitType="Stretch">
 			<textField>
-				<reportElement x="69" y="0" width="100" height="20" uuid="16ab8411-022f-46fe-8ed4-72af0fe3dc77"/>
+				<reportElement x="69" y="0" width="100" height="34" uuid="16ab8411-022f-46fe-8ed4-72af0fe3dc77"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{nombresProveedor}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="188" y="0" width="100" height="20" uuid="73a01f6d-ddef-4088-9c29-002bb1317c5a"/>
+				<reportElement x="188" y="0" width="100" height="35" uuid="73a01f6d-ddef-4088-9c29-002bb1317c5a"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{apellidosProveedor}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="288" y="0" width="110" height="20" uuid="9ca304c9-3f25-42ab-849d-5f1f9172b6a0"/>
+				<reportElement x="288" y="0" width="110" height="34" uuid="9ca304c9-3f25-42ab-849d-5f1f9172b6a0"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{telefonoProveedor}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="398" y="0" width="100" height="20" uuid="14cfa74d-5abc-4f57-8162-cf2994333247"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<reportElement x="413" y="0" width="73" height="34" uuid="14cfa74d-5abc-4f57-8162-cf2994333247"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font size="10"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{contactoPrincipal}]]></textFieldExpression>
 			</textField>
 		</band>
