@@ -69,11 +69,13 @@
 .menuItem:hover{
     -fx-border-color:  #EF8E00;
     -fx-border-width: 0px 0px 3px 0px;
+    -fx-font-weight: BOLD; /* Hace el texto más grueso */
 }
 
 .label:hover{
     -fx-border-color:  #EF8E00;
     -fx-border-width: 0px 0px 3px 0px;
+    
 }
 
 

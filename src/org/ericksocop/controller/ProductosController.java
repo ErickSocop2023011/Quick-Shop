@@ -320,6 +320,7 @@ public class ProductosController implements Initializable {
     public void Agregar() {
         switch (tipoDeOperador) {
             case NINGUNO:
+                imageViewProducto.setImage(null);
                 limpiarControles();
                 activarControles();
                 txtPrecioD.setDisable(true);
@@ -338,6 +339,7 @@ public class ProductosController implements Initializable {
                 break;
             case ACTUALIZAR:
                 guardar();
+                imageViewProducto.setImage(null);
                 limpiarControles();
                 cargarDatos();
                 desactivarControles();
@@ -362,6 +364,7 @@ public class ProductosController implements Initializable {
     }
 
     public void guardar() {
+        imageViewProducto.setImage(null);
         Productos registro = new Productos();
         try {
             registro.setCodigoProducto(Integer.parseInt(txtCodigoProd.getText()));

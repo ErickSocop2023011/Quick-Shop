@@ -17,6 +17,8 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.animation.RotateTransition;
 import javafx.collections.FXCollections;
@@ -41,6 +43,7 @@ import org.ericksocop.bean.Clientes;
 import org.ericksocop.bean.Empleados;
 import org.ericksocop.bean.Facturas;
 import org.ericksocop.dao.Conexion;
+import org.ericksocop.report.GenerarReportes;
 import org.ericksocop.system.Main;
 
 /**
@@ -470,7 +473,8 @@ public class FacturasController implements Initializable {
         switch (tipoDeOperador) {
             case NINGUNO:
                 try {
-                generarPDF();
+                    imprimirReporte();
+                //generarPDF();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -491,8 +495,17 @@ public class FacturasController implements Initializable {
                 break;
         }
     }
+    
+    public void imprimirReporte(){
+        Map parametros = new HashMap();
+        int facturaID = ((Facturas) tvFacturas.getSelectionModel().getSelectedItem()).getNumeroDeFactura();
+       // int facturaID = Integer.parseInt(((Facturas) tvFacturas.getSelectionModel().getSelectedItem()).getNumeroDeFactura());
+        parametros.put("facturaID", facturaID);
+        GenerarReportes.mostrarReportes("reportFactura.jasper", "Factura", parametros);
+    }
+    
 
-    public void generarPDF() {
+    /*public void generarPDF() {
         try {
             Facturas factura = (Facturas) tvFacturas.getSelectionModel().getSelectedItem();
             if (factura != null) {
@@ -504,7 +517,7 @@ public class FacturasController implements Initializable {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
     public void buscarFactura() {
         limpiarControles();

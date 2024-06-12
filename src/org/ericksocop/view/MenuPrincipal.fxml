@@ -31,7 +31,7 @@
                                     <Font />
                                  </font>
                               </JFXButton>
-                              <JFXButton fx:id="btnMinimizar" alignment="CENTER" contentDisplay="CENTER" ellipsisString="" layoutX="1217.0" layoutY="1.0" onAction="#handleButtonAction" prefHeight="40.0" prefWidth="68.0" styleClass="minimize" stylesheets="@../resource/dashboardDesign.css" text="-">
+                              <JFXButton fx:id="btnMinimizar" alignment="CENTER" contentDisplay="CENTER" ellipsisString="" layoutX="1217.0" layoutY="1.0" onAction="#handleButtonAction" prefHeight="40.0" prefWidth="68.0" styleClass="btnBack" stylesheets="@../resource/dashboardDesign.css" text="-">
                                  <font>
                                     <Font />
                                  </font>
@@ -99,7 +99,7 @@
                <left>
                   <AnchorPane fx:id="slider" prefHeight="200.0" prefWidth="176.0" style="-fx-background-color: #FCC574;" BorderPane.alignment="CENTER">
                      <children>
-                        <VBox layoutY="61.0" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="53.0">
+                        <VBox layoutY="5.0" prefHeight="584.0" prefWidth="176.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="5.0">
                            <children>
                               <JFXButton fx:id="btnProductos" alignment="BASELINE_LEFT" onAction="#handleButtonAction" prefHeight="38.0" prefWidth="176.0" styleClass="sidebarItem" stylesheets="@../resource/QuickShopCSS.css" text="Productos" textFill="WHITE">
                                  <font>

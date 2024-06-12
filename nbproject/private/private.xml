@@ -3,14 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/mauco/OneDrive/Documentos/Kinal%202024/Taller/QuickShop/src/org/ericksocop/bean/Proveedores.java</file>
             <file>file:/C:/Users/mauco/OneDrive/Documentos/Kinal%202024/Taller/QuickShop/src/org/ericksocop/controller/ClienteController.java</file>
-            <file>file:/C:/Users/mauco/OneDrive/Documentos/Kinal%202024/Taller/QuickShop/src/org/ericksocop/controller/MenuPrincipalController.java</file>
-            <file>file:/C:/Users/mauco/OneDrive/Documentos/Kinal%202024/Taller/QuickShop/src/org/ericksocop/resource/QuickShopCSS.css</file>
-            <file>file:/C:/Users/mauco/OneDrive/Documentos/Kinal%202024/Taller/QuickShop/src/org/ericksocop/controller/ProveedorController.java</file>
-            <file>file:/C:/Users/mauco/OneDrive/Documentos/Kinal%202024/Taller/QuickShop/src/org/ericksocop/controller/EmpleadosController.java</file>
-            <file>file:/C:/Users/mauco/OneDrive/Documentos/Kinal%202024/Taller/QuickShop/src/org/ericksocop/resource/dashboardDesign.css</file>
-            <file>file:/C:/Users/mauco/OneDrive/Documentos/Kinal%202024/Taller/QuickShop/src/org/ericksocop/system/Main.java</file>
+            <file>file:/C:/Users/mauco/OneDrive/Documentos/Kinal%202024/Taller/QuickShop/src/org/ericksocop/controller/FacturasController.java</file>
+            <file>file:/C:/Users/mauco/OneDrive/Documentos/Kinal%202024/Taller/QuickShop/src/org/ericksocop/report/GenerarReportes.java</file>
         </group>
     </open-files>
 </project-private>

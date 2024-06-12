@@ -94,7 +94,7 @@
 
                            </graphic>
                            <graphic>
-                              <FontAwesomeIcon fx:id="agregarIcono" fill="WHITE" glyphName="PLUS" size="1.3em" text="" />
+                              <FontAwesomeIcon fx:id="agregarIcono" fill="WHITE" glyphName="PLUS" size="1.3em" text="" />
                            </graphic>
                         </JFXButton>
                         <JFXButton fx:id="btnEditarPro" layoutX="25.0" layoutY="310.0" onAction="#editar" prefHeight="50.0" prefWidth="200.0" text="Actualizar" textFill="WHITE">
@@ -116,7 +116,7 @@
 
                            </graphic>
                            <graphic>
-                              <FontAwesomeIcon fx:id="eliminarIcono" fill="WHITE" glyphName="TRASH" size="1.3em" text="" />
+                              <FontAwesomeIcon fx:id="eliminarIcono" fill="WHITE" glyphName="TRASH" size="1.3em" text="" />
                            </graphic>
                         </JFXButton>
                         <JFXButton fx:id="btnReportesPro" layoutX="25.0" layoutY="410.0" onAction="#reportes" prefHeight="50.0" prefWidth="200.0" text="Reportes" textFill="WHITE">

@@ -296,11 +296,17 @@ public class DetalleCompraController implements Initializable {
 
     public void guardar() {
         DetalleCompra registro = new DetalleCompra();
+        if (existeDetalleCompra(registro.getCodigoDetalleCompra())) {
+                JOptionPane.showMessageDialog(null, "El código de detalle compra ya existe. Por favor, ingrese uno nuevo.");
+                return;
+            }
+        
         try {
             registro.setCodigoDetalleCompra(Integer.parseInt(txtCodDetC.getText()));
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "El ID de Detalle Compra no puede ser nulo/vacío", "Error", JOptionPane.ERROR_MESSAGE);
         }
+
         registro.setCantidad(Integer.parseInt(txtCantidad.getText()));
         registro.setCostoUnitario(Double.parseDouble(txtCostoU.getText()));
         registro.setCodigoProducto((((Productos) cmbCodPro.getSelectionModel().getSelectedItem()).getCodigoProducto()));
@@ -314,11 +320,20 @@ public class DetalleCompraController implements Initializable {
             procedimiento.setInt(4, registro.getCodigoProducto());
             procedimiento.setInt(5, registro.getNumeroDocumento());
             procedimiento.execute();
-            actualizarStockInsertarDetalle(registro.getCodigoProducto(), registro.getCantidad());
+            // actualizarStockInsertarDetalle(registro.getCodigoProducto(), registro.getCantidad());
             listaDetalleC.add(registro);
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private boolean existeDetalleCompra(int detalleCompra) {
+        for (DetalleCompra detalleC : listaDetalleC) {
+            if (detalleC.getCodigoDetalleCompra() == detalleCompra) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void actualizarStockInsertarDetalle(int codigoProducto, int cantidad) {
@@ -542,12 +557,12 @@ public class DetalleCompraController implements Initializable {
         cmbCodPro.setValue(null);
         cmbNumDoc.setValue(null);
     }
-    
+
     public void actualizarIconoMaximizar(boolean isMaximized) {
         if (isMaximized) {
             iconMaximizar.setRotate(180);
         } else {
-            iconMaximizar.setRotate(0); 
+            iconMaximizar.setRotate(0);
         }
     }
 
