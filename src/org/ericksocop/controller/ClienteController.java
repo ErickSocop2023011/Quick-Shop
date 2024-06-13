@@ -187,6 +187,7 @@ public class ClienteController implements Initializable {
     public void Agregar() {
         switch (tipoDeOperador) {
             case NINGUNO:
+                tvCliente.setDisable(true);
                 limpiarControles();
                 activarControles();
                 agregarIcono.setFill(Color.WHITE);
@@ -215,6 +216,7 @@ public class ClienteController implements Initializable {
                 /*regresar de nuevo a sus imagenes originales
                 imgAgregar.setImage(new Image("URL"));*/
                 tipoDeOperador = operador.NINGUNO;
+                tvCliente.setDisable(false);
                 // cargarDatos();
                 break;
         }
@@ -234,7 +236,7 @@ public class ClienteController implements Initializable {
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "El ID del Cliente no puede ser nulo/vacío", "Error", JOptionPane.ERROR_MESSAGE);
             return; // Detener el proceso de guardado
-            
+
         }
         registro.setNombreClientes(txtNombreCliente.getText());
         registro.setApellidoClientes(txtApellidoCliente.getText());
@@ -263,17 +265,19 @@ public class ClienteController implements Initializable {
     }
 
     private boolean existeCodigoCliente(int codigoCliente) {
-    for (Clientes cliente : listaClientes) {
-        if (cliente.getClienteID() == codigoCliente) {
-            return true;
+        for (Clientes cliente : listaClientes) {
+            if (cliente.getClienteID() == codigoCliente) {
+                return true;
+            }
         }
+        return false;
     }
-    return false;
-}
+
     @FXML
     public void eliminar() {
         switch (tipoDeOperador) {
             case ACTUALIZAR:
+                tvCliente.setDisable(false);
                 desactivarControles();
                 limpiarControles();
                 agregarIcono.setFill(Color.WHITE);
@@ -318,6 +322,8 @@ public class ClienteController implements Initializable {
     public void editar() {
         switch (tipoDeOperador) {
             case NINGUNO:
+                activarControles();
+                tvCliente.setDisable(true);
                 if (tvCliente.getSelectionModel().getSelectedItem() != null) {
                     actualizarIcono.setFill(Color.WHITE);
                     actualizarIcono.setIcon(FontAwesomeIcons.SAVE);
@@ -327,7 +333,6 @@ public class ClienteController implements Initializable {
                     btnReportes.setText("Cancelar");
                     btnEliminar.setDisable(true);
                     btnAgregar.setDisable(true);
-                    activarControles();
                     txtClienteID.setEditable(false);
                     tipoDeOperador = operador.ACTUALIZAR;
                 } else {
@@ -348,6 +353,7 @@ public class ClienteController implements Initializable {
                 limpiarControles();
                 tipoDeOperador = operador.NINGUNO;
                 cargarDatos();
+                tvCliente.setDisable(false);
                 break;
         }
     }
@@ -359,6 +365,7 @@ public class ClienteController implements Initializable {
                 imprimirReporte();
                 break;
             case ACTUALIZAR:
+                tvCliente.setDisable(false);
                 desactivarControles();
                 limpiarControles();
                 actualizarIcono.setFill(Color.WHITE);

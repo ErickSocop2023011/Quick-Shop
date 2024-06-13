@@ -205,6 +205,7 @@ public class ProveedorController implements Initializable {
     public void Agregar() {
         switch (tipoDeOperador) {
             case NINGUNO:
+                tvPoveedores.setDisable(true);
                 limpiarControles();
                 activarControles();
                 agregarIcono.setFill(Color.WHITE);
@@ -221,6 +222,7 @@ public class ProveedorController implements Initializable {
             case ACTUALIZAR:
                 guardar();
                 limpiarControles();
+                cargarDatos();
                 desactivarControles();
                 agregarIcono.setFill(Color.WHITE);
                 agregarIcono.setIcon(FontAwesomeIcons.USER_PLUS);
@@ -233,7 +235,7 @@ public class ProveedorController implements Initializable {
                 /*regresar de nuevo a sus imagenes originales
                 imgAgregar.setImage(new Image("URL"));*/
                 tipoDeOperador = operador.NINGUNO;
-                cargarDatos();
+                tvPoveedores.setDisable(false);
                 break;
         }
     }
@@ -241,6 +243,11 @@ public class ProveedorController implements Initializable {
     public void guardar() {
         Proveedores registro = new Proveedores();
         try {
+            int provID = Integer.parseInt(txtCodigoP.getText());
+            if(existeCodigoProducto(provID)){
+                JOptionPane.showMessageDialog(null, "El ID del Proveedor ya existe. Por favor, ingrese uno nuevo.", "Error", JOptionPane.ERROR_MESSAGE);
+                return; // Detener el proceso de guardado
+            }
             registro.setCodigoProveedor(Integer.parseInt(txtCodigoP.getText()));
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "El ID del Proveedor no puede ser nulo/vacío", "Error", JOptionPane.ERROR_MESSAGE);
@@ -273,10 +280,20 @@ public class ProveedorController implements Initializable {
             e.printStackTrace();
         }
     }
+    
+    private boolean existeCodigoProducto(int productoID) {
+        for (Proveedores prov : listaProveedores) {
+            if (prov.getCodigoProveedor()== productoID) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     public void eliminar() {
         switch (tipoDeOperador) {
             case ACTUALIZAR:
+                tvPoveedores.setDisable(false);
                 desactivarControles();
                 limpiarControles();
                 agregarIcono.setFill(Color.WHITE);
@@ -336,6 +353,7 @@ public class ProveedorController implements Initializable {
     public void editar() {
         switch (tipoDeOperador) {
             case NINGUNO:
+                tvPoveedores.setDisable(true);
                 if (tvPoveedores.getSelectionModel().getSelectedItem() != null) {
                     actualizarIcono.setFill(Color.WHITE);
                     actualizarIcono.setIcon(FontAwesomeIcons.SAVE);
@@ -366,6 +384,7 @@ public class ProveedorController implements Initializable {
                 limpiarControles();
                 tipoDeOperador = operador.NINGUNO;
                 cargarDatos();
+                tvPoveedores.setDisable(false);
                 break;
         }
     }
@@ -376,6 +395,7 @@ public class ProveedorController implements Initializable {
                 imprimirReporte();
                 break;
             case ACTUALIZAR:
+                tvPoveedores.setDisable(false);
                 desactivarControles();
                 limpiarControles();
                 actualizarIcono.setFill(Color.WHITE);
@@ -390,8 +410,8 @@ public class ProveedorController implements Initializable {
                 break;
         }
     }
-    
-    public void imprimirReporte(){
+
+    public void imprimirReporte() {
         Map parametros = new HashMap();
         parametros.put("codigoProveedor", null);
         GenerarReportes.mostrarReportes("reportProveedores.jasper", "Reporte de Proveedores", parametros);
@@ -523,11 +543,11 @@ public class ProveedorController implements Initializable {
             stage.setIconified(true);
         }
     }
-    
+
     public void actualizarIconoMaximizar(boolean isMaximized) {
         if (isMaximized) {
             iconMaximizar.setRotate(180);
-            
+
         } else {
             iconMaximizar.setRotate(0);
         }

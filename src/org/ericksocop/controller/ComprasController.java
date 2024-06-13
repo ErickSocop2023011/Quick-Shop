@@ -249,15 +249,15 @@ public class ComprasController implements Initializable {
             procedimiento.setString(3, registro.getDescripcionCompra());
             procedimiento.setDouble(4, registro.getTotalDocumento());
             procedimiento.execute();
+            listaCompras.add(registro);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        tvCompras.setDisable(false);
     }
 
     private boolean existeCodigoCompra(int compraID) {
-        for (Compras cliente : listaCompras) {
-            if (cliente.getNumeroDocumento()== compraID) {
+        for (Compras compras : listaCompras) {
+            if (compras.getNumeroDocumento()== compraID) {
                 return true;
             }
         }
@@ -311,6 +311,7 @@ public class ComprasController implements Initializable {
         switch (tipoDeOperador) {
             case NINGUNO:
                 activarControles();
+                tvCompras.setDisable(true);
                 if (tvCompras.getSelectionModel().getSelectedItem() != null) {
                     actualizarIcono.setFill(Color.WHITE);
                     actualizarIcono.setIcon(FontAwesomeIcons.SAVE);
@@ -340,13 +341,17 @@ public class ComprasController implements Initializable {
                 limpiarControles();
                 tipoDeOperador = operador.NINGUNO;
                 cargarDatos();
+                tvCompras.setDisable(false);
                 break;
         }
     }
 
     public void reportes() {
         switch (tipoDeOperador) {
+            case NINGUNO:
+                break;
             case ACTUALIZAR:
+                tvCompras.setDisable(false);
                 desactivarControles();
                 limpiarControles();
                 actualizarIcono.setFill(Color.WHITE);
@@ -358,7 +363,7 @@ public class ComprasController implements Initializable {
                 btnAgregarC.setDisable(false);
                 btnEliminarC.setDisable(false);
                 tipoDeOperador = operador.NINGUNO;
-
+                break;
         }
     }
 

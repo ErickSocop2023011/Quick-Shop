@@ -142,6 +142,7 @@ public class TipoProductoController implements Initializable {
     public void Agregar() {
         switch (tipoDeOperador) {
             case NINGUNO:
+                tvDescripcionP.setDisable(true);
                 limpiarControles();
                 activarControles();
                 agregarIcono.setFill(Color.WHITE);
@@ -171,6 +172,7 @@ public class TipoProductoController implements Initializable {
                 /*regresar de nuevo a sus imagenes originales
                 imgAgregar.setImage(new Image("URL"));*/
                 tipoDeOperador = operador.NINGUNO;
+                tvDescripcionP.setDisable(false);
                 break;
         }
 
@@ -179,9 +181,14 @@ public class TipoProductoController implements Initializable {
     public void guardar() {
         TipoProducto registro = new TipoProducto();
         try {
-            registro.setCodigoTipoProducto(Integer.parseInt(txtCodigoP.getText()));
+            int tipoProductoID = Integer.parseInt(txtCodigoP.getText());
+            if(existeCodigoTipoP(tipoProductoID)){
+                JOptionPane.showMessageDialog(null, "El ID del Tipo de Producto ya existe. Por favor, ingrese uno nuevo.", "Error", JOptionPane.ERROR_MESSAGE);
+                return; // Detener el proceso de guardado
+            }
+            registro.setCodigoTipoProducto(tipoProductoID);
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "El ID de Producto no puede ser nulo/vacío", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "El ID del Tipo Producto no puede ser nulo/vacío", "Error", JOptionPane.ERROR_MESSAGE);
         }
         registro.setDesrcipcionProducto(txtDescripcionP.getText());
         try {
@@ -195,11 +202,21 @@ public class TipoProductoController implements Initializable {
             e.printStackTrace();
         }
     }
+    
+    private boolean existeCodigoTipoP(int tipoPID) {
+        for (TipoProducto tipoP : listaTipoP) {
+            if (tipoP.getCodigoTipoProducto()== tipoPID) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     @FXML
     public void eliminar() {
         switch (tipoDeOperador) {
             case ACTUALIZAR:
+                tvDescripcionP.setDisable(false);
                 desactivarControles();
                 limpiarControles();
                 agregarIcono.setFill(Color.WHITE);
@@ -243,6 +260,7 @@ public class TipoProductoController implements Initializable {
     public void editar() {
         switch (tipoDeOperador) {
             case NINGUNO:
+                tvDescripcionP.setDisable(true);
                 if (tvDescripcionP.getSelectionModel().getSelectedItem() != null) {
                     actualizarIcono.setFill(Color.WHITE);
                     actualizarIcono.setIcon(FontAwesomeIcons.SAVE);
@@ -269,13 +287,17 @@ public class TipoProductoController implements Initializable {
                 limpiarControles();
                 tipoDeOperador = operador.NINGUNO;
                 cargarDatos();
+                tvDescripcionP.setDisable(false);
                 break;
         }
     }
 
     public void reportes() {
         switch (tipoDeOperador) {
+            case NINGUNO:
+                break;
             case ACTUALIZAR:
+                tvDescripcionP.setDisable(false);
                 desactivarControles();
                 limpiarControles();
                 actualizarIcono.setFill(Color.WHITE);
@@ -287,7 +309,7 @@ public class TipoProductoController implements Initializable {
                 btnAgregarP.setDisable(false);
                 btnEliminarP.setDisable(false);
                 tipoDeOperador = operador.NINGUNO;
-
+                break;
         }
     }
 

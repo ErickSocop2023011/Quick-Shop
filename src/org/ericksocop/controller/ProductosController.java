@@ -320,6 +320,7 @@ public class ProductosController implements Initializable {
     public void Agregar() {
         switch (tipoDeOperador) {
             case NINGUNO:
+                tvProductos.setDisable(true);
                 imageViewProducto.setImage(null);
                 limpiarControles();
                 activarControles();
@@ -354,7 +355,7 @@ public class ProductosController implements Initializable {
                 /*regresar de nuevo a sus imagenes originales
                 imgAgregar.setImage(new Image("URL"));*/
                 tipoDeOperador = operador.NINGUNO;
-                cargarDatos();
+                tvProductos.setDisable(false);
                 break;
         }
     }
@@ -367,7 +368,12 @@ public class ProductosController implements Initializable {
         imageViewProducto.setImage(null);
         Productos registro = new Productos();
         try {
-            registro.setCodigoProducto(Integer.parseInt(txtCodigoProd.getText()));
+            int productoID = Integer.parseInt(txtCodigoProd.getText());
+            if (existeCodigoProducto(productoID)) {
+                JOptionPane.showMessageDialog(null, "El ID del Producto ya existe. Por favor, ingrese uno nuevo.", "Error", JOptionPane.ERROR_MESSAGE);
+                return; // Detener el proceso de guardado
+            }
+            registro.setCodigoProducto(productoID);
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "El ID de Producto no puede ser nulo/vacío", "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -423,9 +429,19 @@ public class ProductosController implements Initializable {
         }
     }
 
+    private boolean existeCodigoProducto(int productoID) {
+        for (Productos producto : listaProductos) {
+            if (producto.getCodigoProducto() == productoID) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void editar() {
         switch (tipoDeOperador) {
             case NINGUNO:
+                tvProductos.setDisable(true);
                 if (tvProductos.getSelectionModel().getSelectedItem() != null) {
                     actualizarIcono.setFill(Color.WHITE);
                     actualizarIcono.setIcon(FontAwesomeIcons.SAVE);
@@ -462,7 +478,7 @@ public class ProductosController implements Initializable {
             desactivarControles();
             limpiarControles();
             tipoDeOperador = operador.NINGUNO;
-            cargarDatos();
+            tvProductos.setDisable(false);
             break;
         }
     }
@@ -524,6 +540,7 @@ public class ProductosController implements Initializable {
     public void eliminar() throws SQLException {
         switch (tipoDeOperador) {
             case ACTUALIZAR:
+                tvProductos.setDisable(false);
                 desactivarControles();
                 limpiarControles();
                 agregarIcono.setFill(Color.WHITE);
@@ -579,6 +596,7 @@ public class ProductosController implements Initializable {
                 imprimirReporte();
                 break;
             case ACTUALIZAR:
+                tvProductos.setDisable(false);
                 desactivarControles();
                 limpiarControles();
                 actualizarIcono.setFill(Color.WHITE);

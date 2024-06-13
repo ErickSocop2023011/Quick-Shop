@@ -148,6 +148,7 @@ public class CargoEmpleadosController implements Initializable {
     public void Agregar() {
         switch (tipoDeOperador) {
             case NINGUNO:
+                tvCargoE.setDisable(true);
                 limpiarControles();
                 activarControles();
                 agregarIcono.setFill(Color.WHITE);
@@ -177,6 +178,7 @@ public class CargoEmpleadosController implements Initializable {
                 /*regresar de nuevo a sus imagenes originales
                 imgAgregar.setImage(new Image("URL"));*/
                 tipoDeOperador = operador.NINGUNO;
+                tvCargoE.setDisable(false);
                 break;
         }
 
@@ -186,8 +188,8 @@ public class CargoEmpleadosController implements Initializable {
         CargoEmpleados registro = new CargoEmpleados();
         try {
             int cargoID = Integer.parseInt(txtCodigoCargoE.getText());
-            if(existeCodigoCargo(cargoID)){
-                JOptionPane.showMessageDialog(null, "El ID del Cargo ya existe. Por favor, ingrese uno nuevo.","Error", JOptionPane.ERROR_MESSAGE);
+            if (existeCodigoCargo(cargoID)) {
+                JOptionPane.showMessageDialog(null, "El ID del Cargo ya existe. Por favor, ingrese uno nuevo.", "Error", JOptionPane.ERROR_MESSAGE);
                 return; // Detener el proceso de guardado
             }
             registro.setCodigoCargoEmpleado(cargoID);
@@ -209,19 +211,20 @@ public class CargoEmpleadosController implements Initializable {
             e.printStackTrace();
         }
     }
-    
+
     private boolean existeCodigoCargo(int codigoCargo) {
-    for (CargoEmpleados cliente : listaCargo) {
-        if (cliente.getCodigoCargoEmpleado()== codigoCargo) {
-            return true;
+        for (CargoEmpleados cargo : listaCargo) {
+            if (cargo.getCodigoCargoEmpleado() == codigoCargo) {
+                return true;
+            }
         }
+        return false;
     }
-    return false;
-}
 
     public void eliminar() {
         switch (tipoDeOperador) {
             case ACTUALIZAR:
+                tvCargoE.setDisable(false);
                 desactivarControles();
                 limpiarControles();
                 agregarIcono.setFill(Color.WHITE);
@@ -264,6 +267,8 @@ public class CargoEmpleadosController implements Initializable {
     public void editar() {
         switch (tipoDeOperador) {
             case NINGUNO:
+                activarControles();
+                tvCargoE.setDisable(true);
                 if (tvCargoE.getSelectionModel().getSelectedItem() != null) {
                     actualizarIcono.setFill(Color.WHITE);
                     actualizarIcono.setIcon(FontAwesomeIcons.SAVE);
@@ -273,7 +278,6 @@ public class CargoEmpleadosController implements Initializable {
                     btnReportesCE.setText("Cancelar");
                     btnEliminarCE.setDisable(true);
                     btnAgregarCE.setDisable(true);
-                    activarControles();
                     txtCodigoCargoE.setEditable(false);
                     tipoDeOperador = operador.ACTUALIZAR;
                 } else {
@@ -294,6 +298,7 @@ public class CargoEmpleadosController implements Initializable {
                 limpiarControles();
                 tipoDeOperador = operador.NINGUNO;
                 cargarDatos();
+                tvCargoE.setDisable(false);
                 break;
         }
     }
@@ -303,6 +308,7 @@ public class CargoEmpleadosController implements Initializable {
             case NINGUNO:
                 break;
             case ACTUALIZAR:
+                tvCargoE.setDisable(false);
                 desactivarControles();
                 limpiarControles();
                 actualizarIcono.setFill(Color.WHITE);

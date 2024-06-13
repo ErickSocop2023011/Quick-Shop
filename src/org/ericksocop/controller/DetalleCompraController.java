@@ -260,6 +260,7 @@ public class DetalleCompraController implements Initializable {
     public void Agregar() {
         switch (tipoDeOperador) {
             case NINGUNO:
+                tvDetalleC.setDisable(true);
                 limpiarControles();
                 activarControles();
                 agregarIcono.setFill(Color.WHITE);
@@ -289,20 +290,20 @@ public class DetalleCompraController implements Initializable {
                 /*regresar de nuevo a sus imagenes originales
                 imgAgregar.setImage(new Image("URL"));*/
                 tipoDeOperador = operador.NINGUNO;
-                cargarDatos();
+                tvDetalleC.setDisable(false);
                 break;
         }
     }
 
     public void guardar() {
         DetalleCompra registro = new DetalleCompra();
-        if (existeDetalleCompra(registro.getCodigoDetalleCompra())) {
+        try {
+            int detalleCID = Integer.parseInt(txtCodDetC.getText());
+            if (existeDetalleCompra(detalleCID)) {
                 JOptionPane.showMessageDialog(null, "El código de detalle compra ya existe. Por favor, ingrese uno nuevo.");
                 return;
             }
-        
-        try {
-            registro.setCodigoDetalleCompra(Integer.parseInt(txtCodDetC.getText()));
+            registro.setCodigoDetalleCompra(detalleCID);
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "El ID de Detalle Compra no puede ser nulo/vacío", "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -336,7 +337,7 @@ public class DetalleCompraController implements Initializable {
         return false;
     }
 
-    public void actualizarStockInsertarDetalle(int codigoProducto, int cantidad) {
+   /* public void actualizarStockInsertarDetalle(int codigoProducto, int cantidad) {
         DetalleFactura detalleFactura = new DetalleFactura();
         detalleFactura.setCodigoProducto(codigoProducto);
         detalleFactura.setCantidad(cantidad);
@@ -350,11 +351,12 @@ public class DetalleCompraController implements Initializable {
             e.printStackTrace();
 
         }
-    }
+    }*/
 
     public void editar() {
         switch (tipoDeOperador) {
             case NINGUNO:
+                tvDetalleC.setDisable(true);
                 if (tvDetalleC.getSelectionModel().getSelectedItem() != null) {
                     actualizarIcono.setFill(Color.WHITE);
                     actualizarIcono.setIcon(FontAwesomeIcons.SAVE);
@@ -387,9 +389,9 @@ public class DetalleCompraController implements Initializable {
             btnEliminarDeC.setDisable(false);
             limpiarControles();
             desactivarControles();
-
             tipoDeOperador = operador.NINGUNO;
             cargarDatos();
+            tvDetalleC.setDisable(false);
             break;
         }
     }
@@ -416,6 +418,7 @@ public class DetalleCompraController implements Initializable {
     public void eliminar() {
         switch (tipoDeOperador) {
             case ACTUALIZAR:
+                tvDetalleC.setDisable(false);
                 desactivarControles();
                 limpiarControles();
                 agregarIcono.setFill(Color.WHITE);
@@ -444,7 +447,7 @@ public class DetalleCompraController implements Initializable {
                             limpiarControles();
                             cargarDatos();
                             JOptionPane.showMessageDialog(null, "Detalle Compra eliminado correctamente");
-                            actualizarStockEliminarDetalle(detalleSeleccionado.getCodigoProducto(), detalleSeleccionado.getCantidad());
+                            //actualizarStockEliminarDetalle(detalleSeleccionado.getCodigoProducto(), detalleSeleccionado.getCantidad());
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -457,7 +460,7 @@ public class DetalleCompraController implements Initializable {
         }
     }
 
-    public void actualizarStockEliminarDetalle(int codigoProducto, int cantidad) {
+    /*public void actualizarStockEliminarDetalle(int codigoProducto, int cantidad) {
         DetalleFactura detalleFactura = new DetalleFactura(); // Instancia de DetalleFactura
         detalleFactura.setCodigoProducto(codigoProducto); // Establecer el código del producto
         detalleFactura.setCantidad(cantidad); // Establecer la cantidad
@@ -471,11 +474,14 @@ public class DetalleCompraController implements Initializable {
             e.printStackTrace();
             // Manejar cualquier excepción
         }
-    }
+    }*/
 
     public void reportes() {
         switch (tipoDeOperador) {
+            case NINGUNO:
+                break;
             case ACTUALIZAR:
+                tvDetalleC.setDisable(false);
                 desactivarControles();
                 limpiarControles();
                 actualizarIcono.setFill(Color.WHITE);
@@ -487,6 +493,7 @@ public class DetalleCompraController implements Initializable {
                 btnAgregarDeC.setDisable(false);
                 btnEliminarDeC.setDisable(false);
                 tipoDeOperador = operador.NINGUNO;
+                break;
         }
     }
 

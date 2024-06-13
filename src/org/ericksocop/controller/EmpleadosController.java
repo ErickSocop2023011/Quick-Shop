@@ -222,8 +222,8 @@ public class EmpleadosController implements Initializable {
     public void Agregar() {
         switch (tipoDeOperador) {
             case NINGUNO:
+                tvEmpleados.setDisable(true);
                 limpiarControles();
-                cmbCargoEmp.getSelectionModel().clearSelection(0);
                 activarControles();
                 agregarIcono.setFill(Color.WHITE);
                 agregarIcono.setIcon(FontAwesomeIcons.SAVE);
@@ -256,14 +256,18 @@ public class EmpleadosController implements Initializable {
                 tvEmpleados.setDisable(false);
                 break;
         }
-        tvEmpleados.setDisable(false);
 
     }
 
     public void guardar() {
         Empleados registro = new Empleados();
         try {
-            registro.setCodigoEmpleado(Integer.parseInt(txtCodigoEmp.getText()));
+            int empleadoID = Integer.parseInt(txtCodigoEmp.getText());
+            if(existeCodigoEmpleado(empleadoID)){
+                JOptionPane.showMessageDialog(null, "El ID del Empleado ya existe. Por favor, ingrese uno nuevo.", "Error", JOptionPane.ERROR_MESSAGE);
+                return; // Detener el proceso de guardado
+            }
+            registro.setCodigoEmpleado(empleadoID);
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "El ID del Empleado no puede ser nulo/vacío", "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -290,10 +294,20 @@ public class EmpleadosController implements Initializable {
             e.printStackTrace();
         }
     }
+    
+    private boolean existeCodigoEmpleado(int codigoID) {
+        for (Empleados  empl : listaEmpleados) {
+            if (empl.getCodigoEmpleado()== codigoID) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     public void editar() {
         switch (tipoDeOperador) {
             case NINGUNO:
+                tvEmpleados.setDisable(true);
                 if (tvEmpleados.getSelectionModel().getSelectedItem() != null) {
                     actualizarIcono.setFill(Color.WHITE);
                     actualizarIcono.setIcon(FontAwesomeIcons.SAVE);
@@ -324,6 +338,7 @@ public class EmpleadosController implements Initializable {
                 limpiarControles();
                 tipoDeOperador = operador.NINGUNO;
                 cargarDatos();
+                tvEmpleados.setDisable(false);
                 break;
         }
     }
@@ -353,9 +368,9 @@ public class EmpleadosController implements Initializable {
     }
 
     public void eliminar() throws SQLException {
-        tvEmpleados.setDisable(false);
         switch (tipoDeOperador) {
             case ACTUALIZAR:
+                tvEmpleados.setDisable(false);
                 desactivarControles();
                 limpiarControles();
                 agregarIcono.setFill(Color.WHITE);
@@ -413,7 +428,10 @@ public class EmpleadosController implements Initializable {
 
     public void reportes() {
         switch (tipoDeOperador) {
+            case NINGUNO:
+                break;
             case ACTUALIZAR:
+                tvEmpleados.setDisable(false);
                 desactivarControles();
                 limpiarControles();
                 actualizarIcono.setFill(Color.WHITE);
@@ -425,6 +443,7 @@ public class EmpleadosController implements Initializable {
                 btnAgregarE.setDisable(false);
                 btnEliminarE.setDisable(false);
                 tipoDeOperador = operador.NINGUNO;
+                break;
         }
     }
 

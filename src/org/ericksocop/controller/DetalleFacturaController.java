@@ -43,7 +43,7 @@ import org.ericksocop.system.Main;
  * @author mauco
  */
 public class DetalleFacturaController implements Initializable {
-
+    
     @FXML
     private TableView tvDetalleF;
     @FXML
@@ -100,11 +100,11 @@ public class DetalleFacturaController implements Initializable {
     private FontAwesomeIcon reporteIcono;
     @FXML
     private JFXTextField txtbuscarDetalleFact;
-
+    
     private enum operador {
         AGREGRAR, ELIMINAR, EDITAR, ACTUALIZAR, CANCELAR, NINGUNO
     }
-
+    
     private operador tipoDeOperador = operador.NINGUNO;
     private Main escenarioPrincipal;
     private ObservableList<DetalleFactura> listaDetalleFactura;
@@ -128,7 +128,7 @@ public class DetalleFacturaController implements Initializable {
         colNumF.prefWidthProperty().bind(tvDetalleF.widthProperty().multiply(0.23810));
         colPrecioU.prefWidthProperty().bind(tvDetalleF.widthProperty().multiply(0.23810));
     }
-
+    
     public void cargarDatos() {
         tvDetalleF.setItems(getDetalleF());
         colCodDetalleF.setCellValueFactory(new PropertyValueFactory<DetalleFactura, Integer>("codigoDetalleFactura"));
@@ -137,7 +137,7 @@ public class DetalleFacturaController implements Initializable {
         colNumF.setCellValueFactory(new PropertyValueFactory<DetalleFactura, Integer>("numeroDeFactura"));
         colCodP.setCellValueFactory(new PropertyValueFactory<DetalleFactura, String>("codigoProducto"));
     }
-
+    
     public void seleccionarElemento() {
         try {
             txtCodDetF.setText(String.valueOf(((DetalleFactura) tvDetalleF.getSelectionModel().getSelectedItem()).getCodigoDetalleFactura()));
@@ -149,7 +149,7 @@ public class DetalleFacturaController implements Initializable {
             JOptionPane.showMessageDialog(null, "Por favor selecciona una fila válida", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-
+    
     public ObservableList<DetalleFactura> getDetalleF() {
         ArrayList<DetalleFactura> listaDetF = new ArrayList<>();
         try {
@@ -163,13 +163,13 @@ public class DetalleFacturaController implements Initializable {
                         resultado.getInt("codigoProducto")
                 ));
             }
-
+            
         } catch (Exception e) {
             e.printStackTrace();
         }
         return listaDetalleFactura = FXCollections.observableList(listaDetF);
     }
-
+    
     public ObservableList<Productos> getProducto() {
         ArrayList<Productos> listaP = new ArrayList<>();
         try {
@@ -192,7 +192,7 @@ public class DetalleFacturaController implements Initializable {
         }
         return listaProductos = FXCollections.observableList(listaP);
     }
-
+    
     public ObservableList<Facturas> getFacturas() {
         ArrayList<Facturas> listaF = new ArrayList<>();
         try {
@@ -212,7 +212,7 @@ public class DetalleFacturaController implements Initializable {
         }
         return listaFacturas = FXCollections.observableList(listaF);
     }
-
+    
     public Productos buscarProducto(int productoID) {
         Productos resultado = null;
         try {
@@ -237,7 +237,7 @@ public class DetalleFacturaController implements Initializable {
         }
         return resultado;
     }
-
+    
     public Facturas buscarFactura(int idFactura) {
         Facturas resultado = null;
         try {
@@ -251,17 +251,18 @@ public class DetalleFacturaController implements Initializable {
                         registro.getString("fechaFactura"),
                         registro.getInt("clienteID"),
                         registro.getInt("codigoEmpleado"));
-
+                
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
         return resultado;
     }
-
+    
     public void Agregar() {
         switch (tipoDeOperador) {
             case NINGUNO:
+                tvDetalleF.setDisable(true);
                 limpiarControles();
                 activarControles();
                 agregarIcono.setFill(Color.WHITE);
@@ -278,6 +279,7 @@ public class DetalleFacturaController implements Initializable {
             case ACTUALIZAR:
                 guardar();
                 limpiarControles();
+                cargarDatos();
                 desactivarControles();
                 agregarIcono.setFill(Color.WHITE);
                 agregarIcono.setIcon(FontAwesomeIcons.PLUS);
@@ -290,15 +292,20 @@ public class DetalleFacturaController implements Initializable {
                 /*regresar de nuevo a sus imagenes originales
                 imgAgregar.setImage(new Image("URL"));*/
                 tipoDeOperador = operador.NINGUNO;
-                cargarDatos();
+                tvDetalleF.setDisable(false);
                 break;
         }
     }
-
+    
     public void guardar() {
         DetalleFactura registro = new DetalleFactura();
         try {
-            registro.setCodigoDetalleFactura(Integer.parseInt(txtCodDetF.getText()));
+            int detalleFacturaID = Integer.parseInt(txtCodDetF.getText());
+            if (existeCodigoDetFact(detalleFacturaID)) {
+                JOptionPane.showMessageDialog(null, "El ID del Detalle Factura ya existe. Por favor, ingrese uno nuevo.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            registro.setCodigoDetalleFactura(detalleFacturaID);
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "El ID de Detalle Factura no puede ser nulo/vacío", "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -307,7 +314,7 @@ public class DetalleFacturaController implements Initializable {
         registro.setCantidad(Integer.parseInt(txtCantidad.getText()));
         registro.setNumeroDeFactura(((Facturas) cmbNumF.getSelectionModel().getSelectedItem()).getNumeroDeFactura());
         registro.setCodigoProducto(((Productos) cmbCodP.getSelectionModel().getSelectedItem()).getCodigoProducto());
-
+        
         try {
             PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_crearDetalleFactura(?,?,?,?,?)}");
             procedimiento.setInt(1, registro.getCodigoDetalleFactura());
@@ -316,16 +323,26 @@ public class DetalleFacturaController implements Initializable {
             procedimiento.setInt(4, registro.getNumeroDeFactura());
             procedimiento.setInt(5, registro.getCodigoProducto());
             procedimiento.execute();
-
+            
             listaDetalleFactura.add(registro);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
+    
+    private boolean existeCodigoDetFact(int codigoID) {
+        for (DetalleFactura detalleFac : listaDetalleFactura) {
+            if (detalleFac.getCodigoDetalleFactura() == codigoID) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
     public void editar() {
         switch (tipoDeOperador) {
             case NINGUNO:
+                tvDetalleF.setDisable(true);
                 if (tvDetalleF.getSelectionModel().getSelectedItem() != null) {
                     actualizarIcono.setFill(Color.WHITE);
                     actualizarIcono.setIcon(FontAwesomeIcons.SAVE);
@@ -356,10 +373,11 @@ public class DetalleFacturaController implements Initializable {
                 limpiarControles();
                 tipoDeOperador = operador.NINGUNO;
                 cargarDatos();
+                tvDetalleF.setDisable(false);
                 break;
         }
     }
-
+    
     public void actualizar() {
         try {
             PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_editarDetalleFactura(?,?,?,?,?)}");
@@ -379,11 +397,12 @@ public class DetalleFacturaController implements Initializable {
             e.printStackTrace();
         }
     }
-
+    
     public void eliminar() {
-
+        
         switch (tipoDeOperador) {
             case ACTUALIZAR:
+                tvDetalleF.setDisable(false);
                 desactivarControles();
                 limpiarControles();
                 agregarIcono.setFill(Color.WHITE);
@@ -436,10 +455,13 @@ public class DetalleFacturaController implements Initializable {
                 break;
         }
     }
-
+    
     public void reportes() {
         switch (tipoDeOperador) {
+            case NINGUNO:
+                break;
             case ACTUALIZAR:
+                tvDetalleF.setDisable(false);
                 desactivarControles();
                 limpiarControles();
                 actualizarIcono.setFill(Color.WHITE);
@@ -451,10 +473,10 @@ public class DetalleFacturaController implements Initializable {
                 btnAgregarDeF.setDisable(false);
                 btnEliminarDeF.setDisable(false);
                 tipoDeOperador = operador.NINGUNO;
-
+                break;
         }
     }
-
+    
     public void buscarDetFact() {
         limpiarControles();
         FilteredList<DetalleFactura> filtro = new FilteredList<>(listaDetalleFactura, e -> true);
@@ -469,7 +491,7 @@ public class DetalleFacturaController implements Initializable {
                 String cantidad = String.valueOf(predicateDetalleFactura.getCantidad());
                 String numeroDeFactura = String.valueOf(predicateDetalleFactura.getNumeroDeFactura());
                 String codigoProducto = String.valueOf(predicateDetalleFactura.getCodigoProducto());
-
+                
                 if (codigoDetalleFactura.contains(param)) {
                     return true;
                 } else if (precioUnitario.contains(param)) {
@@ -489,7 +511,7 @@ public class DetalleFacturaController implements Initializable {
         sortList.comparatorProperty().bind(tvDetalleF.comparatorProperty());
         tvDetalleF.setItems(sortList);
     }
-
+    
     public void desactivarControles() {
         txtCantidad.setEditable(false);
         txtCodDetF.setEditable(false);
@@ -497,16 +519,16 @@ public class DetalleFacturaController implements Initializable {
         cmbCodP.setDisable(true);
         cmbNumF.setDisable(true);
     }
-
+    
     public void activarControles() {
         txtCantidad.setEditable(true);
         txtCodDetF.setEditable(true);
         txtPrecioU.setEditable(true);
         cmbCodP.setDisable(false);
         cmbNumF.setDisable(false);
-
+        
     }
-
+    
     public void limpiarControles() {
         txtCantidad.clear();
         txtCodDetF.clear();
@@ -514,11 +536,11 @@ public class DetalleFacturaController implements Initializable {
         cmbCodP.getSelectionModel().clearSelection();
         cmbNumF.getSelectionModel().clearSelection();
     }
-
+    
     public Main getEscenarioPrincipal() {
         return escenarioPrincipal;
     }
-
+    
     public void setEscenarioPrincipal(Main escenarioPrincipal) {
         this.escenarioPrincipal = escenarioPrincipal;
     }
@@ -530,7 +552,7 @@ public class DetalleFacturaController implements Initializable {
             iconMaximizar.setRotate(0);
         }
     }
-
+    
     public void ventana(ActionEvent event) {
         colCodDetalleF.prefWidthProperty().bind(tvDetalleF.widthProperty().multiply(0.0476));
         colCant.prefWidthProperty().bind(tvDetalleF.widthProperty().multiply(0.23810));
@@ -543,7 +565,7 @@ public class DetalleFacturaController implements Initializable {
             rotateTransition.setByAngle(180);
             rotateTransition.setCycleCount(1);
             rotateTransition.setAutoReverse(false);
-
+            
             if (stage.isMaximized()) {
                 stage.setMaximized(false);
                 escenarioPrincipal.setIsMaximized(false);
@@ -554,9 +576,9 @@ public class DetalleFacturaController implements Initializable {
             }
             rotateTransition.play();
         }
-
+        
     }
-
+    
     public void handleButtonAction(ActionEvent event) {
         if (event.getSource() == btnRegresarDetF) {
             escenarioPrincipal.FacturasView();
@@ -569,5 +591,5 @@ public class DetalleFacturaController implements Initializable {
             stage.setIconified(true);
         }
     }
-
+    
 }

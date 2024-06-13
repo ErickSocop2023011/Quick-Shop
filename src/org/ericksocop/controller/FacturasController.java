@@ -283,6 +283,7 @@ public class FacturasController implements Initializable {
     public void Agregar() {
         switch (tipoDeOperador) {
             case NINGUNO:
+                tvFacturas.setDisable(true);
                 limpiarControles();
                 activarControles();
                 agregarIcono.setFill(Color.WHITE);
@@ -302,17 +303,17 @@ public class FacturasController implements Initializable {
                 cargarDatos();
                 desactivarControles();
                 agregarIcono.setFill(Color.WHITE);
-                agregarIcono.setIcon(FontAwesomeIcons.USER_PLUS);
+                agregarIcono.setIcon(FontAwesomeIcons.PLUS);
                 btnAgregarF.setText("Agregar");
                 eliminarIcono.setFill(Color.WHITE);
-                eliminarIcono.setIcon(FontAwesomeIcons.USER_TIMES);
+                eliminarIcono.setIcon(FontAwesomeIcons.TRASH);
                 btnEliminarF.setText("Eliminar");
                 btnEditarF.setDisable(false);
                 btnReportesF.setDisable(false);
                 /*regresar de nuevo a sus imagenes originales
                 imgAgregar.setImage(new Image("URL"));*/
                 tipoDeOperador = operador.NINGUNO;
-                cargarDatos();
+                tvFacturas.setDisable(false);
                 break;
         }
     }
@@ -320,7 +321,12 @@ public class FacturasController implements Initializable {
     public void guardar() {
         Facturas registro = new Facturas();
         try {
-            registro.setNumeroDeFactura(Integer.parseInt(txtNumF.getText()));
+            int facturaID = Integer.parseInt(txtNumF.getText());
+            if(existeCodigoFact(facturaID)){
+                JOptionPane.showMessageDialog(null, "El ID de la Factura ya existe. Por favor, ingrese uno nuevo.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            registro.setNumeroDeFactura(facturaID);
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "El ID de Producto no puede ser nulo/vacío", "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -352,10 +358,20 @@ public class FacturasController implements Initializable {
             e.printStackTrace();
         }
     }
+    
+    private boolean existeCodigoFact(int codigo) {
+        for (Facturas fact : listaFacturas) {
+            if (fact.getNumeroDeFactura()== codigo) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     public void editar() {
         switch (tipoDeOperador) {
             case NINGUNO:
+                tvFacturas.setDisable(true);
                 if (tvFacturas.getSelectionModel().getSelectedItem() != null) {
                     actualizarIcono.setFill(Color.WHITE);
                     actualizarIcono.setIcon(FontAwesomeIcons.SAVE);
@@ -386,6 +402,7 @@ public class FacturasController implements Initializable {
                 limpiarControles();
                 tipoDeOperador = operador.NINGUNO;
                 cargarDatos();
+                tvFacturas.setDisable(false);
                 break;
         }
     }
@@ -423,13 +440,14 @@ public class FacturasController implements Initializable {
     public void eliminar() {
         switch (tipoDeOperador) {
             case ACTUALIZAR:
+                tvFacturas.setDisable(false);
                 desactivarControles();
                 limpiarControles();
                 agregarIcono.setFill(Color.WHITE);
-                agregarIcono.setIcon(FontAwesomeIcons.USER_PLUS);
+                agregarIcono.setIcon(FontAwesomeIcons.PLUS);
                 btnAgregarF.setText("Agregar");
                 eliminarIcono.setFill(Color.WHITE);
-                eliminarIcono.setIcon(FontAwesomeIcons.USER_TIMES);
+                eliminarIcono.setIcon(FontAwesomeIcons.TRASH);
                 btnEliminarF.setText("Eliminar");
                 btnEditarF.setDisable(false);
                 btnReportesF.setDisable(false);
@@ -481,6 +499,7 @@ public class FacturasController implements Initializable {
             tipoDeOperador = operador.ACTUALIZAR;
             break;
             case ACTUALIZAR:
+                tvFacturas.setDisable(false);
                 desactivarControles();
                 limpiarControles();
                 actualizarIcono.setFill(Color.WHITE);

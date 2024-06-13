@@ -94,6 +94,9 @@ public class Main extends Application {
         } else if (resultado instanceof ProductosController) {
             ((ProductosController) resultado).setEscenarioPrincipal(this);
             ((ProductosController) resultado).actualizarIconoMaximizar(isMaximized);
+        }else if (resultado instanceof ProgramadorController) {
+            ((ProgramadorController) resultado).setEscenarioPrincipal(this);
+            ((ProgramadorController) resultado).actualizarIconoMaximizar(isMaximized);
         } else if (resultado instanceof ProveedorController) {
             ((ProveedorController) resultado).setEscenarioPrincipal(this);
             ((ProveedorController) resultado).actualizarIconoMaximizar(isMaximized);
