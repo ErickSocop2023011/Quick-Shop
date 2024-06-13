@@ -223,11 +223,18 @@ public class ClienteController implements Initializable {
 
     public void guardar() {
         Clientes registro = new Clientes();
+
         try {
-            registro.setClienteID(Integer.parseInt(txtClienteID.getText()));
+            int clienteID = Integer.parseInt(txtClienteID.getText());
+            if (existeCodigoCliente(clienteID)) {
+                JOptionPane.showMessageDialog(null, "El ID del Cliente ya existe. Por favor, ingrese uno nuevo.", "Error", JOptionPane.ERROR_MESSAGE);
+                return; // Detener el proceso de guardado
+            }
+            registro.setClienteID(clienteID);
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "El ID del Cliente"
-                    + " no puede ser nulo/vacío", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "El ID del Cliente no puede ser nulo/vacío", "Error", JOptionPane.ERROR_MESSAGE);
+            return; // Detener el proceso de guardado
+            
         }
         registro.setNombreClientes(txtNombreCliente.getText());
         registro.setApellidoClientes(txtApellidoCliente.getText());
@@ -255,6 +262,14 @@ public class ClienteController implements Initializable {
         }
     }
 
+    private boolean existeCodigoCliente(int codigoCliente) {
+    for (Clientes cliente : listaClientes) {
+        if (cliente.getClienteID() == codigoCliente) {
+            return true;
+        }
+    }
+    return false;
+}
     @FXML
     public void eliminar() {
         switch (tipoDeOperador) {
@@ -419,12 +434,12 @@ public class ClienteController implements Initializable {
         sortList.comparatorProperty().bind(tvCliente.comparatorProperty());
         tvCliente.setItems(sortList);
     }
-    
-    public void imprimirReporte(){
+
+    public void imprimirReporte() {
         Map parametros = new HashMap();
         parametros.put("clienteID", null);
         GenerarReportes.mostrarReportes("ReporteCliente.jasper", "Reporte de Cliente", parametros);
-        
+
     }
 
     public void desactivarControles() {
@@ -456,7 +471,7 @@ public class ClienteController implements Initializable {
         txtTelefonoCli.clear();
         txtCorreoCliente.clear();
     }
-    
+
     public void actualizarIconoMaximizar(boolean isMaximized) {
         if (isMaximized) {
             iconMaximizar.setRotate(180);
@@ -464,7 +479,7 @@ public class ClienteController implements Initializable {
             iconMaximizar.setRotate(0);
         }
     }
-    
+
     public void ventana(ActionEvent event) {
         colClienteID.prefWidthProperty().bind(tvCliente.widthProperty().multiply(0.0476));
         colApellidosClientes.prefWidthProperty().bind(tvCliente.widthProperty().multiply(0.15873));
@@ -473,7 +488,7 @@ public class ClienteController implements Initializable {
         colNit.prefWidthProperty().bind(tvCliente.widthProperty().multiply(0.15873));
         colNombreCliente.prefWidthProperty().bind(tvCliente.widthProperty().multiply(0.15873));
         colTelefonoClientes.prefWidthProperty().bind(tvCliente.widthProperty().multiply(0.15873));
-        
+
         if (event.getSource() == iconMaximizar || event.getSource() == btnMaximizar) {
             Stage stage = (Stage) anchorPane.getScene().getWindow();
             RotateTransition rotateTransition = new RotateTransition(Duration.seconds(0.5), iconMaximizar);
@@ -494,7 +509,6 @@ public class ClienteController implements Initializable {
 
     }
 
-    
     public void handleButtonAction(ActionEvent event) {
         if (event.getSource() == btnRegresar) {
             escenarioPrincipal.menuPrincipalView();
@@ -507,7 +521,6 @@ public class ClienteController implements Initializable {
             stage.setIconified(true);
         }
     }
-    
 
     public Main getEscenarioPrincipal() {
         return escenarioPrincipal;

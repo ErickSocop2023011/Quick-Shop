@@ -52,12 +52,19 @@ public class Main extends Application {
         loader.setBuilderFactory(new JavaFXBuilderFactory());
         loader.setLocation(Main.class.getResource("/org/ericksocop/view/" + fxmlname));
         Parent root = loader.load(file);
-        isMaximized = parentStage.isMaximized();
-        if (isMaximized) {
-            parentStage.setScene(new Scene(root, parentStage.getWidth(), parentStage.getHeight()));
-            parentStage.setMaximized(true);
-        } else {
+        
+        // Check if changing to MenuPrincipal.fxml
+        if (fxmlname.equals("MenuPrincipal.fxml")) {
             parentStage.setScene(new Scene(root, 1359, 665));
+            parentStage.setMaximized(false); // Ensure it's not maximized
+        } else {
+            isMaximized = parentStage.isMaximized();
+            if (isMaximized) {
+                parentStage.setScene(new Scene(root, parentStage.getWidth(), parentStage.getHeight()));
+                parentStage.setMaximized(true);
+            } else {
+                parentStage.setScene(new Scene(root, 1359, 665));
+            }
         }
         parentStage.sizeToScene();
 
@@ -66,38 +73,37 @@ public class Main extends Application {
         if (resultado instanceof ClienteController) {
             ((ClienteController) resultado).setEscenarioPrincipal(this);
             ((ClienteController) resultado).actualizarIconoMaximizar(isMaximized);
-        }else if (resultado instanceof CargoEmpleadosController) {
+        } else if (resultado instanceof CargoEmpleadosController) {
             ((CargoEmpleadosController) resultado).setEscenarioPrincipal(this);
             ((CargoEmpleadosController) resultado).actualizarIconoMaximizar(isMaximized);
-        }else if (resultado instanceof EmpleadosController) {
+        } else if (resultado instanceof EmpleadosController) {
             ((EmpleadosController) resultado).setEscenarioPrincipal(this);
             ((EmpleadosController) resultado).actualizarIconoMaximizar(isMaximized);
-        }else if (resultado instanceof ComprasController) {
+        } else if (resultado instanceof ComprasController) {
             ((ComprasController) resultado).setEscenarioPrincipal(this);
             ((ComprasController) resultado).actualizarIconoMaximizar(isMaximized);
-        }else if (resultado instanceof DetalleCompraController) {
+        } else if (resultado instanceof DetalleCompraController) {
             ((DetalleCompraController) resultado).setEscenarioPrincipal(this);
             ((DetalleCompraController) resultado).actualizarIconoMaximizar(isMaximized);
-        }else if (resultado instanceof DetalleFacturaController) {
+        } else if (resultado instanceof DetalleFacturaController) {
             ((DetalleFacturaController) resultado).setEscenarioPrincipal(this);
             ((DetalleFacturaController) resultado).actualizarIconoMaximizar(isMaximized);
-        }else if (resultado instanceof FacturasController) {
+        } else if (resultado instanceof FacturasController) {
             ((FacturasController) resultado).setEscenarioPrincipal(this);
             ((FacturasController) resultado).actualizarIconoMaximizar(isMaximized);
-        }else if (resultado instanceof ProductosController) {
+        } else if (resultado instanceof ProductosController) {
             ((ProductosController) resultado).setEscenarioPrincipal(this);
             ((ProductosController) resultado).actualizarIconoMaximizar(isMaximized);
-        }else if (resultado instanceof ProveedorController) {
+        } else if (resultado instanceof ProveedorController) {
             ((ProveedorController) resultado).setEscenarioPrincipal(this);
             ((ProveedorController) resultado).actualizarIconoMaximizar(isMaximized);
-        }else if (resultado instanceof TipoProductoController) {
+        } else if (resultado instanceof TipoProductoController) {
             ((TipoProductoController) resultado).setEscenarioPrincipal(this);
             ((TipoProductoController) resultado).actualizarIconoMaximizar(isMaximized);
         }
 
         return resultado;
     }
-
 
     public Initializable cambiarEscena(String fxmlname) throws Exception {
         return cambiarEscena(fxmlname, escenarioPrincipal);
@@ -110,7 +116,6 @@ public class Main extends Application {
     public void setIsMaximized(boolean isMaximized) {
         this.isMaximized = isMaximized;
     }
-
 
     public void menuPrincipalView() {
         try {
@@ -134,7 +139,6 @@ public class Main extends Application {
         try {
             ProgramadorController prograView = (ProgramadorController) cambiarEscena("Programador.fxml");
             prograView.setEscenarioPrincipal(this);
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -221,11 +225,7 @@ public class Main extends Application {
         }
     }
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String[] args) {
         launch(args);
     }
-
 }

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reportFactura" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="6aef86de-e86b-41fc-93c9-3998906001f4">
-	<property name="ireport.zoom" value="0.826446280991737"/>
+	<property name="ireport.zoom" value="1.2100000000000024"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="514"/>
 	<parameter name="facturaID" class="java.lang.Integer">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
@@ -83,7 +83,7 @@
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<variable name="sumFactura" class="java.lang.Double" calculation="Sum">
-		<variableExpression><![CDATA[$F{precioUnitario}/1.12]]></variableExpression>
+		<variableExpression><![CDATA[($F{precioUnitario}/1.12)*$F{cantidad}]]></variableExpression>
 	</variable>
 	<variable name="TotalPrec" class="java.lang.String" calculation="Sum">
 		<variableExpression><![CDATA[$V{TotalPrec}*$F{precioUnitario}]]></variableExpression>
@@ -178,13 +178,15 @@
 			</textField>
 			<textField pattern="">
 				<reportElement x="390" y="19" width="117" height="20" uuid="838dcf77-9504-4945-9144-9a9150d479ad"/>
-				<textElement textAlignment="Center" verticalAlignment="Top"/>
-				<textFieldExpression><![CDATA[$V{sumFactura}]]></textFieldExpression>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.text.DecimalFormat("#.00").format($V{sumFactura})]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="390" y="39" width="117" height="28" uuid="f56ffaf4-4904-405e-938b-4388aa442c22"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$V{sumFactura}*0.12]]></textFieldExpression>
+				<textFieldExpression><![CDATA[new java.text.DecimalFormat("#.00").format($V{sumFactura}*0.12)]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageFooter>

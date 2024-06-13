@@ -87,25 +87,25 @@ public class ComprasController implements Initializable {
     @FXML
     private TableColumn colTotalDoc;
     @FXML
-    private JFXButton  btnDetalleCompra;
+    private JFXButton btnDetalleCompra;
     @FXML
-    private JFXButton  btnAgregarC;
+    private JFXButton btnAgregarC;
     @FXML
-    private JFXButton  btnEditarC;
+    private JFXButton btnEditarC;
     @FXML
-    private JFXButton  btnEliminarC;
+    private JFXButton btnEliminarC;
     @FXML
-    private JFXButton  btnReportesC;
+    private JFXButton btnReportesC;
     @FXML
-    private JFXButton  btnRegresarC;
+    private JFXButton btnRegresarC;
     @FXML
-    private JFXTextField  txtNumDoc;
+    private JFXTextField txtNumDoc;
     @FXML
     private JFXDatePicker jfxDatePicker;
     @FXML
-    private JFXTextField  txtDescDoc;
+    private JFXTextField txtDescDoc;
     @FXML
-    private JFXTextField  txtTotalDoc;
+    private JFXTextField txtTotalDoc;
 
     /**
      * Initializes the controller class.
@@ -119,7 +119,7 @@ public class ComprasController implements Initializable {
         colDescCom.prefWidthProperty().bind(tvCompras.widthProperty().multiply(0.31746));
         colFechaDoc.prefWidthProperty().bind(tvCompras.widthProperty().multiply(0.31746));
         colTotalDoc.prefWidthProperty().bind(tvCompras.widthProperty().multiply(0.31746));
-        colNumDoc.prefWidthProperty().bind(tvCompras.widthProperty().multiply(0.31746));
+
     }
 
     public void cargarDatos() {
@@ -177,6 +177,7 @@ public class ComprasController implements Initializable {
     public void Agregar() {
         switch (tipoDeOperador) {
             case NINGUNO:
+                tvCompras.setDisable(true);
                 limpiarControles();
                 activarControles();
                 agregarIcono.setFill(Color.WHITE);
@@ -206,6 +207,7 @@ public class ComprasController implements Initializable {
                 /*regresar de nuevo a sus imagenes originales
                 imgAgregar.setImage(new Image("URL"));*/
                 tipoDeOperador = operador.NINGUNO;
+                tvCompras.setDisable(false);
                 break;
         }
 
@@ -214,9 +216,15 @@ public class ComprasController implements Initializable {
     public void guardar() {
         Compras registro = new Compras();
         try {
-            registro.setNumeroDocumento(Integer.parseInt(txtNumDoc.getText()));
+            int compraID = Integer.parseInt(txtNumDoc.getText());
+            if (existeCodigoCompra(compraID)) {
+                JOptionPane.showMessageDialog(null, "El ID de la Compra ya existe. Por favor, ingrese uno nuevo.", "Error", JOptionPane.ERROR_MESSAGE);
+                return; // Detener el proceso de guardado
+            }
+            registro.setNumeroDocumento(compraID);
+            
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "El ID de Compra no puede ser nulo/vacío", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "El ID de la Compra no puede ser nulo/vacío", "Error", JOptionPane.ERROR_MESSAGE);
         }
         if (jfxDatePicker.getValue() != null) {
             // Convertir LocalDate a Date
@@ -244,12 +252,22 @@ public class ComprasController implements Initializable {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        tvCompras.setDisable(false);
     }
 
+    private boolean existeCodigoCompra(int compraID) {
+        for (Compras cliente : listaCompras) {
+            if (cliente.getNumeroDocumento()== compraID) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     public void eliminar() {
         switch (tipoDeOperador) {
             case ACTUALIZAR:
+                tvCompras.setDisable(false);
                 desactivarControles();
                 limpiarControles();
                 agregarIcono.setFill(Color.WHITE);
@@ -400,12 +418,12 @@ public class ComprasController implements Initializable {
                 }
             });
         });
-        
-        SortedList <Compras> sortList = new SortedList<>(filtro);
+
+        SortedList<Compras> sortList = new SortedList<>(filtro);
         sortList.comparatorProperty().bind(tvCompras.comparatorProperty());
         tvCompras.setItems(sortList);
     }
-    
+
     public void actualizarIconoMaximizar(boolean isMaximized) {
         if (isMaximized) {
             iconMaximizar.setRotate(180);
@@ -413,13 +431,12 @@ public class ComprasController implements Initializable {
             iconMaximizar.setRotate(0);
         }
     }
-    
+
     public void ventana(ActionEvent event) {
         colNumDoc.prefWidthProperty().bind(tvCompras.widthProperty().multiply(0.0476));
         colDescCom.prefWidthProperty().bind(tvCompras.widthProperty().multiply(0.31746));
         colFechaDoc.prefWidthProperty().bind(tvCompras.widthProperty().multiply(0.31746));
         colTotalDoc.prefWidthProperty().bind(tvCompras.widthProperty().multiply(0.31746));
-        colNumDoc.prefWidthProperty().bind(tvCompras.widthProperty().multiply(0.31746));
         if (event.getSource() == iconMaximizar || event.getSource() == btnMaximizar) {
             Stage stage = (Stage) anchorPane.getScene().getWindow();
             RotateTransition rotateTransition = new RotateTransition(Duration.seconds(0.5), iconMaximizar);
@@ -478,11 +495,11 @@ public class ComprasController implements Initializable {
         }
         if (event.getSource() == btnDetalleCompra) {
             try {
-            Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
-            escenarioPrincipal.DetalleCompraView(stage);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+                Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
+                escenarioPrincipal.DetalleCompraView(stage);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         if (event.getSource() == iconoCerrar || event.getSource() == btnCerrar) {
             System.exit(0);

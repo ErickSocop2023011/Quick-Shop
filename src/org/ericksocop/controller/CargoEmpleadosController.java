@@ -185,9 +185,15 @@ public class CargoEmpleadosController implements Initializable {
     public void guardar() {
         CargoEmpleados registro = new CargoEmpleados();
         try {
-            registro.setCodigoCargoEmpleado(Integer.parseInt(txtCodigoCargoE.getText()));
+            int cargoID = Integer.parseInt(txtCodigoCargoE.getText());
+            if(existeCodigoCargo(cargoID)){
+                JOptionPane.showMessageDialog(null, "El ID del Cargo ya existe. Por favor, ingrese uno nuevo.","Error", JOptionPane.ERROR_MESSAGE);
+                return; // Detener el proceso de guardado
+            }
+            registro.setCodigoCargoEmpleado(cargoID);
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "El ID de Cargo Empleados no puede ser nulo/vacio", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "El ID del Cargo no puede ser nulo/vacio", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
         }
 
         registro.setNombreCargo(txtNombreCargo.getText());
@@ -203,6 +209,15 @@ public class CargoEmpleadosController implements Initializable {
             e.printStackTrace();
         }
     }
+    
+    private boolean existeCodigoCargo(int codigoCargo) {
+    for (CargoEmpleados cliente : listaCargo) {
+        if (cliente.getCodigoCargoEmpleado()== codigoCargo) {
+            return true;
+        }
+    }
+    return false;
+}
 
     public void eliminar() {
         switch (tipoDeOperador) {
