@@ -14,7 +14,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
-import java.nio.file.Files;
 import java.sql.Blob;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -23,6 +22,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.animation.RotateTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -142,9 +143,11 @@ public class ProductosController implements Initializable {
     private enum operador {
         AGREGRAR, ELIMINAR, EDITAR, ACTUALIZAR, CANCELAR, NINGUNO
     }
+    // Enumeración que define los diferentes tipos de operaciones que se pueden realizar
     private operador tipoDeOperador = operador.NINGUNO;
 
     private File archivoSeleccionado;
+    // Variable para almacenar el archivo seleccionado (imagen)
 
     /**
      * Initializes the controller class.
@@ -156,6 +159,7 @@ public class ProductosController implements Initializable {
         cmbCodigoTipoP.setItems(getTipoP());
         cmbCodigoP.setItems(getProveedores());
         desactivarControles();
+        // Ajusta el ancho de las columnas de la tabla de productos
         colCodProd.prefWidthProperty().bind(tvProductos.widthProperty().multiply(0.0476));
         colCodProv.prefWidthProperty().bind(tvProductos.widthProperty().multiply(0.11905));
         colCodTipoProd.prefWidthProperty().bind(tvProductos.widthProperty().multiply(0.11905));
@@ -167,12 +171,8 @@ public class ProductosController implements Initializable {
         colPrecioU.prefWidthProperty().bind(tvProductos.widthProperty().multiply(0.11905));
     }
 
-    private Image byteArrayToImage(byte[] byteArray) {
-        ByteArrayInputStream bais = new ByteArrayInputStream(byteArray);
-        return new Image(bais);
-    }
-
     public void cargarDatos() {
+        // Configura las columnas de la tabla con los datos de los productos
         tvProductos.setItems(getProducto());
         colCodProd.setCellValueFactory(new PropertyValueFactory<Productos, String>("codigoProducto"));
         colDescProd.setCellValueFactory(new PropertyValueFactory<Productos, String>("descripcionProducto"));
@@ -186,6 +186,7 @@ public class ProductosController implements Initializable {
     }
 
     public void seleccionarElemento() {
+        // Método para manejar la selección de un producto en la tabla
         imageViewProducto.setImage(null);
         try {
             Productos productoSeleccionado = (Productos) tvProductos.getSelectionModel().getSelectedItem();
@@ -197,7 +198,7 @@ public class ProductosController implements Initializable {
             txtExistencia.setText(String.valueOf(productoSeleccionado.getExistencia()));
             cmbCodigoTipoP.getSelectionModel().select(buscarTipoProducto(productoSeleccionado.getCodigoTipoProducto()));
             cmbCodigoP.getSelectionModel().select(buscarProveedor(productoSeleccionado.getCodigoProveedor()));
-
+            // Carga la imagen del producto si existe
             if (productoSeleccionado.getImagenProducto() != null) {
                 Blob imagenBlob = productoSeleccionado.getImagenProducto();
                 byte[] imagenBytes = imagenBlob.getBytes(1, (int) imagenBlob.length());
@@ -210,6 +211,7 @@ public class ProductosController implements Initializable {
     }
 
     public TipoProducto buscarTipoProducto(int codigoTipoProducto) {
+        // Método para buscar un tipo de producto por su código
         TipoProducto resultado = null;
         try {
             PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_buscarTipoProducto(?)}");
@@ -229,6 +231,7 @@ public class ProductosController implements Initializable {
     }
 
     public Proveedores buscarProveedor(int codigoProveedor) {
+        // Método para buscar un proveedor por su código
         Proveedores resultado = null;
         try {
             PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_buscarproveedor(?)}");
@@ -254,6 +257,7 @@ public class ProductosController implements Initializable {
     }
 
     public ObservableList<Productos> getProducto() {
+        // Método para obtener la lista de productos desde la base de datos
         ArrayList<Productos> listaP = new ArrayList<>();
         try {
             PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_mostrarProductos()}");
@@ -277,6 +281,7 @@ public class ProductosController implements Initializable {
     }
 
     public ObservableList<Proveedores> getProveedores() {
+        // Método para obtener la lista de proveedores desde la base de datos
         ArrayList<Proveedores> listaPro = new ArrayList<>();
         try {
             PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_mostrarproveedores()}");
@@ -301,6 +306,7 @@ public class ProductosController implements Initializable {
     }
 
     public ObservableList<TipoProducto> getTipoP() {
+        // Método para obtener la lista de tipos de producto desde la base de datos
         ArrayList<TipoProducto> lista = new ArrayList<>();
         try {
             PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_mostrarTipoProducto()}");
@@ -317,8 +323,8 @@ public class ProductosController implements Initializable {
         return listaTipoP = FXCollections.observableList(lista);
     }
 
-    public void Agregar() {
-        switch (tipoDeOperador) {
+    public void Agregar() throws SQLException 
+{        switch (tipoDeOperador) {
             case NINGUNO:
                 tvProductos.setDisable(true);
                 imageViewProducto.setImage(null);
@@ -360,11 +366,7 @@ public class ProductosController implements Initializable {
         }
     }
 
-    public byte[] convertImageToBlob(File file) throws IOException {
-        return Files.readAllBytes(file.toPath());
-    }
-
-    public void guardar() {
+    public void guardar() throws SQLException {
         imageViewProducto.setImage(null);
         Productos registro = new Productos();
         try {
@@ -375,7 +377,15 @@ public class ProductosController implements Initializable {
             }
             registro.setCodigoProducto(productoID);
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "El ID de Producto no puede ser nulo/vacío", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "El ID de Producto no puede ser nulo/caracter", "Error", JOptionPane.ERROR_MESSAGE);
+            if (txtCodigoProd.getText().equals(0)) {
+                int productoID = Integer.parseInt(txtCodigoProd.getText());
+                PreparedStatement eliminarProductoStmt = Conexion.getInstance().getConexion()
+                        .prepareCall("{call sp_eliminarProducto(?)}");
+                eliminarProductoStmt.setInt(1, productoID);
+                eliminarProductoStmt.execute();
+
+            }
         }
         registro.setCodigoProveedor(((Proveedores) cmbCodigoP.getSelectionModel().getSelectedItem()).getCodigoProveedor());
         registro.setCodigoTipoProducto(((TipoProducto) cmbCodigoTipoP.getSelectionModel().getSelectedItem()).getCodigoTipoProducto());
@@ -386,14 +396,13 @@ public class ProductosController implements Initializable {
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "Existencias no puede ser nulo/vacío" + "\n"
                     + "Valor Predefinido 1", "Error", JOptionPane.INFORMATION_MESSAGE);
+            
             registro.setExistencia(1);
         }
 
-        if (archivoSeleccionado
-                != null) {
+        if (archivoSeleccionado != null) {
             try {
-                byte[] imageBytes = leerArchivo(archivoSeleccionado
-                );
+                byte[] imageBytes = leerArchivo(archivoSeleccionado);
                 registro.setImagenProducto(new SerialBlob(imageBytes));
             } catch (Exception e) {
                 e.printStackTrace();
@@ -421,7 +430,11 @@ public class ProductosController implements Initializable {
             procedimiento.setInt(7, registro.getExistencia());
             procedimiento.setInt(8, registro.getCodigoTipoProducto());
             procedimiento.setInt(9, registro.getCodigoProveedor());
-            procedimiento.execute();
+            if(registro.getCodigoProducto() == 0){
+                limpiarControles();
+            }else{
+                procedimiento.execute();
+            }
 
             listaProductos.add(registro);
         } catch (Exception e) {
@@ -620,14 +633,19 @@ public class ProductosController implements Initializable {
 
     public void buscarProducto() {
         limpiarControles();
+        // Crea una lista filtrada basada en la lista original de productos
         FilteredList<Productos> filtro = new FilteredList<>(listaProductos, e -> true);
+        // Agrega un listener al campo de texto de búsqueda
         txtbuscarProducto.textProperty().addListener((Observable, oldValue, newValue) -> {
+            // Configura el predicado para filtrar los productos basado en la nueva entrada de búsqueda
             filtro.setPredicate(predicateProducto -> {
+                // Si el nuevo valor es nulo o está vacío, muestra todos los productos
                 if (newValue == null || newValue.isEmpty()) {
                     return true;
                 }
-
+                // Convierte la entrada de búsqueda a minúsculas para hacer la búsqueda case-insensitive
                 String param = newValue.toLowerCase();
+                // Obtiene las propiedades del producto como cadenas
                 String productoID = String.valueOf(predicateProducto.getCodigoProducto());
                 String precioU = String.valueOf(predicateProducto.getPrecioUnitario());
                 String precioD = String.valueOf(predicateProducto.getPrecioDocena());
@@ -635,7 +653,7 @@ public class ProductosController implements Initializable {
                 String existencia = String.valueOf(predicateProducto.getExistencia());
                 String tipoProdID = String.valueOf(predicateProducto.getCodigoTipoProducto());
                 String proveedorID = String.valueOf(predicateProducto.getCodigoProveedor());
-
+                // Verifica si alguna de las propiedades del producto contiene el valor de búsqueda
                 if (productoID.contains(param)) {
                     return true;
                 } else if (predicateProducto.getDescripcionProducto().toLowerCase().contains(param)) {
@@ -657,8 +675,11 @@ public class ProductosController implements Initializable {
                 }
             });
         });
+        // Crea una lista ordenada basada en la lista filtrada
         SortedList<Productos> sortList = new SortedList<>(filtro);
+        // Vincula el comparador de la lista ordenada al comparador de la tabla de vista de productos
         sortList.comparatorProperty().bind(tvProductos.comparatorProperty());
+        // Establece la lista ordenada como los elementos de la tabla de vista de productos
         tvProductos.setItems(sortList);
     }
 
@@ -782,37 +803,52 @@ public class ProductosController implements Initializable {
     }
 
     public void abrirImagen(Stage stage) {
+        // Crea un selector de archivos
         FileChooser fileChooser = new FileChooser();
+        // Agrega filtros para limitar los tipos de archivos que se pueden seleccionar
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg"));
+        // Abre el cuadro de diálogo para seleccionar un archivo
         File file = fileChooser.showOpenDialog(stage);
+        // Si se seleccionó un archivo, se ejecuta este bloque (en este caso no hace nada)
         if (file != null) {
         }
     }
 
     public void seleccionarImagen() {
+        // Crea un selector de archivos
         FileChooser fileChooser = new FileChooser();
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg")
-        );
-        archivoSeleccionado
-                = fileChooser.showOpenDialog(new Stage());
-        if (archivoSeleccionado
-                != null) {
-            Image image = new Image(archivoSeleccionado
-                    .toURI().toString());
+        // Agrega filtros para limitar los tipos de archivos que se pueden seleccionar
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg"));
+        // Abre el cuadro de diálogo para seleccionar un archivo y guarda la referencia del archivo seleccionado
+        archivoSeleccionado = fileChooser.showOpenDialog(new Stage());
+        // Si se seleccionó un archivo, se ejecuta este bloque
+        if (archivoSeleccionado != null) {
+            // Crea una imagen a partir del archivo seleccionado
+            Image image = new Image(archivoSeleccionado.toURI().toString());
+            // Establece la imagen en el ImageView del producto
             imageViewProducto.setImage(image);
         }
     }
 
     private byte[] leerArchivo(File file) throws IOException {
+        // Abre un FileInputStream para leer el archivo y un ByteArrayOutputStream para almacenar los bytes leídos
         try (FileInputStream fis = new FileInputStream(file); ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+            // Buffer de 1 KB
             byte[] buffer = new byte[1024];
+            // Variable para almacenar el número de bytes leídos en cada iteración
             int bytesRead;
+            // Lee el archivo en bloques de 1 KB y escribe en el ByteArrayOutputStream
             while ((bytesRead = fis.read(buffer)) != -1) {
+                // Retorna el contenido del archivo como un arreglo de bytes
                 baos.write(buffer, 0, bytesRead);
             }
             return baos.toByteArray();
         }
     }
 
+    private Image byteArrayToImage(byte[] byteArray) {
+        // Convierte un arreglo de bytes en una imagen
+        ByteArrayInputStream bais = new ByteArrayInputStream(byteArray);
+        return new Image(bais);
+    }
 }

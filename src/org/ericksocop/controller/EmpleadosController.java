@@ -393,7 +393,7 @@ public class EmpleadosController implements Initializable {
                             int codigoEmpleado = empleadoSeleccionado.getCodigoEmpleado();
 
                             // Eliminar las referencias en DetalleFactura a través de Factura
-                            PreparedStatement eliminarDetalleFactura = Conexion.getInstance().getConexion()
+                            /*PreparedStatement eliminarDetalleFactura = Conexion.getInstance().getConexion()
                                     .prepareCall("{call sp_eliminarDetalleFacturaPorFactura(?)}");
                             eliminarDetalleFactura.setInt(1, codigoEmpleado);
                             eliminarDetalleFactura.execute();
@@ -402,7 +402,7 @@ public class EmpleadosController implements Initializable {
                             PreparedStatement eliminarFactura = Conexion.getInstance().getConexion()
                                     .prepareCall("{call sp_eliminarFacturaPorEmpleado(?)}");
                             eliminarFactura.setInt(1, codigoEmpleado);
-                            eliminarFactura.execute();
+                            eliminarFactura.execute();*/
 
                             // Finalmente, eliminar el empleado
                             PreparedStatement eliminarEmpleado = Conexion.getInstance().getConexion()

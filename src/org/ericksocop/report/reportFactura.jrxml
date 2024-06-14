@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reportFactura" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="6aef86de-e86b-41fc-93c9-3998906001f4">
 	<property name="ireport.zoom" value="1.2100000000000024"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="514"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="facturaID" class="java.lang.Integer">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
@@ -83,10 +83,16 @@
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<variable name="sumFactura" class="java.lang.Double" calculation="Sum">
-		<variableExpression><![CDATA[($F{precioUnitario}/1.12)*$F{cantidad}]]></variableExpression>
+		<variableExpression><![CDATA[(($F{precioUnitario}/1.12)*$F{cantidad})]]></variableExpression>
 	</variable>
 	<variable name="TotalPrec" class="java.lang.String" calculation="Sum">
 		<variableExpression><![CDATA[$V{TotalPrec}*$F{precioUnitario}]]></variableExpression>
+	</variable>
+	<variable name="codigoDetalleFactura_SUM" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{codigoDetalleFactura}]]></variableExpression>
+	</variable>
+	<variable name="codigoDetalleFactura_SUM_1" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{codigoDetalleFactura}]]></variableExpression>
 	</variable>
 	<background>
 		<band height="802" splitType="Stretch">
@@ -142,51 +148,40 @@
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="33">
+		<band height="29"/>
+	</detail>
+	<columnFooter>
+		<band height="246" splitType="Stretch">
 			<textField>
-				<reportElement x="59" y="12" width="67" height="20" uuid="405acc4e-ff7d-4c2b-aef0-7deacab5a093"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{cantidad}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="390" y="12" width="107" height="20" uuid="ebfbc0f2-375d-4e89-9d88-80cd3c5617e6"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font isBold="true"/>
-				</textElement>
+				<reportElement x="423" y="0" width="100" height="20" uuid="4ed8694e-233a-423d-9aca-c7aeca591499"/>
 				<textFieldExpression><![CDATA[$F{precioUnitario}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="142" y="12" width="227" height="20" uuid="09660b4c-0245-4a82-823d-450c0f0c31a7"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<reportElement x="251" y="0" width="129" height="20" uuid="a4c5badc-a5f3-4801-bc7a-b7f085d539af"/>
 				<textFieldExpression><![CDATA[$F{descripcionProducto}]]></textFieldExpression>
 			</textField>
+			<textField>
+				<reportElement x="89" y="0" width="100" height="20" uuid="9d33e031-58f7-4fd6-8646-f144cc9a304a"/>
+				<textFieldExpression><![CDATA[$F{cantidad}]]></textFieldExpression>
+			</textField>
 		</band>
-	</detail>
-	<columnFooter>
-		<band height="214" splitType="Stretch"/>
 	</columnFooter>
 	<pageFooter>
 		<band height="239" splitType="Stretch">
-			<textField>
+			<textField pattern="">
 				<reportElement x="390" y="77" width="117" height="20" uuid="9c526c59-ba21-4dc5-aeab-8438f96609db"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{totalFactura}]]></textFieldExpression>
 			</textField>
-			<textField pattern="">
-				<reportElement x="390" y="19" width="117" height="20" uuid="838dcf77-9504-4945-9144-9a9150d479ad"/>
-				<textElement textAlignment="Center" verticalAlignment="Top">
-					<font size="10"/>
-				</textElement>
-				<textFieldExpression><![CDATA[new java.text.DecimalFormat("#.00").format($V{sumFactura})]]></textFieldExpression>
+			<textField evaluationTime="Auto" pattern="###0.00">
+				<reportElement x="397" y="39" width="100" height="20" uuid="07047644-27b7-4260-8e75-61e548dcf453"/>
+				<textFieldExpression><![CDATA[new Double($F{totalFactura}*0.12)]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="390" y="39" width="117" height="28" uuid="f56ffaf4-4904-405e-938b-4388aa442c22"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[new java.text.DecimalFormat("#.00").format($V{sumFactura}*0.12)]]></textFieldExpression>
+			<textField evaluationTime="Auto" pattern="###0.00">
+				<reportElement x="397" y="19" width="100" height="20" uuid="236a1e53-5cd9-427d-9f1c-69212c8fa4c2"/>
+				<textFieldExpression><![CDATA[new Double($V{sumFactura})]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageFooter>
