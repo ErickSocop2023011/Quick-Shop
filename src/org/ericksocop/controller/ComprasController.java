@@ -26,6 +26,7 @@ import org.ericksocop.bean.Compras;
 import org.ericksocop.dao.Conexion;
 import org.ericksocop.system.Main;
 import java.sql.Date;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import javafx.animation.RotateTransition;
@@ -174,7 +175,7 @@ public class ComprasController implements Initializable {
         return listaCompras = FXCollections.observableList(listaC);
     }
 
-    public void Agregar() {
+    public void Agregar() throws SQLException {
         switch (tipoDeOperador) {
             case NINGUNO:
                 tvCompras.setDisable(true);
@@ -213,7 +214,7 @@ public class ComprasController implements Initializable {
 
     }
 
-    public void guardar() {
+    public void guardar() throws SQLException {
         Compras registro = new Compras();
         try {
             int compraID = Integer.parseInt(txtNumDoc.getText());
@@ -224,7 +225,15 @@ public class ComprasController implements Initializable {
             registro.setNumeroDocumento(compraID);
             
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "El ID de la Compra no puede ser nulo/vacío", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "El ID de la Compra no puede ser nulo/caracter no numérico", "Error", JOptionPane.ERROR_MESSAGE);
+            if (txtNumDoc.getText().equals(0)) {
+                int compraID = Integer.parseInt(txtNumDoc.getText());
+                PreparedStatement eliminarCompra = Conexion.getInstance().getConexion()
+                        .prepareCall("{call sp_eliminarcompra(?)}");
+                eliminarCompra.setInt(1, compraID);
+                eliminarCompra.execute();
+            }
+            return;
         }
         if (jfxDatePicker.getValue() != null) {
             // Convertir LocalDate a Date
@@ -325,6 +334,7 @@ public class ComprasController implements Initializable {
                     tipoDeOperador = operador.ACTUALIZAR;
                 } else {
                     JOptionPane.showMessageDialog(null, "Debe de seleccionar una fila para editar");
+                    tvCompras.setDisable(false);
                 }
                 break;
             case ACTUALIZAR:

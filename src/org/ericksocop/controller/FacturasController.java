@@ -280,7 +280,7 @@ public class FacturasController implements Initializable {
         return listaEmpleados = FXCollections.observableList(listaEmp);
     }
 
-    public void Agregar() {
+    public void Agregar() throws SQLException {
         switch (tipoDeOperador) {
             case NINGUNO:
                 tvFacturas.setDisable(true);
@@ -318,17 +318,25 @@ public class FacturasController implements Initializable {
         }
     }
 
-    public void guardar() {
+    public void guardar() throws SQLException {
         Facturas registro = new Facturas();
         try {
             int facturaID = Integer.parseInt(txtNumF.getText());
-            if(existeCodigoFact(facturaID)){
+            if (existeCodigoFact(facturaID)) {
                 JOptionPane.showMessageDialog(null, "El ID de la Factura ya existe. Por favor, ingrese uno nuevo.", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
             registro.setNumeroDeFactura(facturaID);
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "El ID de Producto no puede ser nulo/vacío", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "El ID de Producto no puede ser nulo/caracter no numérico", "Error", JOptionPane.ERROR_MESSAGE);
+            if (txtNumF.getText().equals(0)) {
+                int facturaID = Integer.parseInt(txtNumF.getText());
+                PreparedStatement eliminarFactura = Conexion.getInstance().getConexion()
+                        .prepareCall("{call sp_eliminarFactura(?)}");
+                eliminarFactura.setInt(1, facturaID);
+                eliminarFactura.execute();
+            }
+            return;
         }
         registro.setEstado(txtEstadoF.getText());
         registro.setTotalFactura(Double.parseDouble("0.00"));
@@ -358,10 +366,10 @@ public class FacturasController implements Initializable {
             e.printStackTrace();
         }
     }
-    
+
     private boolean existeCodigoFact(int codigo) {
         for (Facturas fact : listaFacturas) {
-            if (fact.getNumeroDeFactura()== codigo) {
+            if (fact.getNumeroDeFactura() == codigo) {
                 return true;
             }
         }
@@ -386,6 +394,7 @@ public class FacturasController implements Initializable {
                     tipoDeOperador = operador.ACTUALIZAR;
                 } else {
                     JOptionPane.showMessageDialog(null, "Debe de seleccionar una fila para editar");
+                    tvFacturas.setDisable(false);
                 }
                 break;
             case ACTUALIZAR:
@@ -462,15 +471,14 @@ public class FacturasController implements Initializable {
                             int numeroDeFactura = facturaSeleccionada.getNumeroDeFactura();
 
                             // Primero, eliminar los detalles de la factura
+                            /*
                             PreparedStatement eliminarDetalleFactura = Conexion.getInstance().getConexion().prepareCall("{call sp_eliminarDetalleFacturaPorFactura(?)}");
                             eliminarDetalleFactura.setInt(1, numeroDeFactura);
-                            eliminarDetalleFactura.execute();
-
+                            eliminarDetalleFactura.execute();*/
                             // Luego, eliminar la factura
                             PreparedStatement eliminarFactura = Conexion.getInstance().getConexion().prepareCall("{call sp_eliminarFactura(?)}");
                             eliminarFactura.setInt(1, numeroDeFactura);
                             eliminarFactura.execute();
-
                             listaFacturas.remove(facturaSeleccionada);
                             limpiarControles();
                             cargarDatos();
@@ -490,14 +498,18 @@ public class FacturasController implements Initializable {
     public void reportes() {
         switch (tipoDeOperador) {
             case NINGUNO:
-                try {
-                    imprimirReporte();
-                //generarPDF();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            tipoDeOperador = operador.ACTUALIZAR;
-            break;
+                if (tvFacturas.getSelectionModel().getSelectedItem() != null) {
+                    try {
+                        imprimirReporte();
+                        //generarPDF();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }else{
+                JOptionPane.showMessageDialog(null, "Debe de seleccionar una fila para el reporte");
+                }
+                tipoDeOperador = operador.ACTUALIZAR;
+                break;
             case ACTUALIZAR:
                 tvFacturas.setDisable(false);
                 desactivarControles();
@@ -514,15 +526,15 @@ public class FacturasController implements Initializable {
                 break;
         }
     }
-    
-    public void imprimirReporte(){
+
+    public void imprimirReporte() {
         Map parametros = new HashMap();
         int facturaID = ((Facturas) tvFacturas.getSelectionModel().getSelectedItem()).getNumeroDeFactura();
-       // int facturaID = Integer.parseInt(((Facturas) tvFacturas.getSelectionModel().getSelectedItem()).getNumeroDeFactura());
+        // int facturaID = Integer.parseInt(((Facturas) tvFacturas.getSelectionModel().getSelectedItem()).getNumeroDeFactura());
         parametros.put("facturaID", facturaID);
         GenerarReportes.mostrarReportes("reportFactura.jasper", "Factura", parametros);
     }
-    
+
 
     /*public void generarPDF() {
         try {
@@ -537,7 +549,6 @@ public class FacturasController implements Initializable {
             e.printStackTrace();
         }
     }*/
-
     public void buscarFactura() {
         limpiarControles();
         FilteredList<Facturas> filtro = new FilteredList<>(listaFacturas, e -> true);
@@ -624,7 +635,7 @@ public class FacturasController implements Initializable {
             stage.setIconified(true);
         }
     }
-    
+
     public void actualizarIconoMaximizar(boolean isMaximized) {
         if (isMaximized) {
             iconMaximizar.setRotate(180);

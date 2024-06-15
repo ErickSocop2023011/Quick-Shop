@@ -377,15 +377,15 @@ public class ProductosController implements Initializable {
             }
             registro.setCodigoProducto(productoID);
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "El ID de Producto no puede ser nulo/caracter", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "El ID de Producto no puede ser nulo/caracter no numérico", "Error", JOptionPane.ERROR_MESSAGE);
             if (txtCodigoProd.getText().equals(0)) {
                 int productoID = Integer.parseInt(txtCodigoProd.getText());
                 PreparedStatement eliminarProductoStmt = Conexion.getInstance().getConexion()
                         .prepareCall("{call sp_eliminarProducto(?)}");
                 eliminarProductoStmt.setInt(1, productoID);
                 eliminarProductoStmt.execute();
-
             }
+            return;
         }
         registro.setCodigoProveedor(((Proveedores) cmbCodigoP.getSelectionModel().getSelectedItem()).getCodigoProveedor());
         registro.setCodigoTipoProducto(((TipoProducto) cmbCodigoTipoP.getSelectionModel().getSelectedItem()).getCodigoTipoProducto());
@@ -450,6 +450,8 @@ public class ProductosController implements Initializable {
         }
         return false;
     }
+    
+    
 
     public void editar() {
         switch (tipoDeOperador) {
@@ -472,6 +474,7 @@ public class ProductosController implements Initializable {
                     tipoDeOperador = operador.ACTUALIZAR;
                 } else {
                     JOptionPane.showMessageDialog(null, "Debe de seleccionar una fila para editar");
+                    tvProductos.setDisable(false);
                 }
                 break;
             case ACTUALIZAR:

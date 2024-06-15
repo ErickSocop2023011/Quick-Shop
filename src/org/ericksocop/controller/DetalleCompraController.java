@@ -257,7 +257,7 @@ public class DetalleCompraController implements Initializable {
         return listaCompras = FXCollections.observableList(listaC);
     }
 
-    public void Agregar() {
+    public void Agregar() throws SQLException {
         switch (tipoDeOperador) {
             case NINGUNO:
                 tvDetalleC.setDisable(true);
@@ -295,7 +295,7 @@ public class DetalleCompraController implements Initializable {
         }
     }
 
-    public void guardar() {
+    public void guardar() throws SQLException {
         DetalleCompra registro = new DetalleCompra();
         try {
             int detalleCID = Integer.parseInt(txtCodDetC.getText());
@@ -305,7 +305,15 @@ public class DetalleCompraController implements Initializable {
             }
             registro.setCodigoDetalleCompra(detalleCID);
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "El ID de Detalle Compra no puede ser nulo/vacío", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "El ID de Detalle Compra no puede ser nulo/caracter no numérico", "Error", JOptionPane.ERROR_MESSAGE);
+            if (txtCodDetC.getText().equals(0)) {
+                int productoID = Integer.parseInt(txtCodDetC.getText());
+                PreparedStatement eliminarDetalleC = Conexion.getInstance().getConexion()
+                        .prepareCall("{call sp_eliminarDetalleCompra(?)}");
+                eliminarDetalleC.setInt(1, productoID);
+                eliminarDetalleC.execute();
+            }
+            return;
         }
 
         registro.setCantidad(Integer.parseInt(txtCantidad.getText()));
@@ -371,6 +379,7 @@ public class DetalleCompraController implements Initializable {
                     tipoDeOperador = operador.ACTUALIZAR;
                 } else {
                     JOptionPane.showMessageDialog(null, "Debe de seleccionar una fila para editar");
+                    tvDetalleC.setDisable(false);
                 }
                 break;
             case ACTUALIZAR:

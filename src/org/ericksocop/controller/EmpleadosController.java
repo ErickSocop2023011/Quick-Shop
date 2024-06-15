@@ -219,7 +219,7 @@ public class EmpleadosController implements Initializable {
         return listaCargo = FXCollections.observableList(listaCE);
     }
 
-    public void Agregar() {
+    public void Agregar() throws SQLException {
         switch (tipoDeOperador) {
             case NINGUNO:
                 tvEmpleados.setDisable(true);
@@ -259,7 +259,7 @@ public class EmpleadosController implements Initializable {
 
     }
 
-    public void guardar() {
+    public void guardar() throws SQLException {
         Empleados registro = new Empleados();
         try {
             int empleadoID = Integer.parseInt(txtCodigoEmp.getText());
@@ -269,7 +269,15 @@ public class EmpleadosController implements Initializable {
             }
             registro.setCodigoEmpleado(empleadoID);
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "El ID del Empleado no puede ser nulo/vacío", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "El ID del Empleado no puede ser nulo/caracter no numérico", "Error", JOptionPane.ERROR_MESSAGE);
+            if (txtCodigoEmp.getText().equals(0)) {
+                int empleadoID = Integer.parseInt(txtCodigoEmp.getText());
+                PreparedStatement eliminarProductoStmt = Conexion.getInstance().getConexion()
+                        .prepareCall("{call sp_eliminarEmpleado(?)}");
+                eliminarProductoStmt.setInt(1, empleadoID);
+                eliminarProductoStmt.execute();
+            }
+            return;
         }
         registro.setNombresEmpleado(txtnomEmp.getText());
         registro.setApellidosEmpleado(txtApellidosEmp.getText());

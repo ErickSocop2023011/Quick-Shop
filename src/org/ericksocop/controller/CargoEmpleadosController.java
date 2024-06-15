@@ -11,6 +11,7 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcons;
 import java.net.URL;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 import javafx.animation.RotateTransition;
@@ -145,7 +146,7 @@ public class CargoEmpleadosController implements Initializable {
         return listaCargo = FXCollections.observableList(lista);
     }
 
-    public void Agregar() {
+    public void Agregar() throws SQLException {
         switch (tipoDeOperador) {
             case NINGUNO:
                 tvCargoE.setDisable(true);
@@ -184,7 +185,7 @@ public class CargoEmpleadosController implements Initializable {
 
     }
 
-    public void guardar() {
+    public void guardar() throws SQLException {
         CargoEmpleados registro = new CargoEmpleados();
         try {
             int cargoID = Integer.parseInt(txtCodigoCargoE.getText());
@@ -194,7 +195,14 @@ public class CargoEmpleadosController implements Initializable {
             }
             registro.setCodigoCargoEmpleado(cargoID);
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "El ID del Cargo no puede ser nulo/vacio", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "El ID del Cargo no puede ser nulo/caracter no numérico", "Error", JOptionPane.ERROR_MESSAGE);
+            if (txtCodigoCargoE.getText().equals(0)) {
+                int cargoE = Integer.parseInt(txtCodigoCargoE.getText());
+                PreparedStatement eliminarCargo = Conexion.getInstance().getConexion()
+                        .prepareCall("{call sp_eliminarCargoEmpleado(?)}");
+                eliminarCargo.setInt(1, cargoE);
+                eliminarCargo.execute();
+            }
             return;
         }
 
@@ -282,6 +290,7 @@ public class CargoEmpleadosController implements Initializable {
                     tipoDeOperador = operador.ACTUALIZAR;
                 } else {
                     JOptionPane.showMessageDialog(null, "Debe de seleccionar una fila para editar");
+                    tvCargoE.setDisable(false);
                 }
                 break;
             case ACTUALIZAR:

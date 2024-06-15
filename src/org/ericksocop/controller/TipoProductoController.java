@@ -11,6 +11,7 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcons;
 import java.net.URL;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 import javafx.animation.RotateTransition;
@@ -139,7 +140,7 @@ public class TipoProductoController implements Initializable {
     }
 
     @FXML
-    public void Agregar() {
+    public void Agregar() throws SQLException {
         switch (tipoDeOperador) {
             case NINGUNO:
                 tvDescripcionP.setDisable(true);
@@ -178,7 +179,7 @@ public class TipoProductoController implements Initializable {
 
     }
 
-    public void guardar() {
+    public void guardar() throws SQLException {
         TipoProducto registro = new TipoProducto();
         try {
             int tipoProductoID = Integer.parseInt(txtCodigoP.getText());
@@ -188,7 +189,15 @@ public class TipoProductoController implements Initializable {
             }
             registro.setCodigoTipoProducto(tipoProductoID);
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "El ID del Tipo Producto no puede ser nulo/vacío", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "El ID del Tipo Producto no puede ser nulo/caracter no numérico", "Error", JOptionPane.ERROR_MESSAGE);
+            if (txtCodigoP.getText().equals(0)) {
+                int tipoProductoID = Integer.parseInt(txtCodigoP.getText());
+                PreparedStatement eliminarTipoProducto = Conexion.getInstance().getConexion()
+                        .prepareCall("{call sp_eliminarTipoProducto(?)}");
+                eliminarTipoProducto.setInt(1, tipoProductoID);
+                eliminarTipoProducto.execute();
+            }
+            return;
         }
         registro.setDesrcipcionProducto(txtDescripcionP.getText());
         try {
@@ -275,6 +284,7 @@ public class TipoProductoController implements Initializable {
                     tipoDeOperador = operador.ACTUALIZAR;
                 } else {
                     JOptionPane.showMessageDialog(null, "Debe de seleccionar una fila para editar");
+                    tvDescripcionP.setDisable(false);
                 }
                 break;
             case ACTUALIZAR:

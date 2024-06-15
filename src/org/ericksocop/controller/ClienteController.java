@@ -11,6 +11,7 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcons;
 import java.net.URL;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -184,7 +185,7 @@ public class ClienteController implements Initializable {
     }
 
     @FXML
-    public void Agregar() {
+    public void Agregar() throws SQLException {
         switch (tipoDeOperador) {
             case NINGUNO:
                 tvCliente.setDisable(true);
@@ -223,25 +224,37 @@ public class ClienteController implements Initializable {
 
     }
 
-    public void guardar() {
+    public void guardar() throws SQLException {
         Clientes registro = new Clientes();
 
         try {
             int clienteID = Integer.parseInt(txtClienteID.getText());
+            String nit = txtNIT.getText();
             if (existeCodigoCliente(clienteID)) {
                 JOptionPane.showMessageDialog(null, "El ID del Cliente ya existe. Por favor, ingrese uno nuevo.", "Error", JOptionPane.ERROR_MESSAGE);
                 return; // Detener el proceso de guardado
+            }else if(existeNIT(nit)){
+                 JOptionPane.showMessageDialog(null, "El NIT del Cliente ya existe. Por favor, ingrese uno diferente.", "Error", JOptionPane.ERROR_MESSAGE);
+                return; // Detener el proceso de guardado
             }
             registro.setClienteID(clienteID);
+            registro.setNITClientes(nit);
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "El ID del Cliente no puede ser nulo/vacío", "Error", JOptionPane.ERROR_MESSAGE);
-            return; // Detener el proceso de guardado
+            JOptionPane.showMessageDialog(null, "El ID del Cliente no puede ser nulo/caracter no numérico", "Error", JOptionPane.ERROR_MESSAGE);
+            if (txtClienteID.getText().equals(0)) {
+                int productoID = Integer.parseInt(txtClienteID.getText());
+                PreparedStatement eliminarProductoStmt = Conexion.getInstance().getConexion()
+                        .prepareCall("{call sp_eliminarClientes(?)}");
+                eliminarProductoStmt.setInt(1, productoID);
+                eliminarProductoStmt.execute();
+            }
+            return;
 
         }
         registro.setNombreClientes(txtNombreCliente.getText());
         registro.setApellidoClientes(txtApellidoCliente.getText());
         registro.setDireccionClientes(txtDireccionCliente.getText());
-        registro.setNITClientes(txtNIT.getText());
+        
         registro.setTelefonoClientes(txtTelefonoCli.getText());
         registro.setCorreoClientes(txtCorreoCliente.getText());
         try {
@@ -267,6 +280,15 @@ public class ClienteController implements Initializable {
     private boolean existeCodigoCliente(int codigoCliente) {
         for (Clientes cliente : listaClientes) {
             if (cliente.getClienteID() == codigoCliente) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    private boolean existeNIT(String nit) {
+        for (Clientes cliente : listaClientes) {
+            if (cliente.getNITClientes().equals(nit)) {
                 return true;
             }
         }
@@ -337,6 +359,7 @@ public class ClienteController implements Initializable {
                     tipoDeOperador = operador.ACTUALIZAR;
                 } else {
                     JOptionPane.showMessageDialog(null, "Debe de seleccionar una fila para editar");
+                    tvCliente.setDisable(false);
                 }
                 break;
             case ACTUALIZAR:

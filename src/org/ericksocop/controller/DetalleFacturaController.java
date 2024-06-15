@@ -259,7 +259,7 @@ public class DetalleFacturaController implements Initializable {
         return resultado;
     }
     
-    public void Agregar() {
+    public void Agregar() throws SQLException {
         switch (tipoDeOperador) {
             case NINGUNO:
                 tvDetalleF.setDisable(true);
@@ -297,7 +297,7 @@ public class DetalleFacturaController implements Initializable {
         }
     }
     
-    public void guardar() {
+    public void guardar() throws SQLException {
         DetalleFactura registro = new DetalleFactura();
         try {
             int detalleFacturaID = Integer.parseInt(txtCodDetF.getText());
@@ -307,7 +307,15 @@ public class DetalleFacturaController implements Initializable {
             }
             registro.setCodigoDetalleFactura(detalleFacturaID);
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "El ID de Detalle Factura no puede ser nulo/vacío", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "El ID de Detalle Factura no puede ser nulo/caracter no numérico", "Error", JOptionPane.ERROR_MESSAGE);
+            if (txtCodDetF.getText().equals(0)) {
+                int detalleF = Integer.parseInt(txtCodDetF.getText());
+                PreparedStatement eliminarDetalleF = Conexion.getInstance().getConexion()
+                        .prepareCall("{call sp_eliminarDetalleFactura(?)}");
+                eliminarDetalleF.setInt(1, detalleF);
+                eliminarDetalleF.execute();
+            }
+            return;
         }
         registro.setPrecioUnitario(Double.parseDouble("0.00"));
         //registro.setPrecioUnitario(Double.parseDouble(txtPrecioU.getText()));
@@ -357,6 +365,7 @@ public class DetalleFacturaController implements Initializable {
                     tipoDeOperador = operador.ACTUALIZAR;
                 } else {
                     JOptionPane.showMessageDialog(null, "Debe de seleccionar una fila para editar");
+                    tvDetalleF.setDisable(false);
                 }
                 break;
             case ACTUALIZAR:

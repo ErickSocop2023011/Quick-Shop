@@ -11,6 +11,7 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcons;
 import java.net.URL;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -202,7 +203,7 @@ public class ProveedorController implements Initializable {
         return listaProveedores = FXCollections.observableList(listaPro);
     }
 
-    public void Agregar() {
+    public void Agregar() throws SQLException {
         switch (tipoDeOperador) {
             case NINGUNO:
                 tvPoveedores.setDisable(true);
@@ -240,19 +241,32 @@ public class ProveedorController implements Initializable {
         }
     }
 
-    public void guardar() {
+    public void guardar() throws SQLException {
         Proveedores registro = new Proveedores();
         try {
             int provID = Integer.parseInt(txtCodigoP.getText());
-            if(existeCodigoProducto(provID)){
+            String nit = txtNITP.getText();
+            if (existeCodigoProducto(provID)) {
                 JOptionPane.showMessageDialog(null, "El ID del Proveedor ya existe. Por favor, ingrese uno nuevo.", "Error", JOptionPane.ERROR_MESSAGE);
                 return; // Detener el proceso de guardado
+            }else if(existeNIT(nit)){
+                 JOptionPane.showMessageDialog(null, "El NIT del Cliente ya existe. Por favor, ingrese uno diferente.", "Error", JOptionPane.ERROR_MESSAGE);
+                return; // Detener el proceso de guardado
             }
-            registro.setCodigoProveedor(Integer.parseInt(txtCodigoP.getText()));
+            registro.setCodigoProveedor(provID);
+            registro.setNITProveedor(nit);
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "El ID del Proveedor no puede ser nulo/vacío", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "El ID del Proveedor no puede ser nulo/caracter no numérico", "Error", JOptionPane.ERROR_MESSAGE);
+            if (txtCodigoP.getText().equals(0)) {
+                int proveedorID = Integer.parseInt(txtCodigoP.getText());
+                PreparedStatement eliminarProv = Conexion.getInstance().getConexion()
+                        .prepareCall("{call sp_eliminarproveedor(?)}");
+                eliminarProv.setInt(1, proveedorID);
+                eliminarProv.execute();
+            }
+            return;
         }
-        registro.setNITProveedor(txtNITP.getText());
+        
         registro.setNombresProveedor(txtNombresP.getText());
         registro.setApellidosProveedor(txtApellidosP.getText());
         registro.setDireccionProveedor(txtDireccionP.getText());
@@ -280,10 +294,19 @@ public class ProveedorController implements Initializable {
             e.printStackTrace();
         }
     }
-    
+
     private boolean existeCodigoProducto(int productoID) {
         for (Proveedores prov : listaProveedores) {
-            if (prov.getCodigoProveedor()== productoID) {
+            if (prov.getCodigoProveedor() == productoID) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    private boolean existeNIT(String nitProv) {
+        for (Proveedores prov : listaProveedores) {
+            if (prov.getNITProveedor().equals(nitProv)) {
                 return true;
             }
         }
@@ -316,7 +339,7 @@ public class ProveedorController implements Initializable {
                         try {
                             Proveedores productoSeleccionado = (Proveedores) tvPoveedores.getSelectionModel().getSelectedItem();
                             int codigoProducto = productoSeleccionado.getCodigoProveedor();
-
+                            /*
                             PreparedStatement eliminarDetalleCompraStmt = Conexion.getInstance().getConexion()
                                     .prepareCall("{call sp_eliminarDetalleCompraPorProducto(?)}");
                             eliminarDetalleCompraStmt.setInt(1, codigoProducto);
@@ -330,7 +353,7 @@ public class ProveedorController implements Initializable {
                             PreparedStatement eliminarProductoPorProveedorStmt = Conexion.getInstance().getConexion()
                                     .prepareCall("{call sp_eliminarProductoPorProveedor(?)}");
                             eliminarProductoPorProveedorStmt.setInt(1, codigoProducto);
-                            eliminarProductoPorProveedorStmt.execute();
+                            eliminarProductoPorProveedorStmt.execute();*/
 
                             PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_eliminarproveedor(?)}");
                             procedimiento.setInt(1, codigoProducto);
@@ -368,6 +391,7 @@ public class ProveedorController implements Initializable {
                     tipoDeOperador = operador.ACTUALIZAR;
                 } else {
                     JOptionPane.showMessageDialog(null, "Debe de seleccionar una fila para editar");
+                    tvPoveedores.setDisable(false);
                 }
                 break;
             case ACTUALIZAR:
