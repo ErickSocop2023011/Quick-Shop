@@ -13,6 +13,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.animation.RotateTransition;
 import javafx.collections.FXCollections;
@@ -35,9 +37,9 @@ import javafx.util.Duration;
 import javax.swing.JOptionPane;
 import org.ericksocop.bean.Compras;
 import org.ericksocop.bean.DetalleCompra;
-import org.ericksocop.bean.DetalleFactura;
 import org.ericksocop.bean.Productos;
 import org.ericksocop.dao.Conexion;
+import org.ericksocop.report.GenerarReportes;
 import org.ericksocop.system.Main;
 
 /**
@@ -316,11 +318,30 @@ public class DetalleCompraController implements Initializable {
             return;
         }
 
-        registro.setCantidad(Integer.parseInt(txtCantidad.getText()));
-        registro.setCostoUnitario(Double.parseDouble(txtCostoU.getText()));
-        registro.setCodigoProducto((((Productos) cmbCodPro.getSelectionModel().getSelectedItem()).getCodigoProducto()));
-        registro.setNumeroDocumento((((Compras) cmbNumDoc.getSelectionModel().getSelectedItem()).getNumeroDocumento()));
-
+        try {
+            registro.setCantidad(Integer.parseInt(txtCantidad.getText()));
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "La Cantidad no puede ser nula/caracter no númerico", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        try {
+            registro.setCostoUnitario(Double.parseDouble(txtCostoU.getText()));
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "El Costo Unitario no puede ser nulo", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        try {
+            registro.setCodigoProducto((((Productos) cmbCodPro.getSelectionModel().getSelectedItem()).getCodigoProducto()));
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "El Producto ID no puede ser nulo", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        try {
+            registro.setNumeroDocumento((((Compras) cmbNumDoc.getSelectionModel().getSelectedItem()).getNumeroDocumento()));
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "El Compra ID no puede ser nulo", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
         try {
             PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_crearDetalleCompra(?,?,?, ?,?)}");
             procedimiento.setInt(1, registro.getCodigoDetalleCompra());
@@ -330,7 +351,11 @@ public class DetalleCompraController implements Initializable {
             procedimiento.setInt(5, registro.getNumeroDocumento());
             procedimiento.execute();
             // actualizarStockInsertarDetalle(registro.getCodigoProducto(), registro.getCantidad());
-            listaDetalleC.add(registro);
+            if (registro.getCodigoDetalleCompra() != 0) {
+                listaDetalleC.add(registro);
+            } else {
+                limpiarControles();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -345,7 +370,7 @@ public class DetalleCompraController implements Initializable {
         return false;
     }
 
-   /* public void actualizarStockInsertarDetalle(int codigoProducto, int cantidad) {
+    /* public void actualizarStockInsertarDetalle(int codigoProducto, int cantidad) {
         DetalleFactura detalleFactura = new DetalleFactura();
         detalleFactura.setCodigoProducto(codigoProducto);
         detalleFactura.setCantidad(cantidad);
@@ -360,7 +385,6 @@ public class DetalleCompraController implements Initializable {
 
         }
     }*/
-
     public void editar() {
         switch (tipoDeOperador) {
             case NINGUNO:
@@ -409,10 +433,55 @@ public class DetalleCompraController implements Initializable {
         try {
             PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_editarDetalleCompra(?,?,?,?,?)}");
             DetalleCompra registro = (DetalleCompra) tvDetalleC.getSelectionModel().getSelectedItem();
-            registro.setCantidad(Integer.parseInt(txtCantidad.getText()));
-            registro.setCostoUnitario(Double.parseDouble(txtCostoU.getText()));
-            registro.setCodigoProducto((((Productos) cmbCodPro.getSelectionModel().getSelectedItem()).getCodigoProducto()));
-            registro.setNumeroDocumento((((Compras) cmbNumDoc.getSelectionModel().getSelectedItem()).getNumeroDocumento()));
+
+            // Verificar y establecer la cantidad
+            try {
+                int cantidad = Integer.parseInt(txtCantidad.getText());
+                if (cantidad == 0) {
+                    JOptionPane.showMessageDialog(null, "La Cantidad no puede ser 0" + "\n"
+                            + "Valor predefinido: 1", "Error", JOptionPane.ERROR_MESSAGE);
+                    cantidad = 1;
+                    registro.setCantidad(cantidad);
+                }
+                registro.setCantidad(cantidad);
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "La Cantidad no puede ser nula" + "\n"
+                        + "Valor predefinido: 1", "Error", JOptionPane.ERROR_MESSAGE);
+                int cantidad = 1;
+                registro.setCantidad(cantidad);
+                return;
+            }
+
+            // Verificar y establecer el costo unitario
+            try {
+                double costoUnitario = Double.parseDouble(txtCostoU.getText());
+                if (costoUnitario == 0) {
+                    JOptionPane.showMessageDialog(null, "El Costo Unitario no puede ser 0", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                registro.setCostoUnitario(costoUnitario);
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "El Costo Unitario no puede ser nulo", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Establecer código de producto
+            try {
+                registro.setCodigoProducto((((Productos) cmbCodPro.getSelectionModel().getSelectedItem()).getCodigoProducto()));
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "El Producto ID no puede ser nulo", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Establecer número de documento
+            try {
+                registro.setNumeroDocumento((((Compras) cmbNumDoc.getSelectionModel().getSelectedItem()).getNumeroDocumento()));
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "El Compra ID no puede ser nulo", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Ejecutar procedimiento
             procedimiento.setInt(1, registro.getCodigoDetalleCompra());
             procedimiento.setDouble(2, registro.getCostoUnitario());
             procedimiento.setInt(3, registro.getCantidad());
@@ -484,10 +553,10 @@ public class DetalleCompraController implements Initializable {
             // Manejar cualquier excepción
         }
     }*/
-
     public void reportes() {
         switch (tipoDeOperador) {
             case NINGUNO:
+                imprimirReporte();
                 break;
             case ACTUALIZAR:
                 tvDetalleC.setDisable(false);
@@ -504,6 +573,12 @@ public class DetalleCompraController implements Initializable {
                 tipoDeOperador = operador.NINGUNO;
                 break;
         }
+    }
+
+    public void imprimirReporte() {
+        Map parametros = new HashMap();
+        parametros.put("numeroDocumento", null);
+        GenerarReportes.mostrarReportes("reportDetalleC.jasper", "Reporte de Detalle Compra", parametros);
     }
 
     public void buscarDetCompra(KeyEvent event) {

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reportDetalleF" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="fb8f6950-5ae5-4a1b-81b8-1c88e7d15c7d">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="192"/>
+	<queryString>
+		<![CDATA[call sp_mostrarDetallesFactura()]]>
+	</queryString>
+	<field name="codigoDetalleFactura" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="precioUnitario" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="cantidad" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="numeroDeFactura" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="codigoProducto" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<background>
+		<band height="802" splitType="Stretch">
+			<image scaleImage="FillFrame">
+				<reportElement x="0" y="0" width="555" height="802" uuid="ef70036d-b91a-42c3-8c3b-5f9b4d6ab2b1"/>
+				<imageExpression><![CDATA["C:\\Users\\mauco\\OneDrive\\Documentos\\Kinal 2024\\Taller\\QuickShop\\src\\org\\ericksocop\\resource\\BackgroundReporteDetalleF.png"]]></imageExpression>
+			</image>
+		</band>
+	</background>
+	<title>
+		<band height="121" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="105" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="89" splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="38" splitType="Stretch">
+			<textField>
+				<reportElement x="60" y="0" width="52" height="38" uuid="f85ca106-03bc-4cd8-84c5-a05b213c9baa"/>
+				<textElement textAlignment="Center" verticalAlignment="Top"/>
+				<textFieldExpression><![CDATA[$F{codigoDetalleFactura}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="128" y="0" width="83" height="38" uuid="2dc412f4-3473-43f3-99eb-523fc427f47c"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{precioUnitario}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="228" y="0" width="84" height="38" uuid="8c92b3a5-d041-4dfe-b2e3-f0ef75fb20bf"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{cantidad}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="328" y="0" width="74" height="38" uuid="c15cc996-4c85-497d-9a72-c41f86f99bdd"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{numeroDeFactura}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="422" y="0" width="68" height="38" uuid="58867ef4-5200-4573-8d72-8372ffecf205"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{codigoProducto}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="39" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

@@ -29,6 +29,8 @@ import java.sql.Date;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
 import javafx.animation.RotateTransition;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
@@ -37,6 +39,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javax.swing.JOptionPane;
+import org.ericksocop.report.GenerarReportes;
 
 /**
  * FXML Controller class
@@ -223,7 +226,7 @@ public class ComprasController implements Initializable {
                 return; // Detener el proceso de guardado
             }
             registro.setNumeroDocumento(compraID);
-            
+
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "El ID de la Compra no puede ser nulo/caracter no numérico", "Error", JOptionPane.ERROR_MESSAGE);
             if (txtNumDoc.getText().equals(0)) {
@@ -257,8 +260,12 @@ public class ComprasController implements Initializable {
             procedimiento.setDate(2, fechaDocumento);
             procedimiento.setString(3, registro.getDescripcionCompra());
             procedimiento.setDouble(4, registro.getTotalDocumento());
-            procedimiento.execute();
-            listaCompras.add(registro);
+            if (registro.getNumeroDocumento() != 0) {
+                procedimiento.execute();
+                listaCompras.add(registro);
+            } else {
+                limpiarControles();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -266,7 +273,7 @@ public class ComprasController implements Initializable {
 
     private boolean existeCodigoCompra(int compraID) {
         for (Compras compras : listaCompras) {
-            if (compras.getNumeroDocumento()== compraID) {
+            if (compras.getNumeroDocumento() == compraID) {
                 return true;
             }
         }
@@ -359,6 +366,7 @@ public class ComprasController implements Initializable {
     public void reportes() {
         switch (tipoDeOperador) {
             case NINGUNO:
+                imprimirReporte();
                 break;
             case ACTUALIZAR:
                 tvCompras.setDisable(false);
@@ -375,6 +383,12 @@ public class ComprasController implements Initializable {
                 tipoDeOperador = operador.NINGUNO;
                 break;
         }
+    }
+
+    public void imprimirReporte() {
+        Map parametros = new HashMap();
+        parametros.put("numeroDocumento", null);
+        GenerarReportes.mostrarReportes("reportCompra.jasper", "Reporte de Compras", parametros);
     }
 
     public void actualizar() {

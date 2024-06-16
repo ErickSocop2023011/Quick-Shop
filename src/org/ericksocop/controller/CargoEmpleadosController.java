@@ -13,6 +13,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.animation.RotateTransition;
 import javafx.collections.FXCollections;
@@ -32,6 +34,7 @@ import javafx.util.Duration;
 import javax.swing.JOptionPane;
 import org.ericksocop.bean.CargoEmpleados;
 import org.ericksocop.dao.Conexion;
+import org.ericksocop.report.GenerarReportes;
 import org.ericksocop.system.Main;
 
 /**
@@ -213,8 +216,12 @@ public class CargoEmpleadosController implements Initializable {
             procedimiento.setInt(1, registro.getCodigoCargoEmpleado());
             procedimiento.setString(2, registro.getNombreCargo());
             procedimiento.setString(3, registro.getDescripcionCargo());
+            if(registro.getCodigoCargoEmpleado() != 0){
             procedimiento.execute();
             listaCargo.add(registro);
+            }else{
+            limpiarControles();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -315,6 +322,7 @@ public class CargoEmpleadosController implements Initializable {
     public void reportes() {
         switch (tipoDeOperador) {
             case NINGUNO:
+                imprimirReporte();
                 break;
             case ACTUALIZAR:
                 tvCargoE.setDisable(false);
@@ -331,6 +339,12 @@ public class CargoEmpleadosController implements Initializable {
                 tipoDeOperador = operador.NINGUNO;
                 break;
         }
+    }
+    
+    public void imprimirReporte() {
+        Map parametros = new HashMap();
+        parametros.put("codigoCargoEmpleado", null);
+        GenerarReportes.mostrarReportes("reportCargoE.jasper", "Reporte de Cargo Empleados", parametros);
     }
 
     public void actualizar() {

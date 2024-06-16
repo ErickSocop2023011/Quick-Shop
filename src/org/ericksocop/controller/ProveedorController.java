@@ -288,8 +288,12 @@ public class ProveedorController implements Initializable {
             procedimiento.setString(8, registro.getPaginaWeb());
             procedimiento.setString(9, registro.getTelefonoProveedor());
             procedimiento.setString(10, registro.getEmailProveedor());
+            if(registro.getCodigoProveedor() != 0){
             procedimiento.execute();
             listaProveedores.add(registro);
+            }else{
+                limpiarControles();
+            } 
         } catch (Exception e) {
             e.printStackTrace();
         }

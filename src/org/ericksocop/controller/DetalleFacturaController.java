@@ -13,6 +13,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.animation.RotateTransition;
 import javafx.collections.FXCollections;
@@ -35,6 +37,7 @@ import org.ericksocop.bean.DetalleFactura;
 import org.ericksocop.bean.Facturas;
 import org.ericksocop.bean.Productos;
 import org.ericksocop.dao.Conexion;
+import org.ericksocop.report.GenerarReportes;
 import org.ericksocop.system.Main;
 
 /**
@@ -319,7 +322,14 @@ public class DetalleFacturaController implements Initializable {
         }
         registro.setPrecioUnitario(Double.parseDouble("0.00"));
         //registro.setPrecioUnitario(Double.parseDouble(txtPrecioU.getText()));
-        registro.setCantidad(Integer.parseInt(txtCantidad.getText()));
+        try {
+            registro.setCantidad(Integer.parseInt(txtCantidad.getText()));
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "La Cantidad no puede ser nula/caracter no numérico" + "\n"
+                    + "Valor predefinido: 1", "Error", JOptionPane.ERROR_MESSAGE);
+            registro.setCantidad(1);
+            return;
+        }
         registro.setNumeroDeFactura(((Facturas) cmbNumF.getSelectionModel().getSelectedItem()).getNumeroDeFactura());
         registro.setCodigoProducto(((Productos) cmbCodP.getSelectionModel().getSelectedItem()).getCodigoProducto());
         
@@ -330,9 +340,12 @@ public class DetalleFacturaController implements Initializable {
             procedimiento.setInt(3, registro.getCantidad());
             procedimiento.setInt(4, registro.getNumeroDeFactura());
             procedimiento.setInt(5, registro.getCodigoProducto());
+            if(registro.getCodigoDetalleFactura() != 0){
             procedimiento.execute();
-            
             listaDetalleFactura.add(registro);
+            }else{
+            limpiarControles();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -468,6 +481,7 @@ public class DetalleFacturaController implements Initializable {
     public void reportes() {
         switch (tipoDeOperador) {
             case NINGUNO:
+                imprimirReporte();
                 break;
             case ACTUALIZAR:
                 tvDetalleF.setDisable(false);
@@ -484,6 +498,12 @@ public class DetalleFacturaController implements Initializable {
                 tipoDeOperador = operador.NINGUNO;
                 break;
         }
+    }
+    
+    public void imprimirReporte() {
+        Map parametros = new HashMap();
+        parametros.put("codigoDetalleFactura", null);
+        GenerarReportes.mostrarReportes("reportDetalleF.jasper", "Reporte de Detalle Factura", parametros);
     }
     
     public void buscarDetFact() {

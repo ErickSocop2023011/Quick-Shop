@@ -263,7 +263,7 @@ public class EmpleadosController implements Initializable {
         Empleados registro = new Empleados();
         try {
             int empleadoID = Integer.parseInt(txtCodigoEmp.getText());
-            if(existeCodigoEmpleado(empleadoID)){
+            if (existeCodigoEmpleado(empleadoID)) {
                 JOptionPane.showMessageDialog(null, "El ID del Empleado ya existe. Por favor, ingrese uno nuevo.", "Error", JOptionPane.ERROR_MESSAGE);
                 return; // Detener el proceso de guardado
             }
@@ -281,11 +281,23 @@ public class EmpleadosController implements Initializable {
         }
         registro.setNombresEmpleado(txtnomEmp.getText());
         registro.setApellidosEmpleado(txtApellidosEmp.getText());
-        registro.setSueldo(Double.parseDouble(txtSueldo.getText()));
+        try {
+            registro.setSueldo(Double.parseDouble(txtSueldo.getText()));
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "El Sueldo no puede ser nulo/caracter no numérico" + "\n"
+                    + "Suelo Predefinido 2,500", "Error", JOptionPane.ERROR_MESSAGE);
+            registro.setSueldo(2500.00);
+
+        }
         registro.setDireccion(txtDireccionEmp.getText());
         registro.setTurno(txtTurno.getText());
+        try{
         registro.setCodigoCargoEmpleado(((CargoEmpleados) cmbCargoEmp.getSelectionModel().getSelectedItem()).getCodigoCargoEmpleado());
 
+        }catch(Exception e){
+                JOptionPane.showMessageDialog(null, "El Cargo del empleado no puede ser nulo", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+        }
         try {
             PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_crearEmpleado(?,?,?,?,?,?,?)}");
             procedimiento.setInt(1, registro.getCodigoEmpleado());
@@ -295,17 +307,20 @@ public class EmpleadosController implements Initializable {
             procedimiento.setString(5, registro.getDireccion());
             procedimiento.setString(6, registro.getTurno());
             procedimiento.setInt(7, registro.getCodigoCargoEmpleado());
+            if(registro.getCodigoEmpleado() != 0){
             procedimiento.execute();
-
             listaEmpleados.add(registro);
+            }else{
+            limpiarControles();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    
+
     private boolean existeCodigoEmpleado(int codigoID) {
-        for (Empleados  empl : listaEmpleados) {
-            if (empl.getCodigoEmpleado()== codigoID) {
+        for (Empleados empl : listaEmpleados) {
+            if (empl.getCodigoEmpleado() == codigoID) {
                 return true;
             }
         }
@@ -330,6 +345,7 @@ public class EmpleadosController implements Initializable {
                     tipoDeOperador = operador.ACTUALIZAR;
                 } else {
                     JOptionPane.showMessageDialog(null, "Debe de seleccionar una fila para editar");
+                    tvEmpleados.setDisable(false);
                 }
                 break;
             case ACTUALIZAR:
@@ -358,7 +374,13 @@ public class EmpleadosController implements Initializable {
             registro.setCodigoEmpleado(Integer.parseInt(txtCodigoEmp.getText()));
             registro.setNombresEmpleado(txtnomEmp.getText());
             registro.setApellidosEmpleado(txtApellidosEmp.getText());
-            registro.setSueldo(Double.parseDouble(txtSueldo.getText()));
+            try {
+                registro.setSueldo(Double.parseDouble(txtSueldo.getText()));
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "El Sueldo no puede ser nulo/caracter no numérico" + "\n"
+                        + "Suelo Predefinido 2,500", "Error", JOptionPane.ERROR_MESSAGE);
+                registro.setSueldo(2500.00);
+            }
             registro.setDireccion(txtDireccionEmp.getText());
             registro.setTurno(txtTurno.getText());
             registro.setCodigoCargoEmpleado(((CargoEmpleados) cmbCargoEmp.getSelectionModel().getSelectedItem()).getCodigoCargoEmpleado());
@@ -411,7 +433,6 @@ public class EmpleadosController implements Initializable {
                                     .prepareCall("{call sp_eliminarFacturaPorEmpleado(?)}");
                             eliminarFactura.setInt(1, codigoEmpleado);
                             eliminarFactura.execute();*/
-
                             // Finalmente, eliminar el empleado
                             PreparedStatement eliminarEmpleado = Conexion.getInstance().getConexion()
                                     .prepareCall("{call sp_eliminarEmpleado(?)}");
@@ -522,7 +543,7 @@ public class EmpleadosController implements Initializable {
         txtTurno.clear();
         cmbCargoEmp.setValue(null);
     }
-    
+
     public void actualizarIconoMaximizar(boolean isMaximized) {
         if (isMaximized) {
             iconMaximizar.setRotate(180);
@@ -553,7 +574,7 @@ public class EmpleadosController implements Initializable {
             } else {
                 stage.setMaximized(true);
                 escenarioPrincipal.setIsMaximized(true);
-               // iconMaximizar.setRotate(180);
+                // iconMaximizar.setRotate(180);
             }
             rotateTransition.play();
         }

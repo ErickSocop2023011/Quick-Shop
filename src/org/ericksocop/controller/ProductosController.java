@@ -22,8 +22,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.animation.RotateTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -323,8 +321,8 @@ public class ProductosController implements Initializable {
         return listaTipoP = FXCollections.observableList(lista);
     }
 
-    public void Agregar() throws SQLException 
-{        switch (tipoDeOperador) {
+    public void Agregar() throws SQLException {
+        switch (tipoDeOperador) {
             case NINGUNO:
                 tvProductos.setDisable(true);
                 imageViewProducto.setImage(null);
@@ -369,6 +367,8 @@ public class ProductosController implements Initializable {
     public void guardar() throws SQLException {
         imageViewProducto.setImage(null);
         Productos registro = new Productos();
+
+        // Verificación del ID del Producto
         try {
             int productoID = Integer.parseInt(txtCodigoProd.getText());
             if (existeCodigoProducto(productoID)) {
@@ -377,29 +377,37 @@ public class ProductosController implements Initializable {
             }
             registro.setCodigoProducto(productoID);
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "El ID de Producto no puede ser nulo/caracter no numérico", "Error", JOptionPane.ERROR_MESSAGE);
-            if (txtCodigoProd.getText().equals(0)) {
-                int productoID = Integer.parseInt(txtCodigoProd.getText());
-                PreparedStatement eliminarProductoStmt = Conexion.getInstance().getConexion()
-                        .prepareCall("{call sp_eliminarProducto(?)}");
-                eliminarProductoStmt.setInt(1, productoID);
-                eliminarProductoStmt.execute();
-            }
+            JOptionPane.showMessageDialog(null, "El ID del Producto no puede ser nulo/caracter no numérico", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        registro.setCodigoProveedor(((Proveedores) cmbCodigoP.getSelectionModel().getSelectedItem()).getCodigoProveedor());
-        registro.setCodigoTipoProducto(((TipoProducto) cmbCodigoTipoP.getSelectionModel().getSelectedItem()).getCodigoTipoProducto());
-        registro.setDescripcionProducto(txtDescPro.getText());
 
+        // Verificación del Proveedor ID
+        try {
+            registro.setCodigoProveedor(((Proveedores) cmbCodigoP.getSelectionModel().getSelectedItem()).getCodigoProveedor());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "El Proveedor ID no puede ser nulo", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Verificación de la Existencia
         try {
             registro.setExistencia(Integer.parseInt(txtExistencia.getText()));
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "Existencias no puede ser nulo/vacío" + "\n"
-                    + "Valor Predefinido 1", "Error", JOptionPane.INFORMATION_MESSAGE);
-            
-            registro.setExistencia(1);
+            JOptionPane.showMessageDialog(null, "Existencias no puede ser nulo/caracter no númerico", "Error", JOptionPane.ERROR_MESSAGE);
         }
 
+        // Verificación del Tipo Producto ID
+        try {
+            registro.setCodigoTipoProducto(((TipoProducto) cmbCodigoTipoP.getSelectionModel().getSelectedItem()).getCodigoTipoProducto());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "El Tipo Producto ID no puede ser nulo", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Establecer descripción del producto
+        registro.setDescripcionProducto(txtDescPro.getText());
+
+        // Manejo de la imagen del producto
         if (archivoSeleccionado != null) {
             try {
                 byte[] imageBytes = leerArchivo(archivoSeleccionado);
@@ -411,10 +419,12 @@ public class ProductosController implements Initializable {
             registro.setImagenProducto(null);
         }
 
-        registro.setPrecioDocena(Double.parseDouble("0.00"));
-        registro.setPrecioMayor(Double.parseDouble("0.00"));
-        registro.setPrecioUnitario(Double.parseDouble("0.00"));
+        // Establecer precios predeterminados
+        registro.setPrecioDocena(0.00);
+        registro.setPrecioMayor(0.00);
+        registro.setPrecioUnitario(0.00);
 
+        // Ejecutar el procedimiento almacenado para guardar el producto
         try {
             PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{Call sp_agregarProducto(?,?,?,?,?,?,?,?,?)}");
             procedimiento.setInt(1, registro.getCodigoProducto());
@@ -422,21 +432,18 @@ public class ProductosController implements Initializable {
             procedimiento.setDouble(3, registro.getPrecioUnitario());
             procedimiento.setDouble(4, registro.getPrecioDocena());
             procedimiento.setDouble(5, registro.getPrecioMayor());
-            if (registro.getImagenProducto() != null) {
-                procedimiento.setBlob(6, registro.getImagenProducto());
-            } else {
-                procedimiento.setNull(6, java.sql.Types.BLOB);
-            }
+            procedimiento.setBlob(6, registro.getImagenProducto());
             procedimiento.setInt(7, registro.getExistencia());
             procedimiento.setInt(8, registro.getCodigoTipoProducto());
             procedimiento.setInt(9, registro.getCodigoProveedor());
-            if(registro.getCodigoProducto() == 0){
-                limpiarControles();
-            }else{
-                procedimiento.execute();
-            }
 
-            listaProductos.add(registro);
+            // Guardar el producto solo si el ID del producto no es 0
+            if (registro.getCodigoProducto() != 0) {
+                procedimiento.execute();
+                listaProductos.add(registro);
+            } else {
+                limpiarControles();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -450,8 +457,6 @@ public class ProductosController implements Initializable {
         }
         return false;
     }
-    
-    
 
     public void editar() {
         switch (tipoDeOperador) {

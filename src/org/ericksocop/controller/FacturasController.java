@@ -38,7 +38,6 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javax.swing.JOptionPane;
-import static javax.swing.JOptionPane.ERROR_MESSAGE;
 import org.ericksocop.bean.Clientes;
 import org.ericksocop.bean.Empleados;
 import org.ericksocop.bean.Facturas;
@@ -346,8 +345,18 @@ public class FacturasController implements Initializable {
         } else {
             registro.setFechaFactura(null);
         }
-        registro.setClienteID(((Clientes) cmbClienteID.getSelectionModel().getSelectedItem()).getClienteID());
-        registro.setCodigoEmpleado(((Empleados) cmbCodEmp.getSelectionModel().getSelectedItem()).getCodigoEmpleado());
+        try {
+            registro.setClienteID(((Clientes) cmbClienteID.getSelectionModel().getSelectedItem()).getClienteID());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "El Cliente ID no puede ser nulo", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        try {
+            registro.setCodigoEmpleado(((Empleados) cmbCodEmp.getSelectionModel().getSelectedItem()).getCodigoEmpleado());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "El Empleado ID no puede ser nulo", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
         try {
             PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_crearFactura(?,?,?,?,?,?) }");
             procedimiento.setInt(1, registro.getNumeroDeFactura());
@@ -359,9 +368,12 @@ public class FacturasController implements Initializable {
             procedimiento.setDate(4, fechaFactura);
             procedimiento.setInt(5, registro.getClienteID());
             procedimiento.setInt(6, registro.getCodigoEmpleado());
-            procedimiento.execute();
-
-            listaFacturas.add(registro);
+            if (registro.getNumeroDeFactura() != 0) {
+                procedimiento.execute();
+                listaFacturas.add(registro);
+            } else {
+                limpiarControles();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -429,8 +441,18 @@ public class FacturasController implements Initializable {
             } else {
                 registro.setFechaFactura(null);
             }
-            registro.setClienteID(((Clientes) cmbClienteID.getSelectionModel().getSelectedItem()).getClienteID());
-            registro.setCodigoEmpleado(((Empleados) cmbCodEmp.getSelectionModel().getSelectedItem()).getCodigoEmpleado());
+            try {
+                registro.setClienteID(((Clientes) cmbClienteID.getSelectionModel().getSelectedItem()).getClienteID());
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "El Cliente ID no puede ser nulo", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            try {
+                registro.setCodigoEmpleado(((Empleados) cmbCodEmp.getSelectionModel().getSelectedItem()).getCodigoEmpleado());
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "El Empleado ID no puede ser nulo", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
             procedimiento.setInt(1, registro.getNumeroDeFactura());
             procedimiento.setString(2, registro.getEstado());
             procedimiento.setDouble(3, registro.getTotalFactura());
@@ -505,8 +527,8 @@ public class FacturasController implements Initializable {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                }else{
-                JOptionPane.showMessageDialog(null, "Debe de seleccionar una fila para el reporte");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Debe de seleccionar una fila para el reporte");
                 }
                 tipoDeOperador = operador.ACTUALIZAR;
                 break;

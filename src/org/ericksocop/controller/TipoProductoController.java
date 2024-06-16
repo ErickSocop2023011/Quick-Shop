@@ -13,6 +13,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.animation.RotateTransition;
 import javafx.collections.FXCollections;
@@ -32,6 +34,7 @@ import javafx.util.Duration;
 import javax.swing.JOptionPane;
 import org.ericksocop.bean.TipoProducto;
 import org.ericksocop.dao.Conexion;
+import org.ericksocop.report.GenerarReportes;
 import org.ericksocop.system.Main;
 
 /**
@@ -204,8 +207,12 @@ public class TipoProductoController implements Initializable {
             PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_agregarTipoProducto(?,?)}");
             procedimiento.setInt(1, registro.getCodigoTipoProducto());
             procedimiento.setString(2, registro.getDescripcionProducto());
+            if(registro.getCodigoTipoProducto() != 0){
             procedimiento.execute();
             listaTipoP.add(registro);
+            }else{
+            limpiarControles();
+            }
         } catch (Exception e) {
 
             e.printStackTrace();
@@ -305,6 +312,7 @@ public class TipoProductoController implements Initializable {
     public void reportes() {
         switch (tipoDeOperador) {
             case NINGUNO:
+                imprimirReporte();
                 break;
             case ACTUALIZAR:
                 tvDescripcionP.setDisable(false);
@@ -321,6 +329,12 @@ public class TipoProductoController implements Initializable {
                 tipoDeOperador = operador.NINGUNO;
                 break;
         }
+    }
+    
+    public void imprimirReporte() {
+        Map parametros = new HashMap();
+        parametros.put("codigoTipoProducto", null);
+        GenerarReportes.mostrarReportes("reportTipoProducto.jasper", "Reporte de Tipo Producto", parametros);
     }
 
     public void actualizar() {

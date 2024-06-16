@@ -233,8 +233,8 @@ public class ClienteController implements Initializable {
             if (existeCodigoCliente(clienteID)) {
                 JOptionPane.showMessageDialog(null, "El ID del Cliente ya existe. Por favor, ingrese uno nuevo.", "Error", JOptionPane.ERROR_MESSAGE);
                 return; // Detener el proceso de guardado
-            }else if(existeNIT(nit)){
-                 JOptionPane.showMessageDialog(null, "El NIT del Cliente ya existe. Por favor, ingrese uno diferente.", "Error", JOptionPane.ERROR_MESSAGE);
+            } else if (existeNIT(nit)) {
+                JOptionPane.showMessageDialog(null, "El NIT del Cliente ya existe. Por favor, ingrese uno diferente.", "Error", JOptionPane.ERROR_MESSAGE);
                 return; // Detener el proceso de guardado
             }
             registro.setClienteID(clienteID);
@@ -254,7 +254,7 @@ public class ClienteController implements Initializable {
         registro.setNombreClientes(txtNombreCliente.getText());
         registro.setApellidoClientes(txtApellidoCliente.getText());
         registro.setDireccionClientes(txtDireccionCliente.getText());
-        
+
         registro.setTelefonoClientes(txtTelefonoCli.getText());
         registro.setCorreoClientes(txtCorreoCliente.getText());
         try {
@@ -270,8 +270,12 @@ public class ClienteController implements Initializable {
             procedimiento.setString(5, registro.getNITClientes());
             procedimiento.setString(6, registro.getTelefonoClientes());
             procedimiento.setString(7, registro.getCorreoClientes());
-            procedimiento.execute();
-            listaClientes.add(registro);
+            if (registro.getClienteID() != 0) {
+                procedimiento.execute();
+                listaClientes.add(registro);
+            } else {
+                limpiarControles();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -285,7 +289,7 @@ public class ClienteController implements Initializable {
         }
         return false;
     }
-    
+
     private boolean existeNIT(String nit) {
         for (Clientes cliente : listaClientes) {
             if (cliente.getNITClientes().equals(nit)) {
